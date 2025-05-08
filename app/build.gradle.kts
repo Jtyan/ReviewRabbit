@@ -61,6 +61,8 @@ dependencies {
     implementation(libs.logging.interceptor)
     //Coil
     implementation(libs.coil.compose)
+    //Google Font - Inter
+    implementation(libs.androidx.ui.text.google.fonts)
 
 
     testImplementation(libs.junit)

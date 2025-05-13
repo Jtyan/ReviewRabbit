@@ -16,9 +16,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import learningprogramming.academy.reviewrabbit.ui.components.DropdownMenuOverlay
-import learningprogramming.academy.reviewrabbit.ui.components.ReviewRabbitTopAppBar
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import learningprogramming.academy.reviewrabbit.model.NavigationTab
+import learningprogramming.academy.reviewrabbit.ui.components.botnavbar.ReviewRabbitBottomNavBar
+import learningprogramming.academy.reviewrabbit.ui.components.topappbar.DropdownMenuOverlay
+import learningprogramming.academy.reviewrabbit.ui.components.topappbar.ReviewRabbitTopAppBar
 import learningprogramming.academy.reviewrabbit.ui.theme.ReviewRabbitTheme
 
 class MainActivity : ComponentActivity() {
@@ -26,9 +31,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            ReviewRabbitTheme {
+            ReviewRabbitTheme(dynamicColor = false) {
                 var isLoggedin by rememberSaveable { mutableStateOf(false) }
                 var isExpanded by rememberSaveable { mutableStateOf(false) }
+                val navController = rememberNavController()
+
                 Box {
                     Scaffold(
                         topBar = {
@@ -37,15 +44,20 @@ class MainActivity : ComponentActivity() {
                                 toggleExpanded = { isExpanded = !isExpanded }
                             )
                         },
+                        bottomBar = {
+                            ReviewRabbitBottomNavBar(
+                                navController = navController
+                            )
+                        },
                         modifier = Modifier.fillMaxSize()
                     ) { innerPadding ->
                         Box(
-                            Modifier.fillMaxSize()
+                            Modifier
+                                .fillMaxSize()
                                 .padding(innerPadding)
                         ) {
-                            Greeting(
-                                name = "Android",
-                                modifier = Modifier
+                            ReviewRabbitApp(
+                                navController = navController
                             )
                             DropdownMenuOverlay(
                                 isExpanded = isExpanded,
@@ -62,45 +74,41 @@ class MainActivity : ComponentActivity() {
 }
 
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingPreview() {
     ReviewRabbitTheme(dynamicColor = false, darkTheme = false) {
         var isLoggedin by rememberSaveable { mutableStateOf(false) }
         var isExpanded by rememberSaveable { mutableStateOf(true) }
-        Box {
-            Scaffold(
-                topBar = {
-                    ReviewRabbitTopAppBar(
-                        isExpanded = isExpanded,
-                        toggleExpanded = { isExpanded = !isExpanded }
-                    )
-                },
-                modifier = Modifier.fillMaxSize()
-            ) { innerPadding ->
-                Box(
-                    Modifier.fillMaxSize()
-                        .padding(innerPadding)
-                ) {
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier
-                    )
-                    DropdownMenuOverlay(
-                        isExpanded = isExpanded,
-                        isLoggedIn = isLoggedin,
-                        modifier = Modifier
-                            .align(Alignment.TopCenter)
-                    )
-                }
+        val navController = rememberNavController()
+        Scaffold(
+            topBar = {
+                ReviewRabbitTopAppBar(
+                    isExpanded = isExpanded,
+                    toggleExpanded = { isExpanded = !isExpanded }
+                )
+            },
+            bottomBar = {
+                ReviewRabbitBottomNavBar(
+                    navController = navController
+                )
+            },
+            modifier = Modifier.fillMaxSize()
+        ) { innerPadding ->
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            ) {
+                ReviewRabbitApp(
+                    navController = navController
+                )
+                DropdownMenuOverlay(
+                    isExpanded = isExpanded,
+                    isLoggedIn = isLoggedin,
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                )
             }
         }
     }

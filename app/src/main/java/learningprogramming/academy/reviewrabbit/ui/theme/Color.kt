@@ -3,10 +3,10 @@ package learningprogramming.academy.reviewrabbit.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFF031F41)
-val onPrimaryLight = Color(0xFF000000)
+val onPrimaryLight = Color(0xFFF1FAEE)
 val primaryContainerLight = Color(0xFF1D3557)
 val onPrimaryContainerLight = Color(0xFF879EC6)
-val secondaryLight = Color(0xFF006482)
+val secondaryLight = Color(0xFFA8DADC)
 val onSecondaryLight = Color(0xFFFFFFFF)
 val secondaryContainerLight = Color(0xFF007EA3)
 val onSecondaryContainerLight = Color(0xFFFBFDFF)

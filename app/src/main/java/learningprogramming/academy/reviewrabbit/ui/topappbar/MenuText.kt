@@ -15,7 +15,7 @@ fun MenuText(
 ) {
     Text(
         text = text,
-        color = MaterialTheme.colorScheme.surface,
+        color = MaterialTheme.colorScheme.onPrimary,
         modifier = Modifier
             .padding(15.dp)
             .clickable(onClick = onClick)

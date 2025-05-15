@@ -48,7 +48,7 @@ fun DropdownMenuOverlay(
                 HorizontalDivider(
                     modifier = Modifier.border(
                         width = 2.dp,
-                        color = MaterialTheme.colorScheme.onPrimary)
+                        color = MaterialTheme.colorScheme.secondary)
                 )
                 if (isLoggedIn) {
                     MenuText(
@@ -63,7 +63,7 @@ fun DropdownMenuOverlay(
                     HorizontalDivider(
                         modifier = Modifier.border(
                             width = 2.dp,
-                            color = MaterialTheme.colorScheme.onPrimary)
+                            color = MaterialTheme.colorScheme.secondary)
                     )
                     MenuText(
                         text = "Signup",

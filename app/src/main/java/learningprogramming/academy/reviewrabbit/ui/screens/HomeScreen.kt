@@ -1,11 +1,9 @@
 package learningprogramming.academy.reviewrabbit.ui.screens
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import learningprogramming.academy.reviewrabbit.ui.components.searchfilters.SearchFilters
 
 @Composable
 fun HomeScreen() {
-    Text(
-        text = "This is Home Page"
-    )
+    SearchFilters()
 }

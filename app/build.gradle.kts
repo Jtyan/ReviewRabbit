@@ -63,6 +63,8 @@ dependencies {
     implementation(libs.coil.compose)
     //Google Font - Inter
     implementation(libs.androidx.ui.text.google.fonts)
+    // Extended Icons
+    implementation(libs.androidx.material.icons.extended)
 
 
     testImplementation(libs.junit)

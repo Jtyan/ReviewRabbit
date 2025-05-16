@@ -1,5 +1,6 @@
 package learningprogramming.academy.reviewrabbit
 
+import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,11 +21,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 import learningprogramming.academy.reviewrabbit.model.NavigationTab
 import learningprogramming.academy.reviewrabbit.ui.components.botnavbar.ReviewRabbitBottomNavBar
 import learningprogramming.academy.reviewrabbit.ui.components.topappbar.DropdownMenuOverlay
 import learningprogramming.academy.reviewrabbit.ui.components.topappbar.ReviewRabbitTopAppBar
 import learningprogramming.academy.reviewrabbit.ui.theme.ReviewRabbitTheme
+
+@HiltAndroidApp
+class ExampleApplication : Application() {}
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

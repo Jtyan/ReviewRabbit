@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
@@ -27,6 +29,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -34,16 +37,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import learningprogramming.academy.reviewrabbit.model.FilterTabs
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomButton
 import learningprogramming.academy.reviewrabbit.ui.components.topappbar.AnimatedIcon
-import learningprogramming.academy.reviewrabbit.ui.theme.ReviewRabbitTheme
+import learningprogramming.academy.reviewrabbit.viewmodels.ReviewRabbitViewModel
 
 @Composable
-fun SearchFilters() {
+fun SearchFilters(
+    viewModel: ReviewRabbitViewModel
+) {
+    val companyFiltersData = viewModel.companyFilters.collectAsState().value
+
     Card(
         modifier = Modifier
             .padding(16.dp)
@@ -51,7 +57,8 @@ fun SearchFilters() {
                 color = MaterialTheme.colorScheme.outlineVariant,
                 width = 1.dp,
                 shape = RoundedCornerShape(5.dp)
-            ),
+            )
+            .verticalScroll(rememberScrollState()),
         colors = CardColors(
             containerColor = MaterialTheme.colorScheme.background,
             contentColor = MaterialTheme.colorScheme.scrim,
@@ -66,21 +73,26 @@ fun SearchFilters() {
             SearchFilterCategory(
                 title = "Search Filters",
                 child = {
-                    FilterTabs.entries.forEach() {
+                    FilterTabs.entries.forEach() { filterTabs ->
+                        val itemsToShow: List<String> = when (filterTabs) {
+                            FilterTabs.LOCATIONS -> companyFiltersData.locations
+                            FilterTabs.COUNTRIES -> companyFiltersData.countries
+                            FilterTabs.INDUSTRIES -> companyFiltersData.industries
+                            FilterTabs.TAGS -> companyFiltersData.tags
+                        }
                         SearchFilterCategory(
-                            title = it.label,
+                            title = filterTabs.label,
                             child = {
-                                SearchFilterContentWithCheckbox(
-                                    filterItem = "Item name"
-                                )
-                                SearchFilterContentWithCheckbox(
-                                    filterItem = "Item name"
-                                )
+                                itemsToShow.forEach { item ->
+                                    SearchFilterContentWithCheckbox(
+                                        filterItem = item
+                                    )
+                                }
                             }
                         )
                     }
                     CustomButton(
-                        text = "A Button",
+                        text = "Filter",
                         onClick = {}
                     )
                 }
@@ -132,7 +144,7 @@ fun SearchFilterCategory(
             exit = slideOutVertically() + shrinkVertically() + fadeOut(),
         ) {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 if (isSearchFilterCategoryExpanded) {
                     child()
@@ -163,13 +175,5 @@ fun SearchFilterContentWithCheckbox(
             text = filterItem,
             fontSize = 13.sp
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SearchFiltersPreview() {
-    ReviewRabbitTheme(dynamicColor = false) {
-        SearchFilters()
     }
 }

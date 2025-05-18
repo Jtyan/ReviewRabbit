@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp.gradlePlugin)          // Apply KSP plugin
+    alias(libs.plugins.hilt.android.gradlePlugin) // Apply Hilt plugin
+    alias(libs.plugins.kotlin.serialization)      // Apply @Serializable
 }
 
 android {
@@ -55,7 +58,6 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     //Retrofit
     implementation (libs.retrofit)
-    implementation (libs.converter.gson)
     // For OkHttp logging interceptor
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
@@ -65,6 +67,15 @@ dependencies {
     implementation(libs.androidx.ui.text.google.fonts)
     // Extended Icons
     implementation(libs.androidx.material.icons.extended)
+    // Hilt Dependencies
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
+    ksp(libs.hilt.compiler)
+    // Kotlin Serialization library
+    implementation(libs.kotlinx.serialization.json)
+    // Retrofit with Kotlin Serialization integration
+    implementation(libs.retrofit.kotlinx.serialization.converter.jakewharton)
+
 
 
     testImplementation(libs.junit)

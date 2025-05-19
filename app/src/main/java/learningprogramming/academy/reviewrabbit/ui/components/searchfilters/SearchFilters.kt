@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -93,7 +94,8 @@ fun SearchFilters(
                     }
                     CustomButton(
                         text = "Filter",
-                        onClick = {}
+                        onClick = {},
+                        modifier = Modifier.width(300.dp).padding(24.dp)
                     )
                 }
             )
@@ -106,7 +108,7 @@ fun SearchFilterCategory(
     title: String,
     child: @Composable () -> Unit
 ) {
-    var isSearchFilterCategoryExpanded by rememberSaveable { mutableStateOf(true) }
+    var isSearchFilterCategoryExpanded by rememberSaveable { mutableStateOf(false) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally

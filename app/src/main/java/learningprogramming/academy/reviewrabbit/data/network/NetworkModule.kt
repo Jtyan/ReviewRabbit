@@ -31,13 +31,21 @@ object NetworkModule {
         .addInterceptor(loggingInterceptor)
         .build()
 
+    @Provides
+    @Singleton
+    fun provideJsonConfiguration(): Json {
+        return Json {
+            ignoreUnknownKeys = true
+            isLenient = true
+        }
+    }
 
     @Provides
     @Singleton
-    fun provideRetrofit(baseUrl: String, client: OkHttpClient): Retrofit = Retrofit.Builder()
+    fun provideRetrofit(baseUrl: String, client: OkHttpClient, json: Json): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .client(client)
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .build()
 
     @Provides

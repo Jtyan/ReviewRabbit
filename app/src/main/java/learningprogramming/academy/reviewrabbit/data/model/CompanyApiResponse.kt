@@ -7,6 +7,7 @@ data class CompanyApiResponse(
     val id: Int = 0,
     val name: String,
     val url: String,
+    val image: String? = null,
     val location: String = "",
     val country: String = "",
     val industry: String = "",

@@ -8,7 +8,7 @@ import javax.inject.Singleton
 
 interface ReviewRabbitRepository {
     suspend fun getAllCompanies(): List<CompanyApiResponse>
-    suspend fun getCompanyById(companyId: String): CompanyApiResponse
+    suspend fun getCompanyById(companyId: Int): CompanyApiResponse
     suspend fun getCompanyFilters(): CompanyFilters
 }
 
@@ -18,7 +18,7 @@ class ReviewRabbitRepositoryImpl @Inject constructor(private val apiService: Rev
         return apiService.getAllCompanies()
     }
 
-    override suspend fun getCompanyById(companyId: String): CompanyApiResponse {
+    override suspend fun getCompanyById(companyId: Int): CompanyApiResponse {
         return apiService.getCompanyById(companyId)
     }
 

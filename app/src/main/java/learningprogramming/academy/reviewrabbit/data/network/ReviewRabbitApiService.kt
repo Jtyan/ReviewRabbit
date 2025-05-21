@@ -10,7 +10,7 @@ interface ReviewRabbitApiService {
     suspend fun getAllCompanies(): List<CompanyApiResponse>
 
     @GET("companies/{companyId}")
-    suspend fun getCompanyById(@Path("companyId") companyId: String): CompanyApiResponse
+    suspend fun getCompanyById(@Path("companyId") companyId: Int): CompanyApiResponse
 
     @GET("companies/filters")
     suspend fun getCompanyFilters(): CompanyFilters

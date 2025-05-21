@@ -33,9 +33,9 @@ fun ReviewRabbitBottomNavBar(
     ) {
         navigationItemList.forEach {
             NavigationBarItem(
-                selected = currentDestination?.route == it.navigationTab.label,
+                selected = currentDestination?.route == it.bottomNavItems.route,
                 onClick = {
-                    navController.navigate(it.navigationTab.label) {
+                    navController.navigate(it.bottomNavItems.route) {
                         launchSingleTop = true
                         restoreState = true
                     }

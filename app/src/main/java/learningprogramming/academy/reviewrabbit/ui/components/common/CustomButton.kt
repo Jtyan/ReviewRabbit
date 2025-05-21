@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import learningprogramming.academy.reviewrabbit.ui.theme.ReviewRabbitTheme
 
 
@@ -36,7 +37,8 @@ fun CustomButton(
         content = {
             Text(
                 text = text,
-                fontWeight = FontWeight.Normal
+                fontWeight = FontWeight.Normal,
+                fontSize = 20.sp
             )
         },
         modifier = modifier

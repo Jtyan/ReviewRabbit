@@ -19,13 +19,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import learningprogramming.academy.reviewrabbit.R
@@ -78,8 +77,8 @@ fun LazyColumnCompanyItem(
                         .build(),
                     contentDescription = company.name,
                     modifier = Modifier
-                        .clip(RectangleShape)
-                        .size(120.dp)
+                        .size(125.dp)
+                        .padding(12.dp)
                 )
             }
             Spacer(
@@ -87,16 +86,20 @@ fun LazyColumnCompanyItem(
             )
             Text(
                 text = company.name,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 20.sp,
                 color = MaterialTheme.colorScheme.secondaryContainer
             )
             CompanyLocationAndTags(company = company)
             CustomButton(
-                text = "Website",
+                text = "Reviews",
                 onClick = {},
+                containerColor = MaterialTheme.colorScheme.tertiary,
+                contentColor = MaterialTheme.colorScheme.onTertiary,
                 modifier = Modifier
                     .align(Alignment.End)
-                    .width(120.dp)
+                    .width(150.dp)
+                    .padding(top = 20.dp)
             )
         }
     }

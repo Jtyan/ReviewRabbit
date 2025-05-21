@@ -95,6 +95,8 @@ fun SearchFilters(
                     CustomButton(
                         text = "Filter",
                         onClick = {},
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                        contentColor = MaterialTheme.colorScheme.onTertiary,
                         modifier = Modifier.width(300.dp).padding(24.dp)
                     )
                 }

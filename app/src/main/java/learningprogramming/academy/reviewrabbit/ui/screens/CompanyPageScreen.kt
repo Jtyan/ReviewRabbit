@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -27,6 +30,26 @@ import learningprogramming.academy.reviewrabbit.ui.components.common.CustomButto
 import learningprogramming.academy.reviewrabbit.ui.theme.ReviewRabbitTheme
 import learningprogramming.academy.reviewrabbit.ui.theme.extendedLight
 import learningprogramming.academy.reviewrabbit.util.Base64
+import learningprogramming.academy.reviewrabbit.viewmodels.ReviewRabbitViewModel
+
+@Composable
+fun CompanyPage(
+    viewModel: ReviewRabbitViewModel,
+    companyId: Int
+) {
+    LaunchedEffect(companyId) {
+        viewModel.getCompanyById(companyId)
+    }
+    val selectedCompanyState by viewModel.selectedCompany.collectAsState()
+    val selectedCompany = selectedCompanyState
+    if (selectedCompany != null) {
+        Column {
+            CompanyPageHeroBanner(
+                company = selectedCompany
+            )
+        }
+    }
+}
 
 @Composable
 fun CompanyPageHeroBanner(
@@ -65,7 +88,7 @@ fun CompanyPageHeroBanner(
                 text = company.name,
                 fontSize = 22.sp,
                 color = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.padding(vertical = 16.dp)
+                modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
             )
             CompanyLocationAndTags(
                 company = company,

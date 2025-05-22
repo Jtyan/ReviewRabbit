@@ -37,7 +37,8 @@ import learningprogramming.academy.reviewrabbit.util.Base64
 
 @Composable
 fun LazyColumnCompanyItem(
-    company: CompanyApiResponse
+    company: CompanyApiResponse,
+    onClick: (Int) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -93,7 +94,7 @@ fun LazyColumnCompanyItem(
             CompanyLocationAndTags(company = company)
             CustomButton(
                 text = "Reviews",
-                onClick = {},
+                onClick = { onClick(company.id) },
                 containerColor = MaterialTheme.colorScheme.tertiary,
                 contentColor = MaterialTheme.colorScheme.onTertiary,
                 modifier = Modifier
@@ -119,7 +120,8 @@ fun LazyColumnCompanyItemPreview() {
                 country = "United Kingdom",
                 industry = "Tech",
                 tags = listOf("IT", "Tech")
-            )
+            ),
+            onClick = {}
         )
     }
 }

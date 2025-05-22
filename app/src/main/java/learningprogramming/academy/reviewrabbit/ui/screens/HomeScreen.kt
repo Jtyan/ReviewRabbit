@@ -25,7 +25,8 @@ import learningprogramming.academy.reviewrabbit.viewmodels.ReviewRabbitViewModel
 
 @Composable
 fun HomeScreen(
-    viewModel: ReviewRabbitViewModel
+    viewModel: ReviewRabbitViewModel,
+    onClick: (Int) -> Unit
 ) {
     val listOfCompanies by viewModel.listOfCompanies.collectAsState()
 
@@ -58,9 +59,11 @@ fun HomeScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             items(listOfCompanies) {
-                LazyColumnCompanyItem(it)
+                LazyColumnCompanyItem(
+                    it,
+                    onClick = onClick
+                )
             }
         }
     }
-
 }

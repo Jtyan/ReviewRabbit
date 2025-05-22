@@ -21,13 +21,15 @@ class ReviewRabbitViewModel @Inject constructor(
     val companyFilters: StateFlow<CompanyFilters> = _companyFilters.asStateFlow()
     private val _listOfCompanies = MutableStateFlow<List<CompanyApiResponse>>(emptyList())
     val listOfCompanies: StateFlow<List<CompanyApiResponse>> = _listOfCompanies.asStateFlow()
+    private val _selectedCompany = MutableStateFlow<CompanyApiResponse?>(null)
+    val selectedCompany: StateFlow<CompanyApiResponse?> = _selectedCompany.asStateFlow()
 
     init {
         loadCompanyFilters()
         getListOfCompanies()
     }
 
-    fun loadCompanyFilters() {
+    private fun loadCompanyFilters() {
         viewModelScope.launch {
             try {
                 _companyFilters.value = reviewRabbitRepository.getCompanyFilters()
@@ -37,12 +39,22 @@ class ReviewRabbitViewModel @Inject constructor(
         }
     }
 
-    fun getListOfCompanies() {
+    private fun getListOfCompanies() {
         viewModelScope.launch {
             try {
                 _listOfCompanies.value = reviewRabbitRepository.getAllCompanies()
             } catch (e: Exception) {
                 Log.e("ReviewRabbitViewModel", "Error fetching list of all companies. $e")
+            }
+        }
+    }
+
+    fun getCompanyById(companyId: Int) {
+        viewModelScope.launch {
+            try {
+                _selectedCompany.value = reviewRabbitRepository.getCompanyById(companyId)
+            } catch (e: Exception) {
+                Log.e("ReviewRabbitViewModel", "Error fetching company by $companyId. $e")
             }
         }
     }

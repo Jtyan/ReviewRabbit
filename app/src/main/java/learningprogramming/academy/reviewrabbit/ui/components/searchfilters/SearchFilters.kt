@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,15 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
@@ -37,72 +30,60 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import learningprogramming.academy.reviewrabbit.model.FilterTabs
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomButton
+import learningprogramming.academy.reviewrabbit.ui.components.common.CustomCard
 import learningprogramming.academy.reviewrabbit.ui.components.topappbar.AnimatedIcon
-import learningprogramming.academy.reviewrabbit.viewmodels.ReviewRabbitViewModel
+import learningprogramming.academy.reviewrabbit.viewmodels.HomeScreenViewModel
 
 @Composable
 fun SearchFilters(
-    viewModel: ReviewRabbitViewModel
+    homeScreenViewModel: HomeScreenViewModel
 ) {
-    val companyFiltersData = viewModel.companyFilters.collectAsState().value
+    val companyFiltersData = homeScreenViewModel.companyFilters.collectAsState().value
 
-    Card(
-        modifier = Modifier
-            .padding(16.dp)
-            .border(
-                color = MaterialTheme.colorScheme.outlineVariant,
-                width = 1.dp,
-                shape = RoundedCornerShape(5.dp)
-            )
-            .verticalScroll(rememberScrollState()),
-        colors = CardColors(
-            containerColor = MaterialTheme.colorScheme.background,
-            contentColor = MaterialTheme.colorScheme.scrim,
-            disabledContainerColor = Color.Transparent,
-            disabledContentColor = Color.Transparent
-        ),
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp)
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            SearchFilterCategory(
-                title = "Search Filters",
-                child = {
-                    FilterTabs.entries.forEach() { filterTabs ->
-                        val itemsToShow: List<String> = when (filterTabs) {
-                            FilterTabs.LOCATIONS -> companyFiltersData.locations
-                            FilterTabs.COUNTRIES -> companyFiltersData.countries
-                            FilterTabs.INDUSTRIES -> companyFiltersData.industries
-                            FilterTabs.TAGS -> companyFiltersData.tags
-                        }
-                        SearchFilterCategory(
-                            title = filterTabs.label,
-                            child = {
-                                itemsToShow.forEach { item ->
-                                    SearchFilterContentWithCheckbox(
-                                        filterItem = item
-                                    )
-                                }
+    CustomCard(
+        child = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                SearchFilterCategory(
+                    title = "Search Filters",
+                    child = {
+                        FilterTabs.entries.forEach() { filterTabs ->
+                            val itemsToShow: List<String> = when (filterTabs) {
+                                FilterTabs.LOCATIONS -> companyFiltersData.locations
+                                FilterTabs.COUNTRIES -> companyFiltersData.countries
+                                FilterTabs.INDUSTRIES -> companyFiltersData.industries
+                                FilterTabs.TAGS -> companyFiltersData.tags
                             }
+                            SearchFilterCategory(
+                                title = filterTabs.label,
+                                child = {
+                                    itemsToShow.forEach { item ->
+                                        SearchFilterContentWithCheckbox(
+                                            filterItem = item
+                                        )
+                                    }
+                                }
+                            )
+                        }
+                        CustomButton(
+                            text = "Filter",
+                            onClick = {},
+                            containerColor = MaterialTheme.colorScheme.tertiary,
+                            contentColor = MaterialTheme.colorScheme.onTertiary,
+                            modifier = Modifier
+                                .width(300.dp)
+                                .padding(24.dp)
                         )
                     }
-                    CustomButton(
-                        text = "Filter",
-                        onClick = {},
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                        contentColor = MaterialTheme.colorScheme.onTertiary,
-                        modifier = Modifier.width(300.dp).padding(24.dp)
-                    )
-                }
-            )
+                )
+            }
         }
-    }
+    )
 }
 
 @Composable

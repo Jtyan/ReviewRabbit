@@ -14,7 +14,7 @@ import learningprogramming.academy.reviewrabbit.data.repository.ReviewRabbitRepo
 import javax.inject.Inject
 
 @HiltViewModel
-class ReviewRabbitViewModel @Inject constructor(
+class HomeScreenViewModel @Inject constructor(
     private val reviewRabbitRepository: ReviewRabbitRepository
 ): ViewModel() {
     private val _companyFilters = MutableStateFlow(CompanyFilters())

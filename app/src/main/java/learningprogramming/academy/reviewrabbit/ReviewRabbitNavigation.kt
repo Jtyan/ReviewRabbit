@@ -15,18 +15,18 @@ import learningprogramming.academy.reviewrabbit.ui.screens.CompanyPage
 import learningprogramming.academy.reviewrabbit.ui.screens.CreateCompanyScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.HomeScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.UserSettingsScreen
-import learningprogramming.academy.reviewrabbit.viewmodels.ReviewRabbitViewModel
+import learningprogramming.academy.reviewrabbit.viewmodels.HomeScreenViewModel
 
 @Composable
 fun ReviewRabbitApp(
     navController: NavHostController
 ) {
-    val viewModel: ReviewRabbitViewModel = hiltViewModel()
+    val homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
 
     NavHost(navController = navController, startDestination = ScreenRoutes.HOME) {
         composable(route = ScreenRoutes.HOME) {
             HomeScreen(
-                viewModel,
+                homeScreenViewModel,
                 onClick = { companyId ->
                     navController.navigate(ScreenRoutes.companyPageWithArg(companyId))
                 }
@@ -57,7 +57,7 @@ fun ReviewRabbitApp(
             val companyId = backStackEntry.arguments?.getInt("companyId")
             if (companyId != null) {
                 CompanyPage(
-                    viewModel,
+                    homeScreenViewModel = homeScreenViewModel,
                     companyId = companyId
                 )
             }

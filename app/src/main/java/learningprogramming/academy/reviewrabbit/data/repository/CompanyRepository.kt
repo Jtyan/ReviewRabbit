@@ -6,14 +6,14 @@ import learningprogramming.academy.reviewrabbit.data.network.ReviewRabbitApiServ
 import javax.inject.Inject
 import javax.inject.Singleton
 
-interface ReviewRabbitRepository {
+interface CompanyRepository {
     suspend fun getAllCompanies(): List<CompanyApiResponse>
     suspend fun getCompanyById(companyId: Int): CompanyApiResponse
     suspend fun getCompanyFilters(): CompanyFilters
 }
 
 @Singleton
-class ReviewRabbitRepositoryImpl @Inject constructor(private val apiService: ReviewRabbitApiService): ReviewRabbitRepository {
+class CompanyRepositoryImpl @Inject constructor(private val apiService: ReviewRabbitApiService): CompanyRepository {
     override suspend fun getAllCompanies(): List<CompanyApiResponse> {
         return apiService.getAllCompanies()
     }

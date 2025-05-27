@@ -13,6 +13,6 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindReviewRabbitRepository(
-        reviewRabbitRepositoryImpl: ReviewRabbitRepositoryImpl
-    ): ReviewRabbitRepository
+        companyRepositoryImpl: CompanyRepositoryImpl
+    ): CompanyRepository
 }

@@ -10,12 +10,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import learningprogramming.academy.reviewrabbit.data.model.CompanyApiResponse
 import learningprogramming.academy.reviewrabbit.data.model.CompanyFilters
-import learningprogramming.academy.reviewrabbit.data.repository.ReviewRabbitRepository
+import learningprogramming.academy.reviewrabbit.data.repository.CompanyRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    private val reviewRabbitRepository: ReviewRabbitRepository
+    private val companyRepository: CompanyRepository
 ): ViewModel() {
     private val _companyFilters = MutableStateFlow(CompanyFilters())
     val companyFilters: StateFlow<CompanyFilters> = _companyFilters.asStateFlow()
@@ -32,7 +32,7 @@ class HomeScreenViewModel @Inject constructor(
     private fun loadCompanyFilters() {
         viewModelScope.launch {
             try {
-                _companyFilters.value = reviewRabbitRepository.getCompanyFilters()
+                _companyFilters.value = companyRepository.getCompanyFilters()
             } catch (e: Exception) {
                 Log.e("ReviewRabbitViewModel", "Error fetching company filters. $e")
             }
@@ -42,7 +42,7 @@ class HomeScreenViewModel @Inject constructor(
     private fun getListOfCompanies() {
         viewModelScope.launch {
             try {
-                _listOfCompanies.value = reviewRabbitRepository.getAllCompanies()
+                _listOfCompanies.value = companyRepository.getAllCompanies()
             } catch (e: Exception) {
                 Log.e("ReviewRabbitViewModel", "Error fetching list of all companies. $e")
             }
@@ -52,7 +52,7 @@ class HomeScreenViewModel @Inject constructor(
     fun getCompanyById(companyId: Int) {
         viewModelScope.launch {
             try {
-                _selectedCompany.value = reviewRabbitRepository.getCompanyById(companyId)
+                _selectedCompany.value = companyRepository.getCompanyById(companyId)
             } catch (e: Exception) {
                 Log.e("ReviewRabbitViewModel", "Error fetching company by $companyId. $e")
             }

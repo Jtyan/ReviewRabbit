@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -63,7 +64,10 @@ fun HomeScreen(
     }
     val isBannerVisible = !isScrolled
 
-    Column {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         AnimatedVisibility(
             visible = isBannerVisible,
             enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
@@ -74,14 +78,14 @@ fun HomeScreen(
         ) {
             HomepageHeroBanner()
         }
-
-        SearchFilters(homeScreenViewModel)
-
         LazyColumn(
             state = lazyListState,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth()
         ) {
+            item {
+                SearchFilters(homeScreenViewModel)
+            }
             items(listOfCompanies) {
                 LazyColumnCompanyItem(
                     it,

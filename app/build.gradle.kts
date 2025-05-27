@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "learningprogramming.academy.reviewrabbit"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -75,6 +75,8 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     // Retrofit with Kotlin Serialization integration
     implementation(libs.retrofit.kotlinx.serialization.converter.jakewharton)
+    //Prettytime
+    implementation ("org.ocpsoft.prettytime:prettytime:5.0.8.Final")
 
 
 

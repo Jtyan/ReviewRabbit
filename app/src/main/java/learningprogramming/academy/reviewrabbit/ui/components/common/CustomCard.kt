@@ -3,6 +3,7 @@ package learningprogramming.academy.reviewrabbit.ui.components.common
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -19,6 +20,7 @@ fun CustomCard(
     Card(
         modifier = Modifier
             .widthIn(min = 500.dp, max = 500.dp)
+            .wrapContentHeight()
             .padding(16.dp)
             .border(
                 color = MaterialTheme.colorScheme.outlineVariant,

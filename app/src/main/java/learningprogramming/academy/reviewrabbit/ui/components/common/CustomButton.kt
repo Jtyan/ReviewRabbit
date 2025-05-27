@@ -21,8 +21,8 @@ fun CustomButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    containerColor: Color = Color.Unspecified,
-    contentColor: Color = Color.Unspecified
+    containerColor: Color = ButtonDefaults.buttonColors().containerColor,
+    contentColor: Color = ButtonDefaults.buttonColors().contentColor
 ) {
     Button(
         onClick = onClick,
@@ -38,7 +38,7 @@ fun CustomButton(
             Text(
                 text = text,
                 fontWeight = FontWeight.Normal,
-                fontSize = 20.sp
+                fontSize = 16.sp
             )
         },
         modifier = modifier

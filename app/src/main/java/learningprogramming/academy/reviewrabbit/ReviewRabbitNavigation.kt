@@ -15,6 +15,7 @@ import learningprogramming.academy.reviewrabbit.ui.screens.CompanyPage
 import learningprogramming.academy.reviewrabbit.ui.screens.CreateCompanyScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.HomeScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.UserSettingsScreen
+import learningprogramming.academy.reviewrabbit.viewmodels.CompanyReviewViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.HomeScreenViewModel
 
 @Composable
@@ -22,6 +23,7 @@ fun ReviewRabbitApp(
     navController: NavHostController
 ) {
     val homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
+    val companyReviewViewModel: CompanyReviewViewModel = hiltViewModel()
 
     NavHost(navController = navController, startDestination = ScreenRoutes.HOME) {
         composable(route = ScreenRoutes.HOME) {
@@ -58,6 +60,7 @@ fun ReviewRabbitApp(
             if (companyId != null) {
                 CompanyPage(
                     homeScreenViewModel = homeScreenViewModel,
+                    companyReviewViewModel = companyReviewViewModel,
                     companyId = companyId
                 )
             }

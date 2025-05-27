@@ -5,7 +5,7 @@ import learningprogramming.academy.reviewrabbit.data.model.CompanyFilters
 import retrofit2.http.GET
 import retrofit2.http.Path
 
-interface ReviewRabbitApiService {
+interface CompanyApiService {
     @GET("companies")
     suspend fun getAllCompanies(): List<CompanyApiResponse>
 

@@ -2,7 +2,7 @@ package learningprogramming.academy.reviewrabbit.data.repository
 
 import learningprogramming.academy.reviewrabbit.data.model.CompanyApiResponse
 import learningprogramming.academy.reviewrabbit.data.model.CompanyFilters
-import learningprogramming.academy.reviewrabbit.data.network.ReviewRabbitApiService
+import learningprogramming.academy.reviewrabbit.data.network.CompanyApiService
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -13,7 +13,7 @@ interface CompanyRepository {
 }
 
 @Singleton
-class CompanyRepositoryImpl @Inject constructor(private val apiService: ReviewRabbitApiService): CompanyRepository {
+class CompanyRepositoryImpl @Inject constructor(private val apiService: CompanyApiService): CompanyRepository {
     override suspend fun getAllCompanies(): List<CompanyApiResponse> {
         return apiService.getAllCompanies()
     }

@@ -34,7 +34,7 @@ class HomeScreenViewModel @Inject constructor(
             try {
                 _companyFilters.value = companyRepository.getCompanyFilters()
             } catch (e: Exception) {
-                Log.e("ReviewRabbitViewModel", "Error fetching company filters. $e")
+                Log.e("HomeScreenViewModel", "Error fetching company filters. $e")
             }
         }
     }
@@ -44,7 +44,7 @@ class HomeScreenViewModel @Inject constructor(
             try {
                 _listOfCompanies.value = companyRepository.getAllCompanies()
             } catch (e: Exception) {
-                Log.e("ReviewRabbitViewModel", "Error fetching list of all companies. $e")
+                Log.e("HomeScreenViewModel", "Error fetching list of all companies. $e")
             }
         }
     }

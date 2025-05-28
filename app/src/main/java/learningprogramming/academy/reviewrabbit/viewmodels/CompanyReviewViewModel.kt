@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import learningprogramming.academy.reviewrabbit.data.model.PostReviewApi
+import learningprogramming.academy.reviewrabbit.data.model.ReviewApiResponse
 import learningprogramming.academy.reviewrabbit.data.model.ReviewSummaryApiResponse
 import learningprogramming.academy.reviewrabbit.data.repository.ReviewsRepository
 import javax.inject.Inject
@@ -21,8 +23,11 @@ class CompanyReviewViewModel @Inject constructor(
         contents = "No generated review summary yet.",
         created = ""
     )
+
     private val _reviewSummary = MutableStateFlow(initialReviewSummary)
     val reviewSummary: StateFlow<ReviewSummaryApiResponse> = _reviewSummary.asStateFlow()
+    private val _listOfReviews = MutableStateFlow<List<ReviewApiResponse>>(emptyList())
+    val listOfReviews: StateFlow<List<ReviewApiResponse>> = _listOfReviews.asStateFlow()
 
     fun getReviewSummary(companyId: Long) {
         viewModelScope.launch {
@@ -46,6 +51,32 @@ class CompanyReviewViewModel @Inject constructor(
                 Log.e(
                     "CompanyReviewViewModel",
                     "Error generating a review Summary for company id = $companyId. $e"
+                )
+            }
+        }
+    }
+
+    fun displayReviews(companyId: Long) {
+        viewModelScope.launch {
+            try {
+                _listOfReviews.value = reviewsRepository.getAllReviewsByCompanyId(companyId)
+            } catch (e: Exception) {
+                Log.e(
+                    "CompanyReviewViewModel",
+                    "Error getting the list of reviews for company id = $companyId. $e"
+                )
+            }
+        }
+    }
+
+    fun submitReview(review: PostReviewApi) {
+        viewModelScope.launch {
+            try {
+                reviewsRepository.postAReview(review)
+            } catch (e: Exception) {
+                Log.e(
+                    "CompanyReviewViewModel",
+                    "Error posting a review. $e"
                 )
             }
         }

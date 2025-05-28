@@ -15,15 +15,17 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CustomCard(
-    child: @Composable () -> Unit
+    child: @Composable () -> Unit,
+    borderColor: Color = MaterialTheme.colorScheme.outlineVariant,
+    modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .widthIn(min = 500.dp, max = 500.dp)
             .wrapContentHeight()
             .padding(16.dp)
             .border(
-                color = MaterialTheme.colorScheme.outlineVariant,
+                color = borderColor,
                 width = 1.dp,
                 shape = RoundedCornerShape(5.dp)
             ),

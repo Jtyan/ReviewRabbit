@@ -173,8 +173,6 @@ fun LazyColumnCompanyItem(
                     CustomButton(
                         text = "Reviews",
                         onClick = { onClick(company.id) },
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                        contentColor = MaterialTheme.colorScheme.onTertiary,
                         modifier = Modifier
                             .align(Alignment.End)
                             .width(150.dp)

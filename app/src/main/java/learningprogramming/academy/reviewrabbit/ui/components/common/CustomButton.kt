@@ -21,8 +21,8 @@ fun CustomButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    containerColor: Color = ButtonDefaults.buttonColors().containerColor,
-    contentColor: Color = ButtonDefaults.buttonColors().contentColor
+    containerColor: Color = MaterialTheme.colorScheme.tertiary,
+    contentColor: Color = MaterialTheme.colorScheme.onTertiary
 ) {
     Button(
         onClick = onClick,

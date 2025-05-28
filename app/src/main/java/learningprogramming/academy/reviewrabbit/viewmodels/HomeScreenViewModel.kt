@@ -21,8 +21,7 @@ class HomeScreenViewModel @Inject constructor(
     val companyFilters: StateFlow<CompanyFilters> = _companyFilters.asStateFlow()
     private val _listOfCompanies = MutableStateFlow<List<CompanyApiResponse>>(emptyList())
     val listOfCompanies: StateFlow<List<CompanyApiResponse>> = _listOfCompanies.asStateFlow()
-    private val _selectedCompany = MutableStateFlow<CompanyApiResponse?>(null)
-    val selectedCompany: StateFlow<CompanyApiResponse?> = _selectedCompany.asStateFlow()
+
 
     init {
         loadCompanyFilters()
@@ -45,16 +44,6 @@ class HomeScreenViewModel @Inject constructor(
                 _listOfCompanies.value = companyRepository.getAllCompanies()
             } catch (e: Exception) {
                 Log.e("HomeScreenViewModel", "Error fetching list of all companies. $e")
-            }
-        }
-    }
-
-    fun getCompanyById(companyId: Int) {
-        viewModelScope.launch {
-            try {
-                _selectedCompany.value = companyRepository.getCompanyById(companyId)
-            } catch (e: Exception) {
-                Log.e("ReviewRabbitViewModel", "Error fetching company by $companyId. $e")
             }
         }
     }

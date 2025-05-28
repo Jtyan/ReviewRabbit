@@ -90,6 +90,12 @@ fun CompanyPage(
             items(listOfReviews) {
                 ReviewCard(companyReview = it)
             }
+
+            item {
+                InvitePeopleCard(
+                    onClick = {}
+                )
+            }
         }
     }
 }
@@ -195,8 +201,6 @@ fun ReviewSummary(
                     CustomButton(
                         text = "Generate Summary",
                         onClick = onClick,
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                        contentColor = MaterialTheme.colorScheme.onTertiary,
                         modifier = Modifier
                             .wrapContentWidth()
                     )
@@ -304,6 +308,30 @@ fun ReviewItemAndStars(
     }
 }
 
+@Composable
+fun InvitePeopleCard(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    CustomCard(
+        child = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp, horizontal = 16.dp)
+            ) {
+                Text(
+                    text = "Do you represent this company? \nInvite people to leave reviews."
+                )
+                CustomButton(
+                    text = "Invite people",
+                    onClick = onClick,
+                    modifier = Modifier.padding(top = 16.dp)
+                )
+            }
+        }
+    )
+}
 @Preview(showBackground = true)
 @Composable
 fun CompanyPageHeroBannerPreview() {
@@ -356,6 +384,16 @@ fun CompanyPageReviewItemPreview() {
                 created = "2025-05-23T14:45:22.003036Z",
                 updated = "2025-05-23T14:45:22.003036Z"
             )
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CompanyPageInvitePeoplePreview() {
+    ReviewRabbitTheme(dynamicColor = false) {
+        InvitePeopleCard(
+            onClick = {}
         )
     }
 }

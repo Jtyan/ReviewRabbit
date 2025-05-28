@@ -59,7 +59,6 @@ fun ReviewRabbitApp(
             val companyId = backStackEntry.arguments?.getInt("companyId")
             if (companyId != null) {
                 CompanyPage(
-                    homeScreenViewModel = homeScreenViewModel,
                     companyReviewViewModel = companyReviewViewModel,
                     companyId = companyId
                 )

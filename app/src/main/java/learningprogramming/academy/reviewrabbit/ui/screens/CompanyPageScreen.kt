@@ -1,20 +1,20 @@
 package learningprogramming.academy.reviewrabbit.ui.screens
 
-import android.os.Build
-import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.absolutePadding
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,7 +36,10 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import learningprogramming.academy.reviewrabbit.R
 import learningprogramming.academy.reviewrabbit.data.model.CompanyApiResponse
+import learningprogramming.academy.reviewrabbit.data.model.ReviewApiResponse
 import learningprogramming.academy.reviewrabbit.data.model.ReviewSummaryApiResponse
+import learningprogramming.academy.reviewrabbit.model.ReviewCategories
+import learningprogramming.academy.reviewrabbit.model.ReviewCategoriesAndStars
 import learningprogramming.academy.reviewrabbit.ui.components.common.CompanyLocationAndTags
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomButton
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomCard
@@ -43,7 +47,6 @@ import learningprogramming.academy.reviewrabbit.ui.theme.ReviewRabbitTheme
 import learningprogramming.academy.reviewrabbit.ui.theme.extendedLight
 import learningprogramming.academy.reviewrabbit.util.Base64
 import learningprogramming.academy.reviewrabbit.viewmodels.CompanyReviewViewModel
-import learningprogramming.academy.reviewrabbit.viewmodels.HomeScreenViewModel
 import org.ocpsoft.prettytime.PrettyTime
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -53,32 +56,40 @@ import java.util.Locale
 
 @Composable
 fun CompanyPage(
-    homeScreenViewModel: HomeScreenViewModel,
     companyReviewViewModel: CompanyReviewViewModel,
     companyId: Int
 ) {
     LaunchedEffect(companyId) {
-        homeScreenViewModel.getCompanyById(companyId)
+        companyReviewViewModel.getCompanyById(companyId)
         companyReviewViewModel.getReviewSummary(companyId = companyId.toLong())
+        companyReviewViewModel.displayReviews(companyId = companyId.toLong())
     }
 
-    val selectedCompanyState by homeScreenViewModel.selectedCompany.collectAsState()
+    val selectedCompanyState by companyReviewViewModel.selectedCompany.collectAsState()
     val selectedCompany = selectedCompanyState
     val reviewSummary by companyReviewViewModel.reviewSummary.collectAsState()
+    val listOfReviews by companyReviewViewModel.listOfReviews.collectAsState()
+
     if (selectedCompany != null) {
-        Column(
+        LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
         ) {
-            CompanyPageHeroBanner(
-                company = selectedCompany
-            )
-            ReviewSummary(
-                reviewSummary = reviewSummary,
-                onClick = { companyReviewViewModel.generatedReviewSummary(companyId.toLong()) }
-            )
+            item {
+                CompanyPageHeroBanner(
+                    company = selectedCompany
+                )
+            }
+            item {
+                ReviewSummary(
+                    reviewSummary = reviewSummary,
+                    onClick = { companyReviewViewModel.generatedReviewSummary(companyId.toLong()) }
+                )
+            }
+            items(listOfReviews) {
+                ReviewCard(companyReview = it)
+            }
         }
     }
 }
@@ -145,6 +156,13 @@ fun ReviewSummary(
     reviewSummary: ReviewSummaryApiResponse,
     onClick: () -> Unit
 ) {
+    val isReviewSummaryCreated = reviewSummary.created.isNotEmpty()
+    val isReviewOneDayOld = isReviewSummaryCreated && Instant.now()
+        .isAfter(
+            Instant.parse(reviewSummary.created)
+                .plus(1, ChronoUnit.DAYS)
+        )
+
     CustomCard(
         child = {
             Column(
@@ -163,7 +181,7 @@ fun ReviewSummary(
                     text = reviewSummary.contents,
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
-                if (reviewSummary.created.isNotEmpty()) {
+                if (isReviewSummaryCreated) {
                     val timestamp = Date.from(Instant.parse(reviewSummary.created))
                     val prettyTime = PrettyTime(Locale.getDefault())
                     val displayTime = prettyTime.format(timestamp)
@@ -173,7 +191,7 @@ fun ReviewSummary(
                         fontSize = 12.sp
                     )
                 }
-                if (reviewSummary.created.isEmpty() || Instant.now().isAfter(Instant.parse(reviewSummary.created).plus(1, ChronoUnit.DAYS))) {
+                if (!isReviewSummaryCreated || isReviewOneDayOld) {
                     CustomButton(
                         text = "Generate Summary",
                         onClick = onClick,
@@ -186,6 +204,104 @@ fun ReviewSummary(
             }
         }
     )
+}
+
+@Composable
+fun ReviewCard(
+    companyReview: ReviewApiResponse
+) {
+    val userId = 3L
+
+    val reviewCategoriesAndStars = remember(companyReview) {
+        listOf(
+            ReviewCategoriesAndStars(
+                label = ReviewCategories.WOULD_RECOMMEND.label,
+                stars = companyReview.wouldRecommend
+            ),
+            ReviewCategoriesAndStars(
+                label = ReviewCategories.MANAGEMENT.label,
+                stars = companyReview.management
+            ),
+            ReviewCategoriesAndStars(
+                label = ReviewCategories.CULTURE.label,
+                stars = companyReview.culture
+            ),
+            ReviewCategoriesAndStars(
+                label = ReviewCategories.SALARY.label,
+                stars = companyReview.salary
+            ),
+            ReviewCategoriesAndStars(
+                label = ReviewCategories.BENEFITS.label,
+                stars = companyReview.benefits
+            ),
+        )
+    }
+
+    CustomCard(
+        borderColor = if (companyReview.userId == userId) Color.Blue else MaterialTheme.colorScheme.outlineVariant,
+        child = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 24.dp, horizontal = 16.dp)
+            ) {
+                reviewCategoriesAndStars.forEach() {
+                    ReviewItemAndStars(
+                        category = it.label, stars = it.stars,
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
+                }
+                Text(
+                    text = companyReview.review,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+                if (companyReview.created.isNotEmpty()) {
+                    val timestamp = Date.from(Instant.parse(companyReview.created))
+                    val prettyTime = PrettyTime(Locale.getDefault())
+                    val displayTime = prettyTime.format(timestamp)
+
+                    Text(
+                        text = "Posted $displayTime",
+                        fontSize = 12.sp
+                    )
+                }
+                if (companyReview.userId == userId) {
+                    Text(
+                        text = "Your Review",
+                        fontSize = 12.sp
+                    )
+                }
+            }
+        }
+    )
+}
+
+@Composable
+fun ReviewItemAndStars(
+    category: String,
+    stars: Int,
+    modifier: Modifier = Modifier
+) {
+    var numberOfStars = stars
+
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Text(
+            text = "$category:"
+        )
+        Row {
+            while (numberOfStars > 0) {
+                Icon(
+                    imageVector = Icons.Filled.Star,
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.secondaryContainer
+                )
+                numberOfStars--
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)
@@ -218,6 +334,28 @@ fun CompanyPageReviewSummaryPreview() {
                 created = "2025-05-23T14:45:22.003036Z"
             ),
             onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CompanyPageReviewItemPreview() {
+    ReviewRabbitTheme(dynamicColor = false) {
+        ReviewCard(
+            companyReview = ReviewApiResponse(
+                id = 0,
+                companyId = 2L,
+                userId = 3L,
+                management = 3,
+                culture = 4,
+                salary = 5,
+                benefits = 2,
+                wouldRecommend = 2,
+                review = "This is a review about this company",
+                created = "2025-05-23T14:45:22.003036Z",
+                updated = "2025-05-23T14:45:22.003036Z"
+            )
         )
     }
 }

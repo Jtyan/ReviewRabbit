@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import learningprogramming.academy.reviewrabbit.model.ScreenRoutes
 import learningprogramming.academy.reviewrabbit.ui.components.botnavbar.ReviewRabbitBottomNavBar
 import learningprogramming.academy.reviewrabbit.ui.components.topappbar.DropdownMenuOverlay
 import learningprogramming.academy.reviewrabbit.ui.components.topappbar.ReviewRabbitTopAppBar
@@ -60,6 +61,10 @@ class MainActivity : ComponentActivity() {
                             DropdownMenuOverlay(
                                 isExpanded = isExpanded,
                                 isLoggedIn = isLoggedin,
+                                onLoginClick = {
+                                    navController.navigate(route = ScreenRoutes.LOGIN_PAGE)
+                                    isExpanded = !isExpanded
+                                },
                                 modifier = Modifier
                                     .align(Alignment.TopCenter)
                             )
@@ -104,6 +109,9 @@ fun GreetingPreview() {
                 DropdownMenuOverlay(
                     isExpanded = isExpanded,
                     isLoggedIn = isLoggedin,
+                    onLoginClick = {
+                        navController.navigate(route = ScreenRoutes.LOGIN_PAGE)
+                    },
                     modifier = Modifier
                         .align(Alignment.TopCenter)
                 )

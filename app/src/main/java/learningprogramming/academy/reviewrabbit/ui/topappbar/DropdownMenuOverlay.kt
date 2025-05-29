@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 fun DropdownMenuOverlay(
     isExpanded: Boolean,
     isLoggedIn: Boolean,
+    onLoginClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     AnimatedVisibility(
@@ -58,7 +59,7 @@ fun DropdownMenuOverlay(
                 } else if(!isLoggedIn) {
                     MenuText(
                         text = "Login",
-                        onClick = {}
+                        onClick = onLoginClick
                     )
                     HorizontalDivider(
                         modifier = Modifier.border(

@@ -21,4 +21,10 @@ abstract class RepositoryModule {
     abstract fun bindReviewsRepository(
         reviewsRepositoryImpl: ReviewsRepositoryImpl
     ): ReviewsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindUserRepository(
+        userRepositoryImpl: UserRepositoryImpl
+    ): UserRepository
 }

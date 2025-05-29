@@ -14,6 +14,7 @@ import learningprogramming.academy.reviewrabbit.model.ScreenRoutes
 import learningprogramming.academy.reviewrabbit.ui.screens.CompanyPage
 import learningprogramming.academy.reviewrabbit.ui.screens.CreateCompanyScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.HomeScreen
+import learningprogramming.academy.reviewrabbit.ui.screens.LoginPageScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.UserSettingsScreen
 import learningprogramming.academy.reviewrabbit.viewmodels.CompanyReviewViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.HomeScreenViewModel
@@ -63,6 +64,9 @@ fun ReviewRabbitApp(
                     companyId = companyId
                 )
             }
+        }
+        composable(route = ScreenRoutes.LOGIN_PAGE) {
+            LoginPageScreen()
         }
     }
 }

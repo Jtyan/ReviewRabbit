@@ -58,6 +58,11 @@ class UserViewModel @Inject constructor(
         }
     }
 
+    fun onLogoutClicked() {
+        viewModelScope.launch {
+            sessionManager.clearSession()
+        }
+    }
 
     fun resetLoginStateToIdle() {
         _loginUiState.value = LoginScreenUiState.Idle

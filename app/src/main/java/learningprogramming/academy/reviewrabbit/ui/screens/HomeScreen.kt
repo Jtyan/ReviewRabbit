@@ -169,7 +169,10 @@ fun LazyColumnCompanyItem(
                         fontSize = 20.sp,
                         color = MaterialTheme.colorScheme.secondaryContainer
                     )
-                    CompanyLocationAndTags(company = company)
+                    CompanyLocationAndTags(
+                        company = company,
+                        color = MaterialTheme.colorScheme.scrim
+                    )
                     CustomButton(
                         text = "Reviews",
                         onClick = { onClick(company.id) },

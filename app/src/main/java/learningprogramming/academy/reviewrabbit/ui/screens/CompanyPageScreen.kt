@@ -147,7 +147,7 @@ fun CompanyPageHeroBanner(
                 text = "Add Review",
                 onClick = {},
                 containerColor = extendedLight.addReview.colorContainer,
-                contentColor = MaterialTheme.colorScheme.scrim,
+                contentColor = Color.Unspecified,
                 modifier = Modifier
                     .width(180.dp)
                     .padding(top = 12.dp)

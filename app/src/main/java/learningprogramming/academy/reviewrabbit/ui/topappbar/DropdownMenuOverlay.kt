@@ -16,17 +16,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import learningprogramming.academy.reviewrabbit.viewmodels.UserViewModel
 
 @Composable
 fun DropdownMenuOverlay(
+    modifier: Modifier = Modifier,
     isExpanded: Boolean,
-    isLoggedIn: Boolean,
-    onLoginClick: () -> Unit,
-    modifier: Modifier = Modifier
+    viewModel: UserViewModel = hiltViewModel(),
+    onLoginClick: () -> Unit
 ) {
+    val isLoggedIn by viewModel.isLoggedIn.collectAsState()
     AnimatedVisibility(
         visible = isExpanded,
         enter = slideInVertically() + expandVertically(
@@ -56,7 +61,7 @@ fun DropdownMenuOverlay(
                         text = "Logout",
                         onClick = {}
                     )
-                } else if(!isLoggedIn) {
+                } else {
                     MenuText(
                         text = "Login",
                         onClick = onLoginClick

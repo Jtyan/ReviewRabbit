@@ -31,7 +31,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ReviewRabbitTheme(dynamicColor = false) {
-                var isLoggedin by rememberSaveable { mutableStateOf(false) }
                 var isExpanded by rememberSaveable { mutableStateOf(false) }
                 val navController = rememberNavController()
 
@@ -60,7 +59,6 @@ class MainActivity : ComponentActivity() {
                             )
                             DropdownMenuOverlay(
                                 isExpanded = isExpanded,
-                                isLoggedIn = isLoggedin,
                                 onLoginClick = {
                                     navController.navigate(route = ScreenRoutes.LOGIN_PAGE)
                                     isExpanded = !isExpanded
@@ -81,7 +79,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     ReviewRabbitTheme(dynamicColor = false, darkTheme = false) {
-        var isLoggedin by rememberSaveable { mutableStateOf(false) }
         var isExpanded by rememberSaveable { mutableStateOf(true) }
         val navController = rememberNavController()
         Scaffold(
@@ -108,7 +105,6 @@ fun GreetingPreview() {
                 )
                 DropdownMenuOverlay(
                     isExpanded = isExpanded,
-                    isLoggedIn = isLoggedin,
                     onLoginClick = {
                         navController.navigate(route = ScreenRoutes.LOGIN_PAGE)
                     },

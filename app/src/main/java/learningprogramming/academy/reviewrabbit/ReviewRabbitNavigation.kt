@@ -18,6 +18,7 @@ import learningprogramming.academy.reviewrabbit.ui.screens.LoginPageScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.UserSettingsScreen
 import learningprogramming.academy.reviewrabbit.viewmodels.CompanyReviewViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.HomeScreenViewModel
+import learningprogramming.academy.reviewrabbit.viewmodels.UserViewModel
 
 @Composable
 fun ReviewRabbitApp(
@@ -25,6 +26,7 @@ fun ReviewRabbitApp(
 ) {
     val homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
     val companyReviewViewModel: CompanyReviewViewModel = hiltViewModel()
+    val userViewModel: UserViewModel = hiltViewModel()
 
     NavHost(navController = navController, startDestination = ScreenRoutes.HOME) {
         composable(route = ScreenRoutes.HOME) {
@@ -66,7 +68,10 @@ fun ReviewRabbitApp(
             }
         }
         composable(route = ScreenRoutes.LOGIN_PAGE) {
-            LoginPageScreen()
+            LoginPageScreen(
+                userViewModel = userViewModel,
+                onLoginSuccessNavigation = { navController.navigate(ScreenRoutes.HOME) }
+            )
         }
     }
 }

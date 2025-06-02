@@ -4,6 +4,7 @@ import android.util.Log
 import learningprogramming.academy.reviewrabbit.data.model.PostUserLoginApi
 import learningprogramming.academy.reviewrabbit.data.model.UserLoginApiResponse
 import learningprogramming.academy.reviewrabbit.data.network.UserApiService
+import learningprogramming.academy.reviewrabbit.data.session.SessionManager
 import retrofit2.Response
 import java.io.IOException
 import javax.inject.Inject
@@ -12,7 +13,10 @@ interface UserRepository {
     suspend fun loginUser(postUserLoginApi: PostUserLoginApi): LoginResult
 }
 
-class UserRepositoryImpl @Inject constructor(private val userApiService: UserApiService) :
+class UserRepositoryImpl @Inject constructor(
+    private val userApiService: UserApiService,
+    private val sessionManager: SessionManager
+) :
     UserRepository {
     override suspend fun loginUser(postUserLoginApi: PostUserLoginApi): LoginResult {
         return try {
@@ -21,6 +25,7 @@ class UserRepositoryImpl @Inject constructor(private val userApiService: UserApi
             if (response.isSuccessful) {
                 val userLoginApiResponse = response.body()
                 if (userLoginApiResponse != null) {
+                    sessionManager.saveSession(userLoginApiResponse)
                     LoginResult.Success(userData = userLoginApiResponse)
                 } else {
                     Log.e("UserRepository", "Login successful but body was null")

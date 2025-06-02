@@ -77,8 +77,8 @@ dependencies {
     implementation(libs.retrofit.kotlinx.serialization.converter.jakewharton)
     //Prettytime
     implementation ("org.ocpsoft.prettytime:prettytime:5.0.8.Final")
-
-
+    //PreferencesDataStore
+    implementation(libs.datastore.preferences)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

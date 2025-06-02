@@ -52,8 +52,8 @@ fun ReviewRabbitBottomNavBar(
 //                    )
 //                },
                 colors = NavigationBarItemColors(
-                    selectedIconColor = MaterialTheme.colorScheme.primary,
-                    selectedTextColor = MaterialTheme.colorScheme.primary,
+                    selectedIconColor = MaterialTheme.colorScheme.primaryContainer,
+                    selectedTextColor = MaterialTheme.colorScheme.primaryContainer,
                     selectedIndicatorColor = Color.Transparent,
                     unselectedIconColor = extendedLight.heroBanner.color,
                     unselectedTextColor = extendedLight.heroBanner.color,

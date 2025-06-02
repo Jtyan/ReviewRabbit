@@ -45,7 +45,7 @@ import learningprogramming.academy.reviewrabbit.ui.components.common.CustomButto
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomCard
 import learningprogramming.academy.reviewrabbit.ui.theme.ReviewRabbitTheme
 import learningprogramming.academy.reviewrabbit.ui.theme.extendedLight
-import learningprogramming.academy.reviewrabbit.util.Base64
+import learningprogramming.academy.reviewrabbit.util.Base64decoder
 import learningprogramming.academy.reviewrabbit.viewmodels.CompanyReviewViewModel
 import org.ocpsoft.prettytime.PrettyTime
 import java.time.Instant
@@ -120,7 +120,7 @@ fun CompanyPageHeroBanner(
         Column(
             modifier = Modifier.padding(12.dp)
         ) {
-            val imageData = remember(company.image) { Base64.decode(company.image) }
+            val imageData = remember(company.image) { Base64decoder.decode(company.image) }
 
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)

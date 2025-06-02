@@ -3,7 +3,7 @@ package learningprogramming.academy.reviewrabbit.util
 import android.util.Base64
 import android.util.Log
 
-object Base64 {
+object Base64decoder {
     fun decode(image: String?): ByteArray? {
         if (image.isNullOrEmpty()) return null
 

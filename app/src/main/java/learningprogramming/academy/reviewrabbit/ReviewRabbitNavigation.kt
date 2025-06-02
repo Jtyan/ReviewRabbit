@@ -5,6 +5,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -15,6 +16,7 @@ import learningprogramming.academy.reviewrabbit.ui.screens.CompanyPage
 import learningprogramming.academy.reviewrabbit.ui.screens.CreateCompanyScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.HomeScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.LoginPageScreen
+import learningprogramming.academy.reviewrabbit.ui.screens.LogoutPageScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.UserSettingsScreen
 import learningprogramming.academy.reviewrabbit.viewmodels.CompanyReviewViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.HomeScreenViewModel
@@ -22,11 +24,12 @@ import learningprogramming.academy.reviewrabbit.viewmodels.UserViewModel
 
 @Composable
 fun ReviewRabbitApp(
-    navController: NavHostController
+    navController: NavHostController,
+    homeScreenViewModel: HomeScreenViewModel,
+    companyReviewViewModel: CompanyReviewViewModel,
+    userViewModel: UserViewModel,
 ) {
-    val homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
-    val companyReviewViewModel: CompanyReviewViewModel = hiltViewModel()
-    val userViewModel: UserViewModel = hiltViewModel()
+
 
     NavHost(navController = navController, startDestination = ScreenRoutes.HOME) {
         composable(route = ScreenRoutes.HOME) {
@@ -71,6 +74,17 @@ fun ReviewRabbitApp(
             LoginPageScreen(
                 userViewModel = userViewModel,
                 onLoginSuccessNavigation = { navController.navigate(ScreenRoutes.HOME) }
+            )
+        }
+        composable(route = ScreenRoutes.LOGGOUT_PAGE) {
+            LogoutPageScreen(
+                onLogoutSuccessNavigation = {
+                    navController.navigate(ScreenRoutes.HOME) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            inclusive = true
+                        }
+                    }
+                }
             )
         }
     }

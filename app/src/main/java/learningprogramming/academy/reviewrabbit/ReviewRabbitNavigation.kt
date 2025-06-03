@@ -4,7 +4,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -14,20 +13,23 @@ import androidx.navigation.navArgument
 import learningprogramming.academy.reviewrabbit.model.ScreenRoutes
 import learningprogramming.academy.reviewrabbit.ui.screens.CompanyPage
 import learningprogramming.academy.reviewrabbit.ui.screens.CreateCompanyScreen
+import learningprogramming.academy.reviewrabbit.ui.screens.ForgotPasswordScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.HomeScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.LoginPageScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.LogoutPageScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.UserSettingsScreen
 import learningprogramming.academy.reviewrabbit.viewmodels.CompanyReviewViewModel
+import learningprogramming.academy.reviewrabbit.viewmodels.ForgotPasswordViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.HomeScreenViewModel
-import learningprogramming.academy.reviewrabbit.viewmodels.UserViewModel
+import learningprogramming.academy.reviewrabbit.viewmodels.LoginViewModel
 
 @Composable
 fun ReviewRabbitApp(
     navController: NavHostController,
     homeScreenViewModel: HomeScreenViewModel,
     companyReviewViewModel: CompanyReviewViewModel,
-    userViewModel: UserViewModel,
+    loginViewModel: LoginViewModel,
+    forgotPasswordViewModel: ForgotPasswordViewModel
 ) {
 
 
@@ -72,11 +74,12 @@ fun ReviewRabbitApp(
         }
         composable(route = ScreenRoutes.LOGIN_PAGE) {
             LoginPageScreen(
-                userViewModel = userViewModel,
-                onLoginSuccessNavigation = { navController.navigate(ScreenRoutes.HOME) }
+                loginViewModel = loginViewModel,
+                onLoginSuccessNavigation = { navController.navigate(ScreenRoutes.HOME) },
+                onForgotPasswordClick = { navController.navigate(ScreenRoutes.FORGOT_PASSWORD) }
             )
         }
-        composable(route = ScreenRoutes.LOGGOUT_PAGE) {
+        composable(route = ScreenRoutes.LOGOUT_PAGE) {
             LogoutPageScreen(
                 onLogoutSuccessNavigation = {
                     navController.navigate(ScreenRoutes.HOME) {
@@ -85,6 +88,12 @@ fun ReviewRabbitApp(
                         }
                     }
                 }
+            )
+        }
+        composable(route = ScreenRoutes.FORGOT_PASSWORD) {
+            ForgotPasswordScreen(
+                forgotPasswordViewModel = forgotPasswordViewModel,
+                onClick = {}
             )
         }
     }

@@ -6,6 +6,7 @@ object ScreenRoutes {
     const val USER_SETTINGS = "settings_route"
     const val COMPANY_PAGE = "company_page/{companyId}"
     const val LOGIN_PAGE = "login_route"
-    const val LOGGOUT_PAGE = "logged_out_route"
+    const val LOGOUT_PAGE = "logged_out_route"
+    const val FORGOT_PASSWORD = "forgot_password_route"
     fun companyPageWithArg(companyId: Int) = "company_page/$companyId"
 }

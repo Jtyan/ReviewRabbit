@@ -18,7 +18,7 @@ import learningprogramming.academy.reviewrabbit.data.session.SessionManager
 import javax.inject.Inject
 
 @HiltViewModel
-class UserViewModel @Inject constructor(
+class LoginViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val sessionManager: SessionManager
 ) : ViewModel() {

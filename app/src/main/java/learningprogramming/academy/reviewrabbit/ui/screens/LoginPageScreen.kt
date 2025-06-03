@@ -41,31 +41,32 @@ import learningprogramming.academy.reviewrabbit.ui.components.common.CustomTextF
 import learningprogramming.academy.reviewrabbit.ui.theme.extendedLight
 import learningprogramming.academy.reviewrabbit.util.PasswordOutputTransformation
 import learningprogramming.academy.reviewrabbit.viewmodels.LoginScreenUiState
-import learningprogramming.academy.reviewrabbit.viewmodels.UserViewModel
+import learningprogramming.academy.reviewrabbit.viewmodels.LoginViewModel
 
 @Composable
 fun LoginPageScreen(
     modifier: Modifier = Modifier,
-    userViewModel: UserViewModel,
-    onLoginSuccessNavigation: () -> Unit
+    loginViewModel: LoginViewModel,
+    onLoginSuccessNavigation: () -> Unit,
+    onForgotPasswordClick: () -> Unit
 ) {
     var isPasswordVisible by rememberSaveable { mutableStateOf(false) }
 
     val emailState = rememberTextFieldState()
     val passwordState = rememberTextFieldState()
 
-    val loginUiState by userViewModel.loginUiState.collectAsState()
+    val loginUiState by loginViewModel.loginUiState.collectAsState()
 
     DisposableEffect(Unit) {
         onDispose {
-            userViewModel.resetLoginStateToIdle()
+            loginViewModel.resetLoginStateToIdle()
         }
     }
 
     LaunchedEffect(loginUiState) {
         if (loginUiState is LoginScreenUiState.Success) {
             onLoginSuccessNavigation()
-            userViewModel.resetLoginStateToIdle()
+            loginViewModel.resetLoginStateToIdle()
         }
     }
 
@@ -127,10 +128,10 @@ fun LoginPageScreen(
             CustomButton(
                 text = "Log In",
                 onClick = {
-                    userViewModel.onLoginClicked(
+                    loginViewModel.onLoginClicked(
                         PostUserLoginApi(
-                            email = emailState.text.toString(),
-                            password = passwordState.text.toString()
+                            email = emailState.text.toString().trim(),
+                            password = passwordState.text.toString().trim()
                         )
                     )
                 },
@@ -147,7 +148,7 @@ fun LoginPageScreen(
                 modifier = Modifier
                     .align(Alignment.Start)
                     .padding(horizontal = 16.dp)
-                    .clickable {}
+                    .clickable { onForgotPasswordClick() }
             )
         }
     }

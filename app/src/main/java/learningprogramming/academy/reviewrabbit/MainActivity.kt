@@ -24,8 +24,9 @@ import learningprogramming.academy.reviewrabbit.ui.components.topappbar.Dropdown
 import learningprogramming.academy.reviewrabbit.ui.components.topappbar.ReviewRabbitTopAppBar
 import learningprogramming.academy.reviewrabbit.ui.theme.ReviewRabbitTheme
 import learningprogramming.academy.reviewrabbit.viewmodels.CompanyReviewViewModel
+import learningprogramming.academy.reviewrabbit.viewmodels.ForgotPasswordViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.HomeScreenViewModel
-import learningprogramming.academy.reviewrabbit.viewmodels.UserViewModel
+import learningprogramming.academy.reviewrabbit.viewmodels.LoginViewModel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -36,7 +37,8 @@ class MainActivity : ComponentActivity() {
             ReviewRabbitTheme(dynamicColor = false) {
                 val homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
                 val companyReviewViewModel: CompanyReviewViewModel = hiltViewModel()
-                val userViewModel: UserViewModel = hiltViewModel()
+                val userViewModel: LoginViewModel = hiltViewModel()
+                val forgotPasswordViewModel: ForgotPasswordViewModel = hiltViewModel()
 
                 val navController = rememberNavController()
                 var isExpanded by rememberSaveable { mutableStateOf(false) }
@@ -66,14 +68,15 @@ class MainActivity : ComponentActivity() {
                                 navController = navController,
                                 homeScreenViewModel = homeScreenViewModel,
                                 companyReviewViewModel = companyReviewViewModel,
-                                userViewModel = userViewModel
+                                loginViewModel = userViewModel,
+                                forgotPasswordViewModel = forgotPasswordViewModel
                             )
                             DropdownMenuOverlay(
                                 isExpanded = isExpanded,
                                 isLoggedIn = isLoggedIn,
                                 onLogoutClick = {
                                     userViewModel.onLogoutClicked()
-                                    navController.navigate(route = ScreenRoutes.LOGGOUT_PAGE)
+                                    navController.navigate(route = ScreenRoutes.LOGOUT_PAGE)
                                     isExpanded = !isExpanded
                                 },
                                 onLoginClick = {

@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import learningprogramming.academy.reviewrabbit.data.model.PostUserLoginApi
 import learningprogramming.academy.reviewrabbit.data.model.UserLoginApiResponse
-import learningprogramming.academy.reviewrabbit.data.repository.LoginResult
+import learningprogramming.academy.reviewrabbit.data.repository.UserAuthResult
 import learningprogramming.academy.reviewrabbit.data.repository.UserRepository
 import learningprogramming.academy.reviewrabbit.data.session.SessionManager
 import javax.inject.Inject
@@ -35,25 +35,26 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             _loginUiState.value = LoginScreenUiState.Loading
             when (val response = userRepository.loginUser(postUserLoginApi)) {
-                is LoginResult.Success -> {
+                is UserAuthResult.Success -> {
                     Log.i("UserViewModel", "Login successful")
                     _loginUiState.value = LoginScreenUiState.Success(response.userData)
                 }
 
-                is LoginResult.Error -> {
+                is UserAuthResult.Error -> {
                     Log.w("UserViewModel", "Login error: ${response.message}")
                     _loginUiState.value = LoginScreenUiState.Error(response.message)
                 }
 
-                LoginResult.NetworkError -> {
+                UserAuthResult.NetworkError -> {
                     Log.w("UserViewModel", "Login network error")
                     _loginUiState.value = LoginScreenUiState.Error("Network error. Please check your connection.")
                 }
 
-                is LoginResult.UnknownError -> {
+                is UserAuthResult.UnknownError -> {
                     Log.e("UserViewModel", "Login unknown error", response.exception)
                     _loginUiState.value = LoginScreenUiState.Error("An unexpected error occurred.")
                 }
+                UserAuthResult.PasswordRecoverySent -> {}
             }
         }
     }

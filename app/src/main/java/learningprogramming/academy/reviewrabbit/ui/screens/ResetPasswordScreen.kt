@@ -47,7 +47,7 @@ import learningprogramming.academy.reviewrabbit.viewmodels.ResetPasswordViewMode
 fun ResetPasswordScreen(
     modifier: Modifier = Modifier,
     resetPasswordViewModel: ResetPasswordViewModel,
-    onResetSuccessNavigation: () -> Unit,
+    onResetSuccessNavigation: (String) -> Unit,
     onForgotPasswordClick: () -> Unit
 ) {
     var isPasswordVisible by rememberSaveable { mutableStateOf(false) }
@@ -72,7 +72,8 @@ fun ResetPasswordScreen(
 
     LaunchedEffect(resetPasswordUiState) {
         if (resetPasswordUiState is ResetPasswordUiState.Success) {
-            onResetSuccessNavigation()
+            val notification = (resetPasswordUiState as ResetPasswordUiState.Success).message
+            onResetSuccessNavigation(notification)
             resetPasswordViewModel.resetStateToIdle()
         }
     }
@@ -101,18 +102,6 @@ fun ResetPasswordScreen(
                     text = (resetPasswordUiState as ResetPasswordUiState.Error).message,
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.error,
-                )
-            }
-        } else if (resetPasswordUiState is ResetPasswordUiState.Success) {
-            Box(
-                modifier = Modifier
-                    .border(width = 1.dp, color = extendedLight.forgotPassword.color)
-                    .padding(12.dp)
-            ) {
-                Text(
-                    text = (resetPasswordUiState as ResetPasswordUiState.Success).message,
-                    fontSize = 12.sp,
-                    color = extendedLight.forgotPassword.color,
                 )
             }
         }

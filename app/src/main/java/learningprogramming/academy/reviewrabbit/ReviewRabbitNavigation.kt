@@ -96,14 +96,26 @@ fun ReviewRabbitApp(
         composable(route = ScreenRoutes.FORGOT_PASSWORD) {
             ForgotPasswordScreen(
                 forgotPasswordViewModel = forgotPasswordViewModel,
-                onHaveTokenClick = { navController.navigate(ScreenRoutes.RESET_PASSWORD)}
+                onHaveTokenClick = { navController.navigate(ScreenRoutes.RESET_PASSWORD) }
             )
         }
         composable(route = ScreenRoutes.RESET_PASSWORD) {
             ResetPasswordScreen(
                 resetPasswordViewModel = resetPasswordViewModel,
-                onResetSuccessNavigation = { navController.navigate(ScreenRoutes.LOGIN_PAGE)},
+                onResetSuccessNavigation = { notification -> navController.navigate(ScreenRoutes.loginPageWithArg(notification)) },
                 onForgotPasswordClick = { navController.navigate(ScreenRoutes.FORGOT_PASSWORD) },
+            )
+        }
+        composable(
+            route = ScreenRoutes.LOGIN_PAGE_AFTER_RESET,
+            arguments = listOf(navArgument("reset") { type = NavType.StringType }),
+        ) {navBackStackEntry ->
+            val message = navBackStackEntry.arguments?.getString("reset")
+            LoginPageScreen(
+                loginViewModel = loginViewModel,
+                notification = message,
+                onLoginSuccessNavigation = { navController.navigate(ScreenRoutes.HOME) },
+                onForgotPasswordClick = { navController.navigate(ScreenRoutes.FORGOT_PASSWORD) }
             )
         }
     }

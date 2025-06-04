@@ -48,7 +48,8 @@ fun LoginPageScreen(
     modifier: Modifier = Modifier,
     loginViewModel: LoginViewModel,
     onLoginSuccessNavigation: () -> Unit,
-    onForgotPasswordClick: () -> Unit
+    onForgotPasswordClick: () -> Unit,
+    notification: String? = null,
 ) {
     var isPasswordVisible by rememberSaveable { mutableStateOf(false) }
 
@@ -93,6 +94,19 @@ fun LoginPageScreen(
                     text = (loginUiState as LoginScreenUiState.Error).message,
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.error,
+                )
+            }
+        }
+        if (!notification.isNullOrBlank()) {
+            Box(
+                modifier = Modifier
+                    .border(width = 1.dp, color = extendedLight.forgotPassword.color)
+                    .padding(12.dp)
+            ) {
+                Text(
+                    text = notification,
+                    fontSize = 12.sp,
+                    color = extendedLight.forgotPassword.color,
                 )
             }
         }

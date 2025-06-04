@@ -28,7 +28,8 @@ fun CustomTextField(
     required: Boolean,
     trailingIcon: @Composable() (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    outputTransformation: OutputTransformation? = null
+    outputTransformation: OutputTransformation? = null,
+    focusedContainerColor: Color = MaterialTheme.colorScheme.surfaceContainerLow,
 ) {
     Column(
         modifier = Modifier
@@ -59,7 +60,7 @@ fun CustomTextField(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,
-                focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                focusedContainerColor = focusedContainerColor,
                 unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
                 focusedPlaceholderColor = MaterialTheme.colorScheme.outlineVariant,
                 unfocusedPlaceholderColor = MaterialTheme.colorScheme.outlineVariant

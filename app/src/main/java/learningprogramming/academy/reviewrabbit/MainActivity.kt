@@ -27,6 +27,7 @@ import learningprogramming.academy.reviewrabbit.viewmodels.CompanyReviewViewMode
 import learningprogramming.academy.reviewrabbit.viewmodels.ForgotPasswordViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.HomeScreenViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.LoginViewModel
+import learningprogramming.academy.reviewrabbit.viewmodels.ResetPasswordViewModel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -37,12 +38,13 @@ class MainActivity : ComponentActivity() {
             ReviewRabbitTheme(dynamicColor = false) {
                 val homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
                 val companyReviewViewModel: CompanyReviewViewModel = hiltViewModel()
-                val userViewModel: LoginViewModel = hiltViewModel()
+                val loginViewModel: LoginViewModel = hiltViewModel()
                 val forgotPasswordViewModel: ForgotPasswordViewModel = hiltViewModel()
+                val resetPasswordViewModel: ResetPasswordViewModel = hiltViewModel()
 
                 val navController = rememberNavController()
                 var isExpanded by rememberSaveable { mutableStateOf(false) }
-                val isLoggedIn by userViewModel.isLoggedIn.collectAsState()
+                val isLoggedIn by loginViewModel.isLoggedIn.collectAsState()
 
                 Box {
                     Scaffold(
@@ -68,14 +70,15 @@ class MainActivity : ComponentActivity() {
                                 navController = navController,
                                 homeScreenViewModel = homeScreenViewModel,
                                 companyReviewViewModel = companyReviewViewModel,
-                                loginViewModel = userViewModel,
-                                forgotPasswordViewModel = forgotPasswordViewModel
+                                loginViewModel = loginViewModel,
+                                forgotPasswordViewModel = forgotPasswordViewModel,
+                                resetPasswordViewModel = resetPasswordViewModel
                             )
                             DropdownMenuOverlay(
                                 isExpanded = isExpanded,
                                 isLoggedIn = isLoggedIn,
                                 onLogoutClick = {
-                                    userViewModel.onLogoutClicked()
+                                    loginViewModel.onLogoutClicked()
                                     navController.navigate(route = ScreenRoutes.LOGOUT_PAGE)
                                     isExpanded = !isExpanded
                                 },

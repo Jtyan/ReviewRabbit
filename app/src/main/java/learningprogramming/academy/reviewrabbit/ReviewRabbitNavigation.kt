@@ -17,11 +17,13 @@ import learningprogramming.academy.reviewrabbit.ui.screens.ForgotPasswordScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.HomeScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.LoginPageScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.LogoutPageScreen
+import learningprogramming.academy.reviewrabbit.ui.screens.ResetPasswordScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.UserSettingsScreen
 import learningprogramming.academy.reviewrabbit.viewmodels.CompanyReviewViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.ForgotPasswordViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.HomeScreenViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.LoginViewModel
+import learningprogramming.academy.reviewrabbit.viewmodels.ResetPasswordViewModel
 
 @Composable
 fun ReviewRabbitApp(
@@ -29,7 +31,8 @@ fun ReviewRabbitApp(
     homeScreenViewModel: HomeScreenViewModel,
     companyReviewViewModel: CompanyReviewViewModel,
     loginViewModel: LoginViewModel,
-    forgotPasswordViewModel: ForgotPasswordViewModel
+    forgotPasswordViewModel: ForgotPasswordViewModel,
+    resetPasswordViewModel: ResetPasswordViewModel
 ) {
 
 
@@ -93,7 +96,14 @@ fun ReviewRabbitApp(
         composable(route = ScreenRoutes.FORGOT_PASSWORD) {
             ForgotPasswordScreen(
                 forgotPasswordViewModel = forgotPasswordViewModel,
-                onClick = {}
+                onHaveTokenClick = { navController.navigate(ScreenRoutes.RESET_PASSWORD)}
+            )
+        }
+        composable(route = ScreenRoutes.RESET_PASSWORD) {
+            ResetPasswordScreen(
+                resetPasswordViewModel = resetPasswordViewModel,
+                onResetSuccessNavigation = { navController.navigate(ScreenRoutes.LOGIN_PAGE)},
+                onForgotPasswordClick = { navController.navigate(ScreenRoutes.FORGOT_PASSWORD) },
             )
         }
     }

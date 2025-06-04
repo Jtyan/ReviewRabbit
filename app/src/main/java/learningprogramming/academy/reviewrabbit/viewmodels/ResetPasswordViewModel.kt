@@ -39,12 +39,19 @@ class ResetPasswordViewModel @Inject constructor(
             _resetPasswordUiState.value = ResetPasswordUiState.Error("Email $email is invalid")
             return
         }
+        if (password.isEmpty()) {
+            _resetPasswordUiState.value = ResetPasswordUiState.Error("Password must not be empty")
+            return
+        } else if (password.length < 8) {
+            _resetPasswordUiState.value = ResetPasswordUiState.Error("Password must be 8 or more characters")
+            return
+        }
         viewModelScope.launch {
             _resetPasswordUiState.value = ResetPasswordUiState.Loading
             when (val response = userRepository.resetPassword(resetPasswordApi)) {
                 is UserAuthResult.ResetPasswordSuccess -> {
                     Log.i("UserViewModel", "Password reset successful!")
-                    _resetPasswordUiState.value = ResetPasswordUiState.Success("Password reset successful!")
+                    _resetPasswordUiState.value = ResetPasswordUiState.Success("Password reset successful! Please log in with your new password")
                 }
 
                 is UserAuthResult.Error -> {

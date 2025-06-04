@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.rememberTextFieldState
@@ -38,7 +37,7 @@ import learningprogramming.academy.reviewrabbit.viewmodels.ForgotPasswordViewMod
 fun ForgotPasswordScreen(
     modifier: Modifier = Modifier,
     forgotPasswordViewModel: ForgotPasswordViewModel,
-    onClick: () -> Unit
+    onHaveTokenClick: () -> Unit
 ) {
 
     val emailState = rememberTextFieldState()
@@ -47,12 +46,6 @@ fun ForgotPasswordScreen(
 
     DisposableEffect(Unit) {
         onDispose {
-            forgotPasswordViewModel.resetForgotPasswordStateToIdle()
-        }
-    }
-
-    LaunchedEffect(forgotPasswordUiState) {
-        if (forgotPasswordUiState is ForgotPasswordUiState.Success) {
             forgotPasswordViewModel.resetForgotPasswordStateToIdle()
         }
     }
@@ -85,13 +78,13 @@ fun ForgotPasswordScreen(
         } else if (forgotPasswordUiState is ForgotPasswordUiState.Success) {
             Box(
                 modifier = Modifier
-                    .border(width = 1.dp, color = Color.Green)
+                    .border(width = 1.dp, color = extendedLight.forgotPassword.color)
                     .padding(12.dp)
             ) {
                 Text(
                     text = "A recovery token has been sent to your email!",
                     fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.error,
+                    color = extendedLight.forgotPassword.color,
                 )
             }
         }
@@ -108,9 +101,11 @@ fun ForgotPasswordScreen(
             CustomButton(
                 text = "Recover password",
                 onClick = {
-                    forgotPasswordViewModel.onRecoverPasswordClicked(PostUserForgetPasswordApi(
-                        email = emailState.text.toString().trim()
-                    ))
+                    forgotPasswordViewModel.onRecoverPasswordClicked(
+                        PostUserForgetPasswordApi(
+                            email = emailState.text.toString().trim()
+                        )
+                    )
                 },
                 modifier = Modifier
                     .align(Alignment.Start)
@@ -125,7 +120,7 @@ fun ForgotPasswordScreen(
                 modifier = Modifier
                     .align(Alignment.Start)
                     .padding(horizontal = 16.dp)
-                    .clickable {}
+                    .clickable { onHaveTokenClick() }
             )
         }
     }

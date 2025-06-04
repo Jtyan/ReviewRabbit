@@ -54,7 +54,8 @@ class LoginViewModel @Inject constructor(
                     Log.e("UserViewModel", "Login unknown error", response.exception)
                     _loginUiState.value = LoginScreenUiState.Error("An unexpected error occurred.")
                 }
-                UserAuthResult.PasswordRecoverySent -> {}
+                is UserAuthResult.PasswordRecoverySent -> {}
+                is UserAuthResult.ResetPasswordSuccess -> {}
             }
         }
     }

@@ -56,6 +56,7 @@ class ForgotPasswordViewModel @Inject constructor(
                 }
 
                 is UserAuthResult.Success -> {}
+                is UserAuthResult.ResetPasswordSuccess -> {}
             }
         }
     }

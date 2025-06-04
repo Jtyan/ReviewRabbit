@@ -3,6 +3,7 @@ package learningprogramming.academy.reviewrabbit.data.repository
 import android.util.Log
 import learningprogramming.academy.reviewrabbit.data.model.PostUserForgetPasswordApi
 import learningprogramming.academy.reviewrabbit.data.model.PostUserLoginApi
+import learningprogramming.academy.reviewrabbit.data.model.ResetPasswordApi
 import learningprogramming.academy.reviewrabbit.data.model.UserLoginApiResponse
 import learningprogramming.academy.reviewrabbit.data.network.UserApiService
 import learningprogramming.academy.reviewrabbit.data.session.SessionManager
@@ -13,13 +14,13 @@ import javax.inject.Inject
 interface UserRepository {
     suspend fun loginUser(postUserLoginApi: PostUserLoginApi): UserAuthResult
     suspend fun recoverPassword(postUserForgetPasswordApi: PostUserForgetPasswordApi): UserAuthResult
+    suspend fun resetPassword(resetPasswordApi: ResetPasswordApi): UserAuthResult
 }
 
 class UserRepositoryImpl @Inject constructor(
     private val userApiService: UserApiService,
     private val sessionManager: SessionManager
-) :
-    UserRepository {
+) : UserRepository {
     override suspend fun loginUser(postUserLoginApi: PostUserLoginApi): UserAuthResult {
         return try {
             val response: Response<UserLoginApiResponse> =
@@ -70,6 +71,25 @@ class UserRepositoryImpl @Inject constructor(
             UserAuthResult.UnknownError(e)
         }
     }
+
+    override suspend fun resetPassword(resetPasswordApi: ResetPasswordApi): UserAuthResult {
+        return try {
+            val response = userApiService.resetPassword(resetPasswordApi)
+            if (response.isSuccessful) {
+                Log.i("UserRepository", "Password reset successful")
+                UserAuthResult.ResetPasswordSuccess
+            } else {
+                Log.e("UserRepository", "Password reset API error: ${response.code()}")
+                UserAuthResult.Error(response.errorBody().toString())
+            }
+        } catch (e: IOException) {
+            Log.e("UserRepository", "Password reset network error: ${e.message}")
+            UserAuthResult.NetworkError
+        } catch (e: Exception) {
+            Log.e("UserRepository", "Password reset unknown error: ${e.message}")
+            UserAuthResult.UnknownError(e)
+        }
+    }
 }
 
 sealed interface UserAuthResult {
@@ -78,4 +98,5 @@ sealed interface UserAuthResult {
     data object NetworkError : UserAuthResult
     data class UnknownError(val exception: Throwable) : UserAuthResult
     data object PasswordRecoverySent : UserAuthResult
+    data object ResetPasswordSuccess: UserAuthResult
 }

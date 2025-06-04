@@ -20,3 +20,10 @@ data class PostUserLoginApi(
 data class PostUserForgetPasswordApi(
     val email: String
 )
+
+@Serializable
+data class ResetPasswordApi(
+    val email: String,
+    val token: String,
+    val newPassword: String
+)

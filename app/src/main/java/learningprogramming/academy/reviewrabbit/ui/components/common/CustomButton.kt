@@ -18,10 +18,9 @@ import learningprogramming.academy.reviewrabbit.ui.theme.ReviewRabbitTheme
 
 @Composable
 fun CustomButton(
-    modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit,
-    enabled: Boolean = true,
+    modifier: Modifier = Modifier,
     containerColor: Color = MaterialTheme.colorScheme.tertiary,
     contentColor: Color = MaterialTheme.colorScheme.onTertiary
 ) {
@@ -31,8 +30,8 @@ fun CustomButton(
         colors = ButtonColors(
             containerColor = containerColor,
             contentColor = contentColor,
-            disabledContainerColor = MaterialTheme.colorScheme.outline,
-            disabledContentColor = MaterialTheme.colorScheme.outlineVariant,
+            disabledContainerColor = MaterialTheme.colorScheme.onTertiaryContainer,
+            disabledContentColor = MaterialTheme.colorScheme.secondary,
         ),
         elevation = ButtonDefaults.elevatedButtonElevation(4.dp),
         content = {
@@ -42,7 +41,6 @@ fun CustomButton(
                 fontSize = 16.sp
             )
         },
-        enabled = enabled,
         modifier = modifier
     )
 }

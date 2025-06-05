@@ -1,5 +1,6 @@
 package learningprogramming.academy.reviewrabbit.ui.components.common
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -39,7 +40,8 @@ fun CustomButton(
             Text(
                 text = text,
                 fontWeight = FontWeight.Normal,
-                fontSize = 16.sp
+                fontSize = 16.sp,
+                modifier = Modifier.padding(horizontal = 8.dp)
             )
         },
         enabled = enabled,

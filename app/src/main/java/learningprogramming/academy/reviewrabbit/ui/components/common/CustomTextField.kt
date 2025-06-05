@@ -22,13 +22,15 @@ import learningprogramming.academy.reviewrabbit.ui.theme.ReviewRabbitTheme
 
 @Composable
 fun CustomTextField(
+    modifier: Modifier = Modifier,
     textFieldState: TextFieldState = rememberTextFieldState(),
     text: String,
     placeholder: String = "",
     required: Boolean,
-    trailingIcon: @Composable() (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     outputTransformation: OutputTransformation? = null,
+    lineLimits: TextFieldLineLimits = TextFieldLineLimits.SingleLine,
     focusedContainerColor: Color = MaterialTheme.colorScheme.surfaceContainerLow,
 ) {
     Column(
@@ -49,7 +51,7 @@ fun CustomTextField(
         }
         TextField(
             state = textFieldState,
-            lineLimits = TextFieldLineLimits.SingleLine,
+            lineLimits = lineLimits,
             placeholder = { Text(text = placeholder) },
             trailingIcon = trailingIcon,
             outputTransformation = outputTransformation,
@@ -64,8 +66,8 @@ fun CustomTextField(
                 unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
                 focusedPlaceholderColor = MaterialTheme.colorScheme.outlineVariant,
                 unfocusedPlaceholderColor = MaterialTheme.colorScheme.outlineVariant
-                ),
-            modifier = Modifier.fillMaxWidth()
+            ),
+            modifier = modifier.fillMaxWidth()
         )
     }
 }

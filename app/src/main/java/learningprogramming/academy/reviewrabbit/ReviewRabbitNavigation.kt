@@ -17,8 +17,8 @@ import learningprogramming.academy.reviewrabbit.ui.screens.ForgotPasswordScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.HomeScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.LoginPageScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.LogoutPageScreen
+import learningprogramming.academy.reviewrabbit.ui.screens.ProfileSettingsScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.ResetPasswordScreen
-import learningprogramming.academy.reviewrabbit.ui.screens.UserSettingsScreen
 import learningprogramming.academy.reviewrabbit.viewmodels.CompanyReviewViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.ForgotPasswordViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.HomeScreenViewModel
@@ -49,7 +49,10 @@ fun ReviewRabbitApp(
             CreateCompanyScreen()
         }
         composable(route = ScreenRoutes.USER_SETTINGS) {
-            UserSettingsScreen()
+            ProfileSettingsScreen(
+                onChangePasswordClick = {},
+                onInviteClick = {  }
+            )
         }
         composable(
             route = ScreenRoutes.COMPANY_PAGE,

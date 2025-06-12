@@ -17,12 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import learningprogramming.academy.reviewrabbit.ui.theme.ReviewRabbitTheme
 
 @Composable
 fun CustomTextField(
     modifier: Modifier = Modifier,
+    textFieldModifier: Modifier = Modifier,
     textFieldState: TextFieldState = rememberTextFieldState(),
     text: String,
     placeholder: String = "",
@@ -34,9 +34,8 @@ fun CustomTextField(
     focusedContainerColor: Color = MaterialTheme.colorScheme.surfaceContainerLow,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp)
     ) {
         Row {
             if (required) {
@@ -67,7 +66,7 @@ fun CustomTextField(
                 focusedPlaceholderColor = MaterialTheme.colorScheme.outlineVariant,
                 unfocusedPlaceholderColor = MaterialTheme.colorScheme.outlineVariant
             ),
-            modifier = modifier.fillMaxWidth()
+            modifier = textFieldModifier.fillMaxWidth()
         )
     }
 }

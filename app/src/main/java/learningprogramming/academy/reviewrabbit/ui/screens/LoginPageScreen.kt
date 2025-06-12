@@ -114,7 +114,8 @@ fun LoginPageScreen(
             textFieldState = emailState,
             text = "Email",
             placeholder = "Your Email",
-            required = true
+            required = true,
+            modifier = Modifier.padding(16.dp)
         )
         CustomTextField(
             textFieldState = passwordState,
@@ -134,7 +135,8 @@ fun LoginPageScreen(
                 keyboardType = KeyboardType.Password
             ),
             outputTransformation = if (isPasswordVisible) null else PasswordOutputTransformation(),
-            required = true
+            required = true,
+            modifier = Modifier.padding(16.dp)
         )
         if (loginUiState is LoginScreenUiState.Loading) {
             CircularProgressIndicator()

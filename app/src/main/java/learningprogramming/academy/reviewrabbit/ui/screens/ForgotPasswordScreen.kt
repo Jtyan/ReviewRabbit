@@ -92,7 +92,8 @@ fun ForgotPasswordScreen(
             textFieldState = emailState,
             text = "Email",
             placeholder = "Your Email",
-            required = true
+            required = true,
+            modifier = Modifier.padding(16.dp)
         )
 
         if (forgotPasswordUiState is ForgotPasswordUiState.Loading) {

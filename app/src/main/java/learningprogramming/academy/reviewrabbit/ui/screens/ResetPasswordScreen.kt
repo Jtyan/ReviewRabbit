@@ -109,13 +109,15 @@ fun ResetPasswordScreen(
             textFieldState = emailState,
             text = "Email",
             placeholder = "Your email",
-            required = true
+            required = true,
+            modifier = Modifier.padding(16.dp)
         )
         CustomTextField(
             textFieldState = recoveryTokenState,
             text = "Recovery Token (from email)",
             placeholder = "The token",
-            required = true
+            required = true,
+            modifier = Modifier.padding(16.dp)
         )
         CustomTextField(
             textFieldState = passwordState,
@@ -135,7 +137,8 @@ fun ResetPasswordScreen(
                 keyboardType = KeyboardType.Password
             ),
             outputTransformation = if (isPasswordVisible) null else PasswordOutputTransformation(),
-            required = true
+            required = true,
+            modifier = Modifier.padding(16.dp)
         )
         CustomTextField(
             textFieldState = confirmPasswordState,
@@ -160,7 +163,8 @@ fun ResetPasswordScreen(
             } else {
                 MaterialTheme.colorScheme.errorContainer
             },
-            required = true
+            required = true,
+            modifier = Modifier.padding(16.dp)
         )
         if (!isPasswordMatching) {
             Text(

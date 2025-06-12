@@ -16,13 +16,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import learningprogramming.academy.reviewrabbit.model.BottomNavItems
+import learningprogramming.academy.reviewrabbit.model.ScreenRoutes
 import learningprogramming.academy.reviewrabbit.model.navigationItemList
 import learningprogramming.academy.reviewrabbit.ui.theme.ReviewRabbitTheme
 import learningprogramming.academy.reviewrabbit.ui.theme.extendedLight
 
 @Composable
 fun ReviewRabbitBottomNavBar(
-    navController: NavController
+    navController: NavController,
+    isLoggedIn: Boolean
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -35,9 +38,17 @@ fun ReviewRabbitBottomNavBar(
             NavigationBarItem(
                 selected = currentDestination?.route == it.bottomNavItems.route,
                 onClick = {
-                    navController.navigate(it.bottomNavItems.route) {
-                        launchSingleTop = true
-                        restoreState = true
+                    if (!isLoggedIn && it.bottomNavItems == BottomNavItems.USER_SETTINGS) {
+                        navController.navigate(ScreenRoutes.LOGIN_PAGE)
+                        {
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    } else {
+                        navController.navigate(it.bottomNavItems.route) {
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     }
                 },
                 icon = {
@@ -70,7 +81,8 @@ fun ReviewRabbitBottomNavBar(
 fun ReviewRabbitBottomNavBarPreview() {
     ReviewRabbitTheme {
         ReviewRabbitBottomNavBar(
-            navController = rememberNavController()
+            navController = rememberNavController(),
+            isLoggedIn = true
         )
     }
 }

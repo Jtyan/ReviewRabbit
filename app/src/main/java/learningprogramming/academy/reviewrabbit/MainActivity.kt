@@ -26,6 +26,7 @@ import learningprogramming.academy.reviewrabbit.ui.theme.ReviewRabbitTheme
 import learningprogramming.academy.reviewrabbit.viewmodels.CompanyReviewViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.ForgotPasswordViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.HomeScreenViewModel
+import learningprogramming.academy.reviewrabbit.viewmodels.InviteViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.LoginViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.ResetPasswordViewModel
 
@@ -41,6 +42,7 @@ class MainActivity : ComponentActivity() {
                 val loginViewModel: LoginViewModel = hiltViewModel()
                 val forgotPasswordViewModel: ForgotPasswordViewModel = hiltViewModel()
                 val resetPasswordViewModel: ResetPasswordViewModel = hiltViewModel()
+                val inviteViewModel: InviteViewModel = hiltViewModel()
 
                 val navController = rememberNavController()
                 var isExpanded by rememberSaveable { mutableStateOf(false) }
@@ -56,7 +58,8 @@ class MainActivity : ComponentActivity() {
                         },
                         bottomBar = {
                             ReviewRabbitBottomNavBar(
-                                navController = navController
+                                navController = navController,
+                                isLoggedIn = isLoggedIn
                             )
                         },
                         modifier = Modifier.fillMaxSize()
@@ -72,7 +75,8 @@ class MainActivity : ComponentActivity() {
                                 companyReviewViewModel = companyReviewViewModel,
                                 loginViewModel = loginViewModel,
                                 forgotPasswordViewModel = forgotPasswordViewModel,
-                                resetPasswordViewModel = resetPasswordViewModel
+                                resetPasswordViewModel = resetPasswordViewModel,
+                                inviteViewModel = inviteViewModel
                             )
                             DropdownMenuOverlay(
                                 isExpanded = isExpanded,
@@ -83,7 +87,10 @@ class MainActivity : ComponentActivity() {
                                     isExpanded = !isExpanded
                                 },
                                 onLoginClick = {
-                                    navController.navigate(route = ScreenRoutes.LOGIN_PAGE)
+                                    navController.navigate(route = ScreenRoutes.LOGIN_PAGE) {
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
                                     isExpanded = !isExpanded
                                 },
                                 modifier = Modifier

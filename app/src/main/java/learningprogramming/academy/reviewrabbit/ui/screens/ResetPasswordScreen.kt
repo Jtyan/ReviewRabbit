@@ -35,10 +35,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.delay
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomButton
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomTextField
 import learningprogramming.academy.reviewrabbit.ui.theme.extendedLight
+import learningprogramming.academy.reviewrabbit.util.PasswordChecker
 import learningprogramming.academy.reviewrabbit.util.PasswordOutputTransformation
 import learningprogramming.academy.reviewrabbit.viewmodels.ResetPasswordUiState
 import learningprogramming.academy.reviewrabbit.viewmodels.ResetPasswordViewModel
@@ -60,7 +60,7 @@ fun ResetPasswordScreen(
 
     val resetPasswordUiState by resetPasswordViewModel.resetPasswordUiState.collectAsState()
 
-    val isPasswordMatching: Boolean = resetPasswordViewModel.checkIfPasswordsMatch(
+    val isPasswordMatching: Boolean = PasswordChecker.checkIfPasswordsMatch(
         passwordState.text.toString(), confirmPasswordState.text.toString()
     )
 

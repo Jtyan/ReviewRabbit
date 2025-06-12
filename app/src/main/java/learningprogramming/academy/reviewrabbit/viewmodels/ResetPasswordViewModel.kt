@@ -21,13 +21,6 @@ class ResetPasswordViewModel @Inject constructor(
     private val _resetPasswordUiState = MutableStateFlow<ResetPasswordUiState>(ResetPasswordUiState.Idle)
     val resetPasswordUiState: StateFlow<ResetPasswordUiState> = _resetPasswordUiState.asStateFlow()
 
-    fun checkIfPasswordsMatch(newPassword: String, confirmPassword: String): Boolean {
-        while (newPassword != confirmPassword) {
-            return false
-        }
-        return true
-    }
-
     fun onResetPasswordClicked(email: String, token: String, password: String) {
         val resetPasswordApi = ResetPasswordApi(
             email = email,
@@ -50,29 +43,30 @@ class ResetPasswordViewModel @Inject constructor(
             _resetPasswordUiState.value = ResetPasswordUiState.Loading
             when (val response = userRepository.resetPassword(resetPasswordApi)) {
                 is UserAuthResult.ResetPasswordSuccess -> {
-                    Log.i("UserViewModel", "Password reset successful!")
+                    Log.i("ResetPasswordViewModel", "Password reset successful!")
                     _resetPasswordUiState.value = ResetPasswordUiState.Success("Password reset successful! Please log in with your new password")
                 }
 
                 is UserAuthResult.Error -> {
-                    Log.w("UserViewModel", "Password reset error: ${response.message}")
+                    Log.w("ResetPasswordViewModel", "Password reset error: ${response.message}")
                     _resetPasswordUiState.value = ResetPasswordUiState.Error("The email / token combination is invalid")
                 }
 
                 is UserAuthResult.NetworkError -> {
-                    Log.w("UserViewModel", "Password reset network error")
+                    Log.w("ResetPasswordViewModel", "Password reset network error")
                     _resetPasswordUiState.value =
                         ResetPasswordUiState.Error("Network error. Please check your connection.")
                 }
 
                 is UserAuthResult.UnknownError -> {
-                    Log.e("UserViewModel", "Password reset unknown error", response.exception)
+                    Log.e("ResetPasswordViewModel", "Password reset unknown error", response.exception)
                     _resetPasswordUiState.value =
                         ResetPasswordUiState.Error("An unexpected error occurred.")
                 }
 
                 is UserAuthResult.Success -> {}
                 is UserAuthResult.PasswordRecoverySent -> {}
+                is UserAuthResult.ChangePasswordSuccess -> {}
             }
         }
     }

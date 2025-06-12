@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import learningprogramming.academy.reviewrabbit.model.ScreenRoutes
+import learningprogramming.academy.reviewrabbit.ui.screens.ChangePasswordScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.CompanyPage
 import learningprogramming.academy.reviewrabbit.ui.screens.CreateCompanyScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.ForgotPasswordScreen
@@ -19,6 +20,7 @@ import learningprogramming.academy.reviewrabbit.ui.screens.LoginPageScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.LogoutPageScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.ProfileSettingsScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.ResetPasswordScreen
+import learningprogramming.academy.reviewrabbit.viewmodels.ChangePasswordViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.CompanyReviewViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.ForgotPasswordViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.HomeScreenViewModel
@@ -34,7 +36,8 @@ fun ReviewRabbitApp(
     loginViewModel: LoginViewModel,
     forgotPasswordViewModel: ForgotPasswordViewModel,
     resetPasswordViewModel: ResetPasswordViewModel,
-    inviteViewModel: InviteViewModel
+    inviteViewModel: InviteViewModel,
+    changePasswordViewModel: ChangePasswordViewModel
 ) {
 
 
@@ -53,7 +56,7 @@ fun ReviewRabbitApp(
         composable(route = ScreenRoutes.USER_SETTINGS) {
             ProfileSettingsScreen(
                 inviteViewModel = inviteViewModel,
-                onChangePasswordClick = {}
+                onChangePasswordClick = { navController.navigate(ScreenRoutes.CHANGE_PASSWORD) }
             )
         }
         composable(
@@ -127,6 +130,12 @@ fun ReviewRabbitApp(
                 notification = message,
                 onLoginSuccessNavigation = { navController.navigate(ScreenRoutes.HOME) },
                 onForgotPasswordClick = { navController.navigate(ScreenRoutes.FORGOT_PASSWORD) }
+            )
+        }
+        composable(route = ScreenRoutes.CHANGE_PASSWORD) {
+            ChangePasswordScreen(
+               changePasswordViewModel = changePasswordViewModel,
+                onPasswordChangeSuccessNavigation = { navController.navigate(ScreenRoutes.USER_SETTINGS) }
             )
         }
     }

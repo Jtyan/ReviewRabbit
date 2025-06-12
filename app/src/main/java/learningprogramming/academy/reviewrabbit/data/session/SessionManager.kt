@@ -54,6 +54,8 @@ class SessionManager @Inject constructor(
 
     suspend fun getCurrentToken(): String? = userTokenFlow.firstOrNull()
 
+    suspend fun getEmail(): String? = userEmailFlow.firstOrNull()
+
     suspend fun isSessionValid(): Boolean {
         return isLoggedInFlow.firstOrNull() ?: false
     }

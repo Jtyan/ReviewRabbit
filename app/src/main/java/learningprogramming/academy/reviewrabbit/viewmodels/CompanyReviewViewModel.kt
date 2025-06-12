@@ -49,7 +49,7 @@ class CompanyReviewViewModel @Inject constructor(
             try {
                 _reviewSummary.value = reviewsRepository.getReviewSummaryByCompanyId(companyId)
             } catch (e: Exception) {
-                Log.e(
+                Log.w(
                     "CompanyReviewViewModel",
                     "Error getting Review Summary for company id = $companyId. $e"
                 )

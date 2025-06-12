@@ -27,3 +27,10 @@ data class ResetPasswordApi(
     val token: String,
     val newPassword: String
 )
+
+@Serializable
+data class ChangePasswordApi(
+    val email: String,
+    val oldPassword: String,
+    val newPassword: String
+)

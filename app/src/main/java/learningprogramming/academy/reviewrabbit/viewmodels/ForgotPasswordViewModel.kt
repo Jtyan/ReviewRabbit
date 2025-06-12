@@ -34,29 +34,30 @@ class ForgotPasswordViewModel @Inject constructor(
             _forgotPasswordUiState.value = ForgotPasswordUiState.Loading
             when (val response = userRepository.recoverPassword(postUserForgetPasswordApi)) {
                 is UserAuthResult.PasswordRecoverySent -> {
-                    Log.i("UserViewModel", "Password recovery email sent for $email")
+                    Log.i("ForgotPasswordViewModel", "Password recovery email sent for $email")
                     _forgotPasswordUiState.value = ForgotPasswordUiState.Success
                 }
 
                 is UserAuthResult.Error -> {
-                    Log.w("UserViewModel", "Login error: ${response.message}")
+                    Log.w("ForgotPasswordViewModel", "Password Recovery error: ${response.message}")
                     _forgotPasswordUiState.value = ForgotPasswordUiState.Error(response.message)
                 }
 
                 UserAuthResult.NetworkError -> {
-                    Log.w("UserViewModel", "Login network error")
+                    Log.w("ForgotPasswordViewModel", "Password Recovery network error")
                     _forgotPasswordUiState.value =
                         ForgotPasswordUiState.Error("Network error. Please check your connection.")
                 }
 
                 is UserAuthResult.UnknownError -> {
-                    Log.e("UserViewModel", "Login unknown error", response.exception)
+                    Log.e("ForgotPasswordViewModel", "Password Recovery unknown error", response.exception)
                     _forgotPasswordUiState.value =
                         ForgotPasswordUiState.Error("An unexpected error occurred.")
                 }
 
                 is UserAuthResult.Success -> {}
                 is UserAuthResult.ResetPasswordSuccess -> {}
+                is UserAuthResult.ChangePasswordSuccess -> {}
             }
         }
     }

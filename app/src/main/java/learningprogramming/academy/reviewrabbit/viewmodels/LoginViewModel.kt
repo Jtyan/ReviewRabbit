@@ -36,26 +36,27 @@ class LoginViewModel @Inject constructor(
             _loginUiState.value = LoginScreenUiState.Loading
             when (val response = userRepository.loginUser(postUserLoginApi)) {
                 is UserAuthResult.Success -> {
-                    Log.i("UserViewModel", "Login successful")
+                    Log.i("LoginViewModel", "Login successful")
                     _loginUiState.value = LoginScreenUiState.Success(response.userData)
                 }
 
                 is UserAuthResult.Error -> {
-                    Log.w("UserViewModel", "Login error: ${response.message}")
+                    Log.w("LoginViewModel", "Login error: ${response.message}")
                     _loginUiState.value = LoginScreenUiState.Error(response.message)
                 }
 
                 UserAuthResult.NetworkError -> {
-                    Log.w("UserViewModel", "Login network error")
+                    Log.w("LoginViewModel", "Login network error")
                     _loginUiState.value = LoginScreenUiState.Error("Network error. Please check your connection.")
                 }
 
                 is UserAuthResult.UnknownError -> {
-                    Log.e("UserViewModel", "Login unknown error", response.exception)
+                    Log.e("LoginViewModel", "Login unknown error", response.exception)
                     _loginUiState.value = LoginScreenUiState.Error("An unexpected error occurred.")
                 }
                 is UserAuthResult.PasswordRecoverySent -> {}
                 is UserAuthResult.ResetPasswordSuccess -> {}
+                is UserAuthResult.ChangePasswordSuccess -> {}
             }
         }
     }

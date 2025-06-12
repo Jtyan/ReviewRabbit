@@ -1,6 +1,7 @@
 package learningprogramming.academy.reviewrabbit.data.repository
 
 import android.util.Log
+import learningprogramming.academy.reviewrabbit.data.model.ChangePasswordApi
 import learningprogramming.academy.reviewrabbit.data.model.PostUserForgetPasswordApi
 import learningprogramming.academy.reviewrabbit.data.model.PostUserLoginApi
 import learningprogramming.academy.reviewrabbit.data.model.ResetPasswordApi
@@ -15,6 +16,7 @@ interface UserRepository {
     suspend fun loginUser(postUserLoginApi: PostUserLoginApi): UserAuthResult
     suspend fun recoverPassword(postUserForgetPasswordApi: PostUserForgetPasswordApi): UserAuthResult
     suspend fun resetPassword(resetPasswordApi: ResetPasswordApi): UserAuthResult
+    suspend fun changePassword(changePasswordApi: ChangePasswordApi): UserAuthResult
 }
 
 class UserRepositoryImpl @Inject constructor(
@@ -90,6 +92,25 @@ class UserRepositoryImpl @Inject constructor(
             UserAuthResult.UnknownError(e)
         }
     }
+
+    override suspend fun changePassword(changePasswordApi: ChangePasswordApi): UserAuthResult {
+        return try {
+            val response = userApiService.changePassword(changePasswordApi)
+            if (response.isSuccessful) {
+                Log.i("UserRepository", "Password successfully changed.")
+                UserAuthResult.ChangePasswordSuccess
+            } else {
+                Log.e("UserRepository", "Password change has failed. Status code: ${response.code()}")
+                UserAuthResult.Error("Password change has failed.")
+            }
+        } catch (e: IOException) {
+            Log.e("UserRepository", "Password change network error: ${e.message}")
+            UserAuthResult.NetworkError
+        } catch (e: Exception) {
+            Log.e("UserRepository", "Password change unknown error: ${e.message}")
+            UserAuthResult.UnknownError(e)
+        }
+    }
 }
 
 sealed interface UserAuthResult {
@@ -99,4 +120,5 @@ sealed interface UserAuthResult {
     data class UnknownError(val exception: Throwable) : UserAuthResult
     data object PasswordRecoverySent : UserAuthResult
     data object ResetPasswordSuccess: UserAuthResult
+    data object ChangePasswordSuccess: UserAuthResult
 }

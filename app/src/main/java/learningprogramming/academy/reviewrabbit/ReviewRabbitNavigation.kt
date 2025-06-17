@@ -26,6 +26,7 @@ import learningprogramming.academy.reviewrabbit.viewmodels.ForgotPasswordViewMod
 import learningprogramming.academy.reviewrabbit.viewmodels.HomeScreenViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.InviteViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.LoginViewModel
+import learningprogramming.academy.reviewrabbit.viewmodels.PostCompanyViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.ResetPasswordViewModel
 
 @Composable
@@ -37,7 +38,8 @@ fun ReviewRabbitApp(
     forgotPasswordViewModel: ForgotPasswordViewModel,
     resetPasswordViewModel: ResetPasswordViewModel,
     inviteViewModel: InviteViewModel,
-    changePasswordViewModel: ChangePasswordViewModel
+    changePasswordViewModel: ChangePasswordViewModel,
+    postCompanyViewModel: PostCompanyViewModel
 ) {
 
 
@@ -51,7 +53,9 @@ fun ReviewRabbitApp(
             )
         }
         composable(route = ScreenRoutes.CREATE_NEW_COMPANY) {
-            CreateCompanyScreen()
+            CreateCompanyScreen(
+                postCompanyViewModel = postCompanyViewModel
+            )
         }
         composable(route = ScreenRoutes.USER_SETTINGS) {
             ProfileSettingsScreen(
@@ -134,7 +138,7 @@ fun ReviewRabbitApp(
         }
         composable(route = ScreenRoutes.CHANGE_PASSWORD) {
             ChangePasswordScreen(
-               changePasswordViewModel = changePasswordViewModel,
+                changePasswordViewModel = changePasswordViewModel,
                 onPasswordChangeSuccessNavigation = { navController.navigate(ScreenRoutes.USER_SETTINGS) }
             )
         }

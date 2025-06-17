@@ -29,6 +29,7 @@ import learningprogramming.academy.reviewrabbit.viewmodels.ForgotPasswordViewMod
 import learningprogramming.academy.reviewrabbit.viewmodels.HomeScreenViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.InviteViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.LoginViewModel
+import learningprogramming.academy.reviewrabbit.viewmodels.PostCompanyViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.ResetPasswordViewModel
 
 @AndroidEntryPoint
@@ -45,6 +46,7 @@ class MainActivity : ComponentActivity() {
                 val resetPasswordViewModel: ResetPasswordViewModel = hiltViewModel()
                 val inviteViewModel: InviteViewModel = hiltViewModel()
                 val changePasswordViewModel: ChangePasswordViewModel = hiltViewModel()
+                val postCompanyViewModel: PostCompanyViewModel = hiltViewModel()
 
                 val navController = rememberNavController()
                 var isExpanded by rememberSaveable { mutableStateOf(false) }
@@ -79,7 +81,8 @@ class MainActivity : ComponentActivity() {
                                 forgotPasswordViewModel = forgotPasswordViewModel,
                                 resetPasswordViewModel = resetPasswordViewModel,
                                 inviteViewModel = inviteViewModel,
-                                changePasswordViewModel = changePasswordViewModel
+                                changePasswordViewModel = changePasswordViewModel,
+                                postCompanyViewModel = postCompanyViewModel
                             )
                             DropdownMenuOverlay(
                                 isExpanded = isExpanded,

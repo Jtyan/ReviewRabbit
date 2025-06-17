@@ -13,3 +13,14 @@ data class CompanyApiResponse(
     val industry: String = "",
     val tags: List<String> = emptyList()
 )
+
+@Serializable
+data class PostCompanyApi(
+    val name: String,
+    val url: String,
+    val location: String?,
+    val country: String?,
+    val industry: String?,
+    val image: String?,
+    val tags: List<String>?
+)

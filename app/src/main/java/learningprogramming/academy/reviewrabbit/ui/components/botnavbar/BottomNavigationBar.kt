@@ -38,7 +38,10 @@ fun ReviewRabbitBottomNavBar(
             NavigationBarItem(
                 selected = currentDestination?.route == it.bottomNavItems.route,
                 onClick = {
-                    if (!isLoggedIn && it.bottomNavItems == BottomNavItems.USER_SETTINGS) {
+                    val userSettings = BottomNavItems.USER_SETTINGS
+                    val createCompany = BottomNavItems.CREATE_NEW_COMPANY
+
+                    if (!isLoggedIn && (it.bottomNavItems == userSettings || it.bottomNavItems == createCompany)) {
                         navController.navigate(ScreenRoutes.LOGIN_PAGE)
                         {
                             launchSingleTop = true

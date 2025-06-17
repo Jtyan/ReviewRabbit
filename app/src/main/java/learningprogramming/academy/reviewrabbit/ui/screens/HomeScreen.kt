@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -144,7 +145,7 @@ fun LazyColumnCompanyItem(
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     ) {
 
-                        val imageData = remember(company.image) { Base64Decoder.stringToByteArray(company.image) }
+                        val imageData = remember(company.image) { Base64Decoder.base64ToByteArray(company.image) }
 
                         AsyncImage(
                             model = ImageRequest.Builder(LocalContext.current)
@@ -155,6 +156,7 @@ fun LazyColumnCompanyItem(
                                 .crossfade(true)
                                 .build(),
                             contentDescription = company.name,
+                            contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .size(125.dp)
                                 .padding(12.dp)

@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -120,7 +121,7 @@ fun CompanyPageHeroBanner(
         Column(
             modifier = Modifier.padding(12.dp)
         ) {
-            val imageData = remember(company.image) { Base64Decoder.stringToByteArray(company.image) }
+            val imageData = remember(company.image) { Base64Decoder.base64ToByteArray(company.image) }
 
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -130,6 +131,7 @@ fun CompanyPageHeroBanner(
                     .crossfade(true)
                     .build(),
                 contentDescription = company.name,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier.size(120.dp)
 
             )

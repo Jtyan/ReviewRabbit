@@ -1,6 +1,7 @@
 package learningprogramming.academy.reviewrabbit.viewmodels
 
 import android.util.Log
+import androidx.datastore.core.IOException
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +15,7 @@ import learningprogramming.academy.reviewrabbit.data.model.ReviewApiResponse
 import learningprogramming.academy.reviewrabbit.data.model.ReviewSummaryApiResponse
 import learningprogramming.academy.reviewrabbit.data.repository.CompanyRepository
 import learningprogramming.academy.reviewrabbit.data.repository.ReviewsRepository
-import java.time.Instant
+import learningprogramming.academy.reviewrabbit.model.ReviewCategories
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,17 +23,30 @@ class CompanyReviewViewModel @Inject constructor(
     private val reviewsRepository: ReviewsRepository,
     private val companyRepository: CompanyRepository
 ) : ViewModel() {
+
     private val initialReviewSummary = ReviewSummaryApiResponse(
-        companyId = 0,
-        contents = "No generated review summary yet.",
-        created = ""
+        companyId = 0, contents = "No generated review summary yet.", created = ""
     )
+    private val initialNewReview = PostReviewApi(
+        companyId = 0,
+        management = 0,
+        culture = 0,
+        salary = 0,
+        benefits = 0,
+        wouldRecommend = 0,
+        review = ""
+    )
+
     private val _selectedCompany = MutableStateFlow<CompanyApiResponse?>(null)
     val selectedCompany: StateFlow<CompanyApiResponse?> = _selectedCompany.asStateFlow()
     private val _reviewSummary = MutableStateFlow(initialReviewSummary)
     val reviewSummary: StateFlow<ReviewSummaryApiResponse> = _reviewSummary.asStateFlow()
     private val _listOfReviews = MutableStateFlow<List<ReviewApiResponse>>(emptyList())
     val listOfReviews: StateFlow<List<ReviewApiResponse>> = _listOfReviews.asStateFlow()
+    private val _newReview = MutableStateFlow(initialNewReview)
+    val newReview: StateFlow<PostReviewApi> = _newReview.asStateFlow()
+    private val _reviewUiState = MutableStateFlow<ReviewUiState>(ReviewUiState.Idle)
+    val reviewUiState: StateFlow<ReviewUiState> = _reviewUiState.asStateFlow()
 
     fun getCompanyById(companyId: Int) {
         viewModelScope.launch {
@@ -84,16 +98,62 @@ class CompanyReviewViewModel @Inject constructor(
         }
     }
 
-    fun submitReview(review: PostReviewApi) {
+    fun submitReview() {
         viewModelScope.launch {
+            _reviewUiState.value = ReviewUiState.Loading
+            val review = _newReview.value
+            Log.i("CompanyReviewViewModel", review.toString())
             try {
+                if (review.companyId != _selectedCompany.value?.id) {
+                    Log.e("CompanyReviewViewModel", "Company id ${review.companyId} is invalid")
+                    _reviewUiState.value =
+                        ReviewUiState.Error("Company id ${review.companyId} is invalid.")
+                    return@launch
+                }
+
+                if (review.wouldRecommend == 0 || review.culture == 0 || review.benefits == 0 || review.management == 0 || review.salary == 0 || review.review.isEmpty()) {
+                    Log.e("CompanyReviewViewModel", "ReviewCategories ratings are not set")
+                    _reviewUiState.value =
+                        ReviewUiState.Error("Please complete the ratings before submitting.")
+                    return@launch
+                }
+
                 reviewsRepository.postAReview(review)
+                _reviewUiState.value = ReviewUiState.Success("Review added successfully.")
+            } catch (e: IOException) {
+                Log.e("CompanyReviewViewModel", "Failed to add a review. Network error has occurred.")
+                _reviewUiState.value = ReviewUiState.Error("Failed to add a review. Network error has occurred.")
             } catch (e: Exception) {
-                Log.e(
-                    "CompanyReviewViewModel",
-                    "Error posting a review. $e"
-                )
+                Log.e("CompanyReviewViewModel", "Error posting a review. $e")
+                _reviewUiState.value = ReviewUiState.Error("Unable to submit the review.")
             }
         }
     }
+
+    fun updateNewReview(newReview: PostReviewApi) {
+        _newReview.value = newReview
+    }
+
+    fun updateCategoryRating(category: ReviewCategories, rating: Int) {
+        val currentReview = _newReview.value
+        val updatedReview = when (category) {
+            ReviewCategories.WOULD_RECOMMEND -> currentReview.copy(wouldRecommend = rating)
+            ReviewCategories.MANAGEMENT -> currentReview.copy(management = rating)
+            ReviewCategories.CULTURE -> currentReview.copy(culture = rating)
+            ReviewCategories.SALARY -> currentReview.copy(salary = rating)
+            ReviewCategories.BENEFITS -> currentReview.copy(benefits = rating)
+        }
+        _newReview.value = updatedReview
+    }
+
+    fun resetReviewUiState() {
+        _reviewUiState.value = ReviewUiState.Idle
+    }
+}
+
+sealed interface ReviewUiState {
+    data object Idle : ReviewUiState
+    data object Loading : ReviewUiState
+    data class Success(val message: String) : ReviewUiState
+    data class Error(val message: String) : ReviewUiState
 }

@@ -85,12 +85,13 @@ fun CompanyPage(
     val reviewSummary by companyReviewViewModel.reviewSummary.collectAsState()
     val listOfReviews by companyReviewViewModel.listOfReviews.collectAsState()
     val reviewUiState = companyReviewViewModel.reviewUiState.collectAsState().value
+    val userId = companyReviewViewModel.userId.collectAsState().value
+    val isReviewPosted = companyReviewViewModel.hasUserPostedReview.collectAsState().value
 
     LaunchedEffect(companyId) {
         companyReviewViewModel.getCompanyById(companyId)
         companyReviewViewModel.getReviewSummary(companyId = companyId.toLong())
         companyReviewViewModel.displayReviews(companyId = companyId.toLong())
-
     }
     LaunchedEffect(reviewUiState) {
         if (reviewUiState is ReviewUiState.Success) {
@@ -107,6 +108,7 @@ fun CompanyPage(
             item {
                 CompanyPageHeroBanner(
                     company = selectedCompany,
+                    isReviewPosted = isReviewPosted,
                     onAddReviewClick = { addReviewField = true }
                 )
             }
@@ -126,7 +128,10 @@ fun CompanyPage(
                 }
             }
             items(listOfReviews) {
-                ReviewCard(companyReview = it)
+                ReviewCard(
+                    userId = userId,
+                    companyReview = it
+                )
             }
 
             item {
@@ -141,6 +146,7 @@ fun CompanyPage(
 @Composable
 fun CompanyPageHeroBanner(
     company: CompanyApiResponse,
+    isReviewPosted: Boolean,
     onAddReviewClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -184,15 +190,17 @@ fun CompanyPageHeroBanner(
                 company = company,
                 color = MaterialTheme.colorScheme.secondary
             )
-            CustomButton(
-                text = "Add Review",
-                onClick = onAddReviewClick,
-                containerColor = extendedLight.addReview.colorContainer,
-                contentColor = Color.Unspecified,
-                modifier = Modifier
-                    .width(180.dp)
-                    .padding(top = 12.dp)
-            )
+            if (!isReviewPosted) {
+                CustomButton(
+                    text = "Add Review",
+                    onClick = onAddReviewClick,
+                    containerColor = extendedLight.addReview.colorContainer,
+                    contentColor = Color.Unspecified,
+                    modifier = Modifier
+                        .width(180.dp)
+                        .padding(top = 12.dp)
+                )
+            }
         }
     }
 }
@@ -380,10 +388,9 @@ fun AddReviewCategoriesAndStars(
 
 @Composable
 fun ReviewCard(
+    userId: Long?,
     companyReview: ReviewApiResponse
 ) {
-    val userId = 3L
-
     val reviewCategoriesAndStars = remember(companyReview) {
         listOf(
             ReviewCategoriesAndStars(
@@ -516,7 +523,8 @@ fun CompanyPageHeroBannerPreview() {
                 industry = "Tech",
                 tags = listOf("IT", "Tech")
             ),
-            onAddReviewClick = {}
+            onAddReviewClick = {},
+            isReviewPosted = false
         )
     }
 }
@@ -541,6 +549,7 @@ fun CompanyPageReviewSummaryPreview() {
 fun CompanyPageReviewItemPreview() {
     ReviewRabbitTheme(dynamicColor = false) {
         ReviewCard(
+            userId = 0,
             companyReview = ReviewApiResponse(
                 id = 0,
                 companyId = 2L,

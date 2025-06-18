@@ -52,6 +52,8 @@ class SessionManager @Inject constructor(
             tokenIsPresent && notExpired && preferences[SessionKeys.IS_LOGGED_IN] == true
         }
 
+    suspend fun getUserId(): Long? = userIdFlow.firstOrNull()
+
     suspend fun getCurrentToken(): String? = userTokenFlow.firstOrNull()
 
     suspend fun getEmail(): String? = userEmailFlow.firstOrNull()

@@ -15,13 +15,15 @@ import learningprogramming.academy.reviewrabbit.data.model.ReviewApiResponse
 import learningprogramming.academy.reviewrabbit.data.model.ReviewSummaryApiResponse
 import learningprogramming.academy.reviewrabbit.data.repository.CompanyRepository
 import learningprogramming.academy.reviewrabbit.data.repository.ReviewsRepository
+import learningprogramming.academy.reviewrabbit.data.session.SessionManager
 import learningprogramming.academy.reviewrabbit.model.ReviewCategories
 import javax.inject.Inject
 
 @HiltViewModel
 class CompanyReviewViewModel @Inject constructor(
     private val reviewsRepository: ReviewsRepository,
-    private val companyRepository: CompanyRepository
+    private val companyRepository: CompanyRepository,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
 
     private val initialReviewSummary = ReviewSummaryApiResponse(
@@ -47,6 +49,16 @@ class CompanyReviewViewModel @Inject constructor(
     val newReview: StateFlow<PostReviewApi> = _newReview.asStateFlow()
     private val _reviewUiState = MutableStateFlow<ReviewUiState>(ReviewUiState.Idle)
     val reviewUiState: StateFlow<ReviewUiState> = _reviewUiState.asStateFlow()
+    private val _userId = MutableStateFlow<Long?>(null)
+    val userId: StateFlow<Long?> = _userId.asStateFlow()
+    private val _hasUserPostedReview = MutableStateFlow<Boolean>(false)
+    val hasUserPostedReview: StateFlow<Boolean> = _hasUserPostedReview.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            _userId.value = sessionManager.getUserId()
+        }
+    }
 
     fun getCompanyById(companyId: Int) {
         viewModelScope.launch {
@@ -89,6 +101,7 @@ class CompanyReviewViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _listOfReviews.value = reviewsRepository.getAllReviewsByCompanyId(companyId)
+                checkIfUserPostedAReview()
             } catch (e: Exception) {
                 Log.e(
                     "CompanyReviewViewModel",
@@ -96,6 +109,11 @@ class CompanyReviewViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun checkIfUserPostedAReview() {
+        _hasUserPostedReview.value =
+            _listOfReviews.value.find { it.userId == _userId.value } != null
     }
 
     fun submitReview() {
@@ -121,8 +139,12 @@ class CompanyReviewViewModel @Inject constructor(
                 reviewsRepository.postAReview(review)
                 _reviewUiState.value = ReviewUiState.Success("Review added successfully.")
             } catch (e: IOException) {
-                Log.e("CompanyReviewViewModel", "Failed to add a review. Network error has occurred.")
-                _reviewUiState.value = ReviewUiState.Error("Failed to add a review. Network error has occurred.")
+                Log.e(
+                    "CompanyReviewViewModel",
+                    "Failed to add a review. Network error has occurred."
+                )
+                _reviewUiState.value =
+                    ReviewUiState.Error("Failed to add a review. Network error has occurred.")
             } catch (e: Exception) {
                 Log.e("CompanyReviewViewModel", "Error posting a review. $e")
                 _reviewUiState.value = ReviewUiState.Error("Unable to submit the review.")

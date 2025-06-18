@@ -3,7 +3,6 @@ package learningprogramming.academy.reviewrabbit.ui.components.common
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.OutputTransformation
 import androidx.compose.foundation.text.input.TextFieldLineLimits
@@ -23,7 +22,7 @@ import learningprogramming.academy.reviewrabbit.ui.theme.ReviewRabbitTheme
 fun CustomTextField(
     modifier: Modifier = Modifier,
     textFieldModifier: Modifier = Modifier,
-    textFieldState: TextFieldState = rememberTextFieldState(),
+    textFieldState: TextFieldState,
     text: String,
     placeholder: String = "",
     required: Boolean,
@@ -76,6 +75,7 @@ fun CustomTextField(
 fun CustomTextFieldPreview() {
     ReviewRabbitTheme(dynamicColor = false) {
         CustomTextField(
+            textFieldState = rememberTextFieldState(),
             text = "Email",
             placeholder = "Your Email",
             required = true

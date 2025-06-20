@@ -20,3 +20,8 @@ data class SendInvitesApiResponse(
     val status: String,
     val nInvites: Int
 )
+
+@Serializable
+data class InviteCheckoutRequestModel(
+    val companyId: Long
+)

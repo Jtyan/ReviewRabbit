@@ -1,5 +1,7 @@
 package learningprogramming.academy.reviewrabbit.ui.screens
 
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -34,7 +36,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -64,17 +65,22 @@ import learningprogramming.academy.reviewrabbit.ui.theme.ReviewRabbitTheme
 import learningprogramming.academy.reviewrabbit.ui.theme.extendedLight
 import learningprogramming.academy.reviewrabbit.util.Base64Decoder
 import learningprogramming.academy.reviewrabbit.viewmodels.CompanyReviewViewModel
+import learningprogramming.academy.reviewrabbit.viewmodels.InviteViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.ReviewUiState
 import org.ocpsoft.prettytime.PrettyTime
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.Date
 import java.util.Locale
+import androidx.core.net.toUri
+import learningprogramming.academy.reviewrabbit.viewmodels.InviteCheckoutUiState
+import learningprogramming.academy.reviewrabbit.viewmodels.InviteUiState
 
 
 @Composable
 fun CompanyPage(
     companyReviewViewModel: CompanyReviewViewModel,
+    invitesViewModel: InviteViewModel,
     companyId: Int
 ) {
     var addReviewField by rememberSaveable { mutableStateOf(false) }
@@ -87,6 +93,8 @@ fun CompanyPage(
     val reviewUiState = companyReviewViewModel.reviewUiState.collectAsState().value
     val userId = companyReviewViewModel.userId.collectAsState().value
     val isReviewPosted = companyReviewViewModel.hasUserPostedReview.collectAsState().value
+    val redirectInviteState by invitesViewModel.redirectInviteState.collectAsState()
+    val context = LocalContext.current
 
     LaunchedEffect(companyId) {
         companyReviewViewModel.getCompanyById(companyId)
@@ -97,6 +105,17 @@ fun CompanyPage(
         if (reviewUiState is ReviewUiState.Success) {
             companyReviewViewModel.displayReviews(companyId.toLong())
         }
+    }
+
+    LaunchedEffect(redirectInviteState.message) {
+        redirectInviteState.message?.let {
+            Toast.makeText(context, redirectInviteState.message, Toast.LENGTH_SHORT).show()
+        }
+        redirectInviteState.checkoutUrl?.let { url ->
+            val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+            context.startActivity(intent)
+        }
+        invitesViewModel.resetRedirectInviteState()
     }
 
     if (selectedCompany != null) {
@@ -136,7 +155,9 @@ fun CompanyPage(
 
             item {
                 InvitePeopleCard(
-                    onClick = {}
+                    onClick = {
+                        invitesViewModel.redirectInviteToStripe(companyId = companyId.toLong())
+                    }
                 )
             }
         }
@@ -266,7 +287,6 @@ fun AddReviewCard(
 ) {
     val reviewUiState = companyReviewViewModel.reviewUiState.collectAsState().value
     val newReview = companyReviewViewModel.newReview.collectAsState().value
-    val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val reviewText = rememberTextFieldState()
 
@@ -329,7 +349,11 @@ fun AddReviewCard(
                     CustomButton(
                         text = "Post Review",
                         onClick = {
-                            companyReviewViewModel.updateNewReview(newReview.copy(review = reviewText.text.toString().trim()))
+                            companyReviewViewModel.updateNewReview(
+                                newReview.copy(
+                                    review = reviewText.text.toString().trim()
+                                )
+                            )
                             companyReviewViewModel.submitReview()
                         },
                     )

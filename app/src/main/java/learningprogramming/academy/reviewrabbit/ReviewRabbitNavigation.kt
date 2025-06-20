@@ -82,6 +82,7 @@ fun ReviewRabbitApp(
             val companyId = backStackEntry.arguments?.getInt("companyId")
             if (companyId != null) {
                 CompanyPage(
+                    invitesViewModel = inviteViewModel,
                     companyReviewViewModel = companyReviewViewModel,
                     companyId = companyId
                 )

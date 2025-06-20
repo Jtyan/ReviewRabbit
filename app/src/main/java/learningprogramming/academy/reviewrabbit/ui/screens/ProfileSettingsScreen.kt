@@ -188,9 +188,7 @@ fun InvitesSection(
                         )
                     }
                 }
-                is InviteUiState.Idle -> {}
-                is InviteUiState.Loading -> {}
-                is InviteUiState.GetInvitesSuccess -> {}
+                else -> {}
             }
         }
     }

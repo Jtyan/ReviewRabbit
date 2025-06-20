@@ -3,6 +3,7 @@ package learningprogramming.academy.reviewrabbit.data.repository
 import android.util.Log
 import androidx.datastore.core.IOException
 import learningprogramming.academy.reviewrabbit.data.model.GetInvitesApiResponse
+import learningprogramming.academy.reviewrabbit.data.model.InviteCheckoutRequestModel
 import learningprogramming.academy.reviewrabbit.data.model.SendInvitesApiModel
 import learningprogramming.academy.reviewrabbit.data.model.SendInvitesApiResponse
 import learningprogramming.academy.reviewrabbit.data.network.InviteApiService
@@ -12,6 +13,7 @@ import javax.inject.Inject
 interface InviteRepository {
     suspend fun getInvites(): CompanyInviteResult
     suspend fun sendInvites(invites: SendInvitesApiModel): CompanyInviteResult
+    suspend fun getInviteCheckoutUrl(inviteCheckoutRequestModel: InviteCheckoutRequestModel): CompanyInviteResult
 }
 
 class InviteRepositoryImpl @Inject constructor(
@@ -78,11 +80,39 @@ class InviteRepositoryImpl @Inject constructor(
             CompanyInviteResult.UnknownError(e)
         }
     }
+
+    override suspend fun getInviteCheckoutUrl(inviteCheckoutRequestModel: InviteCheckoutRequestModel): CompanyInviteResult {
+        return try {
+            val response = inviteApiService.getInviteCheckoutUrl(inviteCheckoutRequestModel)
+            if (response.isSuccessful && response.body() != null) {
+                CompanyInviteResult.RedirectToStripeSuccess(response.body()!!)
+            } else {
+                val errorBodyString = response.errorBody()?.string()
+                val errorMessage = if (!errorBodyString.isNullOrBlank()) {
+                    errorBodyString
+                } else {
+                    "Redirect invites failed: Unable to get redirect link to Stripe. Response: ${response.message()}"
+                }
+                Log.e("InviteRepository", "(RedirectInvites) Api Error: ${response.code()} Message: ${response.body()}")
+                CompanyInviteResult.Error(errorMessage)
+            }
+        } catch (e: IOException) {
+            Log.e("InviteRepository", "(RedirectInvites) An I/O error occurred: ${e.message}")
+            CompanyInviteResult.NetworkError
+        } catch (e: Exception) {
+            Log.e(
+                "InviteRepository",
+                "(RedirectInvites) An unexpected error occurred: ${e.message}"
+            )
+            CompanyInviteResult.UnknownError(e)
+        }
+    }
 }
 
 sealed interface CompanyInviteResult {
     data class GetInviteSuccess(val response: List<GetInvitesApiResponse?>) : CompanyInviteResult
     data class SendInviteSuccess(val response: SendInvitesApiResponse): CompanyInviteResult
+    data class RedirectToStripeSuccess(val urlString: String): CompanyInviteResult
     data class Error(val message: String) : CompanyInviteResult
     data object NetworkError : CompanyInviteResult
     data class UnknownError(val exception: Throwable) : CompanyInviteResult

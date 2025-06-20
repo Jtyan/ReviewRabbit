@@ -76,9 +76,11 @@ dependencies {
     // Retrofit with Kotlin Serialization integration
     implementation(libs.retrofit.kotlinx.serialization.converter.jakewharton)
     //Prettytime
-    implementation ("org.ocpsoft.prettytime:prettytime:5.0.8.Final")
+    implementation (libs.prettytime)
     //PreferencesDataStore
     implementation(libs.datastore.preferences)
+    // ScalarsConverterFactory
+    implementation(libs.converter.scalars)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -10,6 +10,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -46,6 +47,7 @@ object NetworkModule {
     fun provideRetrofit(baseUrl: String, client: OkHttpClient, json: Json): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .client(client)
+        .addConverterFactory(ScalarsConverterFactory.create())
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .build()
 

@@ -2,6 +2,8 @@ package learningprogramming.academy.reviewrabbit.viewmodels
 
 import android.util.Log
 import android.util.Patterns
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,6 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import learningprogramming.academy.reviewrabbit.data.model.GetInvitesApiResponse
+import learningprogramming.academy.reviewrabbit.data.model.InviteCheckoutRequestModel
 import learningprogramming.academy.reviewrabbit.data.model.SendInvitesApiModel
 import learningprogramming.academy.reviewrabbit.data.repository.CompanyInviteResult
 import learningprogramming.academy.reviewrabbit.data.repository.InviteRepository
@@ -21,11 +24,15 @@ class InviteViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val inviteRepository: InviteRepository
 ) : ViewModel() {
-    private val _getInvites: MutableStateFlow<InviteUiState?> = MutableStateFlow(InviteUiState.Idle)
-    val getInvites: StateFlow<InviteUiState?> = _getInvites.asStateFlow()
+    private val _getInvites: MutableStateFlow<InviteUiState> = MutableStateFlow(InviteUiState.Idle)
+    val getInvites: StateFlow<InviteUiState> = _getInvites.asStateFlow()
     private val _sendInviteResult: MutableStateFlow<SendInviteResult> =
         MutableStateFlow(SendInviteResult(companyId = 0L, state = InviteUiState.Idle))
     val sendInviteResult: StateFlow<SendInviteResult> = _sendInviteResult.asStateFlow()
+    private val _redirectInviteState: MutableStateFlow<InviteCheckoutUiState> =
+        MutableStateFlow(InviteCheckoutUiState())
+    val redirectInviteState: StateFlow<InviteCheckoutUiState> = _redirectInviteState.asStateFlow()
+
 
     fun getInvites() {
         viewModelScope.launch {
@@ -61,7 +68,7 @@ class InviteViewModel @Inject constructor(
                     _getInvites.value = InviteUiState.Error("An unexpected error occurred.")
                 }
 
-                is CompanyInviteResult.SendInviteSuccess -> {}
+                else -> {}
             }
         }
     }
@@ -122,13 +129,57 @@ class InviteViewModel @Inject constructor(
                     )
                 }
 
-                is CompanyInviteResult.GetInviteSuccess -> {}
+                else -> {}
             }
         }
     }
 
-    fun resetInviteUiStateToIdle() {
-        _getInvites.value = InviteUiState.Idle
+    fun redirectInviteToStripe(companyId: Long) {
+        viewModelScope.launch {
+            when (val response =
+                inviteRepository.getInviteCheckoutUrl(InviteCheckoutRequestModel(companyId))) {
+                is CompanyInviteResult.RedirectToStripeSuccess -> {
+                    Log.i("InviteViewModel", "Request checkout Url success")
+                    _redirectInviteState.value = InviteCheckoutUiState(
+                        checkoutUrl = response.urlString,
+                        message = "Redirecting to payment..."
+                    )
+                }
+
+                is CompanyInviteResult.Error -> {
+                    Log.e(
+                        "InviteViewModel",
+                        "Unable to get checkout url. companyId = $companyId. response = ${response.message}"
+                    )
+                    _redirectInviteState.value =
+                        InviteCheckoutUiState(message = response.message)
+                }
+
+                is CompanyInviteResult.NetworkError -> {
+                    Log.e(
+                        "InviteViewModel",
+                        "Network error occurred. Unable to retrieve checkout URL"
+                    )
+                    _redirectInviteState.value =
+                        InviteCheckoutUiState(message = "Network error occurred. Unable to retrieve checkout URL")
+                }
+
+                is CompanyInviteResult.UnknownError -> {
+                    Log.e(
+                        "InviteViewModel",
+                        "Unknown error occurred. Unable to retrieve checkout URL"
+                    )
+                    _redirectInviteState.value =
+                        InviteCheckoutUiState(message = "UnknownError : ${response.exception}")
+                }
+
+                else -> {}
+            }
+        }
+    }
+
+    fun resetRedirectInviteState() {
+        _redirectInviteState.value = InviteCheckoutUiState()
     }
 
     fun clearSendInviteResult() {
@@ -147,4 +198,9 @@ sealed interface InviteUiState {
 data class SendInviteResult(
     val companyId: Long,
     val state: InviteUiState
+)
+
+data class InviteCheckoutUiState(
+    val checkoutUrl: String? = null,
+    val message: String? = null
 )

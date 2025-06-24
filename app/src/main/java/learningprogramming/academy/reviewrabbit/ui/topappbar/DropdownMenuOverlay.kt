@@ -26,7 +26,8 @@ fun DropdownMenuOverlay(
     isExpanded: Boolean,
     isLoggedIn: Boolean,
     onLogoutClick: () -> Unit,
-    onLoginClick: () -> Unit
+    onLoginClick: () -> Unit,
+    onSignupClick:() -> Unit
 ) {
 
     AnimatedVisibility(
@@ -72,7 +73,7 @@ fun DropdownMenuOverlay(
                     )
                     MenuText(
                         text = "Signup",
-                        onClick = {}
+                        onClick = onSignupClick
                     )
                 }
             }

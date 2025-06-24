@@ -20,6 +20,7 @@ import learningprogramming.academy.reviewrabbit.ui.screens.LoginPageScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.LogoutPageScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.ProfileSettingsScreen
 import learningprogramming.academy.reviewrabbit.ui.screens.ResetPasswordScreen
+import learningprogramming.academy.reviewrabbit.ui.screens.SignupPageScreen
 import learningprogramming.academy.reviewrabbit.viewmodels.ChangePasswordViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.CompanyReviewViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.ForgotPasswordViewModel
@@ -28,6 +29,7 @@ import learningprogramming.academy.reviewrabbit.viewmodels.InviteViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.LoginViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.PostCompanyViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.ResetPasswordViewModel
+import learningprogramming.academy.reviewrabbit.viewmodels.SignupViewModel
 
 @Composable
 fun ReviewRabbitApp(
@@ -39,9 +41,9 @@ fun ReviewRabbitApp(
     resetPasswordViewModel: ResetPasswordViewModel,
     inviteViewModel: InviteViewModel,
     changePasswordViewModel: ChangePasswordViewModel,
-    postCompanyViewModel: PostCompanyViewModel
+    postCompanyViewModel: PostCompanyViewModel,
+    signupViewModel: SignupViewModel
 ) {
-
 
     NavHost(navController = navController, startDestination = ScreenRoutes.HOME) {
         composable(route = ScreenRoutes.HOME) {
@@ -141,6 +143,13 @@ fun ReviewRabbitApp(
             ChangePasswordScreen(
                 changePasswordViewModel = changePasswordViewModel,
                 onPasswordChangeSuccessNavigation = { navController.navigate(ScreenRoutes.USER_SETTINGS) }
+            )
+        }
+        composable(route = ScreenRoutes.SIGNUP_PAGE) {
+            SignupPageScreen(
+                signupViewModel = signupViewModel,
+                onSignupSuccessNavigation = { navController.navigate(ScreenRoutes.LOGIN_PAGE) },
+                onLoginClick = { navController.navigate(ScreenRoutes.LOGIN_PAGE) }
             )
         }
     }

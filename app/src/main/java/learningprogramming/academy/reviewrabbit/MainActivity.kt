@@ -31,6 +31,7 @@ import learningprogramming.academy.reviewrabbit.viewmodels.InviteViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.LoginViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.PostCompanyViewModel
 import learningprogramming.academy.reviewrabbit.viewmodels.ResetPasswordViewModel
+import learningprogramming.academy.reviewrabbit.viewmodels.SignupViewModel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -47,6 +48,7 @@ class MainActivity : ComponentActivity() {
                 val inviteViewModel: InviteViewModel = hiltViewModel()
                 val changePasswordViewModel: ChangePasswordViewModel = hiltViewModel()
                 val postCompanyViewModel: PostCompanyViewModel = hiltViewModel()
+                val signupViewModel: SignupViewModel = hiltViewModel()
 
                 val navController = rememberNavController()
                 var isExpanded by rememberSaveable { mutableStateOf(false) }
@@ -82,7 +84,8 @@ class MainActivity : ComponentActivity() {
                                 resetPasswordViewModel = resetPasswordViewModel,
                                 inviteViewModel = inviteViewModel,
                                 changePasswordViewModel = changePasswordViewModel,
-                                postCompanyViewModel = postCompanyViewModel
+                                postCompanyViewModel = postCompanyViewModel,
+                                signupViewModel = signupViewModel
                             )
                             DropdownMenuOverlay(
                                 isExpanded = isExpanded,
@@ -97,6 +100,10 @@ class MainActivity : ComponentActivity() {
                                         launchSingleTop = true
                                         restoreState = true
                                     }
+                                    isExpanded = !isExpanded
+                                },
+                                onSignupClick = {
+                                    navController.navigate(route = ScreenRoutes.SIGNUP_PAGE)
                                     isExpanded = !isExpanded
                                 },
                                 modifier = Modifier

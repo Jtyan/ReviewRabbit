@@ -2,7 +2,6 @@ package learningprogramming.academy.reviewrabbit.viewmodels
 
 import android.util.Log
 import android.util.Patterns
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -90,9 +89,7 @@ class ChangePasswordViewModel @Inject constructor(
                             ChangePasswordUiState.Error("An unexpected error occurred.")
                     }
 
-                    is UserAuthResult.Success -> {}
-                    is UserAuthResult.PasswordRecoverySent -> {}
-                    is UserAuthResult.ResetPasswordSuccess -> {}
+                    else -> {}
                 }
             }
         }

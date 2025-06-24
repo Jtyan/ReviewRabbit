@@ -32,7 +32,7 @@ class ForgotPasswordViewModel @Inject constructor(
         }
         viewModelScope.launch {
             _forgotPasswordUiState.value = ForgotPasswordUiState.Loading
-            when (val response = userRepository.recoverPassword(postUserForgetPasswordApi)) {
+             when (val response = userRepository.recoverPassword(postUserForgetPasswordApi)) {
                 is UserAuthResult.PasswordRecoverySent -> {
                     Log.i("ForgotPasswordViewModel", "Password recovery email sent for $email")
                     _forgotPasswordUiState.value = ForgotPasswordUiState.Success
@@ -55,9 +55,7 @@ class ForgotPasswordViewModel @Inject constructor(
                         ForgotPasswordUiState.Error("An unexpected error occurred.")
                 }
 
-                is UserAuthResult.Success -> {}
-                is UserAuthResult.ResetPasswordSuccess -> {}
-                is UserAuthResult.ChangePasswordSuccess -> {}
+                else -> {}
             }
         }
     }

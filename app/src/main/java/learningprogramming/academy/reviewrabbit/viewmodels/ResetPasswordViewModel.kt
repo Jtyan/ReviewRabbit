@@ -64,9 +64,7 @@ class ResetPasswordViewModel @Inject constructor(
                         ResetPasswordUiState.Error("An unexpected error occurred.")
                 }
 
-                is UserAuthResult.Success -> {}
-                is UserAuthResult.PasswordRecoverySent -> {}
-                is UserAuthResult.ChangePasswordSuccess -> {}
+                else -> {}
             }
         }
     }

@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import learningprogramming.academy.reviewrabbit.data.model.PostUserLoginApi
+import learningprogramming.academy.reviewrabbit.data.model.PostUserApi
 import learningprogramming.academy.reviewrabbit.data.model.UserLoginApiResponse
 import learningprogramming.academy.reviewrabbit.data.repository.UserAuthResult
 import learningprogramming.academy.reviewrabbit.data.repository.UserRepository
@@ -31,11 +31,11 @@ class LoginViewModel @Inject constructor(
         initialValue = false
     )
 
-    fun onLoginClicked(postUserLoginApi: PostUserLoginApi) {
+    fun onLoginClicked(postUserApi: PostUserApi) {
         viewModelScope.launch {
             _loginUiState.value = LoginScreenUiState.Loading
-            when (val response = userRepository.loginUser(postUserLoginApi)) {
-                is UserAuthResult.Success -> {
+            when (val response = userRepository.loginUser(postUserApi)) {
+                is UserAuthResult.LoginUserSuccess -> {
                     Log.i("LoginViewModel", "Login successful")
                     _loginUiState.value = LoginScreenUiState.Success(response.userData)
                 }
@@ -54,9 +54,7 @@ class LoginViewModel @Inject constructor(
                     Log.e("LoginViewModel", "Login unknown error", response.exception)
                     _loginUiState.value = LoginScreenUiState.Error("An unexpected error occurred.")
                 }
-                is UserAuthResult.PasswordRecoverySent -> {}
-                is UserAuthResult.ResetPasswordSuccess -> {}
-                is UserAuthResult.ChangePasswordSuccess -> {}
+                else -> {}
             }
         }
     }

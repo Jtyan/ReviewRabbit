@@ -3,7 +3,7 @@ package learningprogramming.academy.reviewrabbit.data.repository
 import android.util.Log
 import learningprogramming.academy.reviewrabbit.data.model.ChangePasswordApi
 import learningprogramming.academy.reviewrabbit.data.model.PostUserForgetPasswordApi
-import learningprogramming.academy.reviewrabbit.data.model.PostUserLoginApi
+import learningprogramming.academy.reviewrabbit.data.model.PostUserApi
 import learningprogramming.academy.reviewrabbit.data.model.ResetPasswordApi
 import learningprogramming.academy.reviewrabbit.data.model.UserLoginApiResponse
 import learningprogramming.academy.reviewrabbit.data.network.UserApiService
@@ -13,7 +13,7 @@ import java.io.IOException
 import javax.inject.Inject
 
 interface UserRepository {
-    suspend fun loginUser(postUserLoginApi: PostUserLoginApi): UserAuthResult
+    suspend fun loginUser(postUserApi: PostUserApi): UserAuthResult
     suspend fun recoverPassword(postUserForgetPasswordApi: PostUserForgetPasswordApi): UserAuthResult
     suspend fun resetPassword(resetPasswordApi: ResetPasswordApi): UserAuthResult
     suspend fun changePassword(changePasswordApi: ChangePasswordApi): UserAuthResult
@@ -23,10 +23,10 @@ class UserRepositoryImpl @Inject constructor(
     private val userApiService: UserApiService,
     private val sessionManager: SessionManager
 ) : UserRepository {
-    override suspend fun loginUser(postUserLoginApi: PostUserLoginApi): UserAuthResult {
+    override suspend fun loginUser(postUserApi: PostUserApi): UserAuthResult {
         return try {
             val response: Response<UserLoginApiResponse> =
-                userApiService.loginUser(postUserLoginApi)
+                userApiService.loginUser(postUserApi)
             if (response.isSuccessful) {
                 val userLoginApiResponse = response.body()
                 if (userLoginApiResponse != null) {

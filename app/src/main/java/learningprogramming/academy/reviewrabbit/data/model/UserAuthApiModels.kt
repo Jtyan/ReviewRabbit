@@ -11,7 +11,7 @@ data class UserLoginApiResponse(
 )
 
 @Serializable
-data class PostUserLoginApi(
+data class PostUserApi(
     val email: String,
     val password: String
 )

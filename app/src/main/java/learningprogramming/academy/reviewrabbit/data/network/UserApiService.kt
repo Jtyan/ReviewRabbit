@@ -2,7 +2,7 @@ package learningprogramming.academy.reviewrabbit.data.network
 
 import learningprogramming.academy.reviewrabbit.data.model.ChangePasswordApi
 import learningprogramming.academy.reviewrabbit.data.model.PostUserForgetPasswordApi
-import learningprogramming.academy.reviewrabbit.data.model.PostUserLoginApi
+import learningprogramming.academy.reviewrabbit.data.model.PostUserApi
 import learningprogramming.academy.reviewrabbit.data.model.ResetPasswordApi
 import learningprogramming.academy.reviewrabbit.data.model.UserLoginApiResponse
 import retrofit2.Response
@@ -12,7 +12,7 @@ import retrofit2.http.PUT
 
 interface UserApiService {
     @POST("users/login")
-    suspend fun loginUser(@Body postUserLoginApi: PostUserLoginApi): Response<UserLoginApiResponse>
+    suspend fun loginUser(@Body postUserApi: PostUserApi): Response<UserLoginApiResponse>
 
     @POST("users/forgot")
     suspend fun recoverPassword(@Body postUserForgetPasswordApi: PostUserForgetPasswordApi): Response<Unit>

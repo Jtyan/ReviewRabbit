@@ -17,6 +17,7 @@ interface UserRepository {
     suspend fun recoverPassword(postUserForgetPasswordApi: PostUserForgetPasswordApi): UserAuthResult
     suspend fun resetPassword(resetPasswordApi: ResetPasswordApi): UserAuthResult
     suspend fun changePassword(changePasswordApi: ChangePasswordApi): UserAuthResult
+    suspend fun signupUser(postUserApi: PostUserApi): UserAuthResult
 }
 
 class UserRepositoryImpl @Inject constructor(
@@ -31,7 +32,7 @@ class UserRepositoryImpl @Inject constructor(
                 val userLoginApiResponse = response.body()
                 if (userLoginApiResponse != null) {
                     sessionManager.saveSession(userLoginApiResponse)
-                    UserAuthResult.Success(userData = userLoginApiResponse)
+                    UserAuthResult.LoginUserSuccess(userData = userLoginApiResponse)
                 } else {
                     Log.e("UserRepository", "Login successful but body was null")
                     UserAuthResult.Error("Login successful but server response was empty.")
@@ -111,14 +112,34 @@ class UserRepositoryImpl @Inject constructor(
             UserAuthResult.UnknownError(e)
         }
     }
+
+    override suspend fun signupUser(postUserApi: PostUserApi): UserAuthResult {
+        return try {
+            val response = userApiService.signupUser(postUserApi)
+            if (response.isSuccessful) {
+                Log.i("UserRepository", "User sign up successful")
+                UserAuthResult.SignupUserSuccess
+            } else {
+                Log.e("UserRepository", "Sign up Error. ${response.code()} ${response.message()}")
+                UserAuthResult.Error("Unable to sign up user. ${response.code()} ${response.message()}")
+            }
+        } catch (e: IOException) {
+            Log.e("UserRepository", "User sign up network error: ${e.message}")
+            UserAuthResult.NetworkError
+        } catch (e: Exception) {
+            Log.e("UserRepository", "User sign up unknown error: ${e.message}")
+            UserAuthResult.UnknownError(e)
+        }
+    }
 }
 
 sealed interface UserAuthResult {
-    data class Success(val userData: UserLoginApiResponse) : UserAuthResult
-    data class Error(val message: String) : UserAuthResult
-    data object NetworkError : UserAuthResult
-    data class UnknownError(val exception: Throwable) : UserAuthResult
+    data class LoginUserSuccess(val userData: UserLoginApiResponse) : UserAuthResult
     data object PasswordRecoverySent : UserAuthResult
     data object ResetPasswordSuccess: UserAuthResult
     data object ChangePasswordSuccess: UserAuthResult
+    data object SignupUserSuccess: UserAuthResult
+    data class Error(val message: String) : UserAuthResult
+    data object NetworkError : UserAuthResult
+    data class UnknownError(val exception: Throwable) : UserAuthResult
 }

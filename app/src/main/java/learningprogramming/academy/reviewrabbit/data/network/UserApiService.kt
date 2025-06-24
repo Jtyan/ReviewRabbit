@@ -22,4 +22,7 @@ interface UserApiService {
 
     @PUT("users/password")
     suspend fun changePassword(@Body changePasswordApi: ChangePasswordApi): Response<Unit>
+
+    @POST("users")
+    suspend fun signupUser(@Body postUserApi: PostUserApi):Response<Unit>
 }

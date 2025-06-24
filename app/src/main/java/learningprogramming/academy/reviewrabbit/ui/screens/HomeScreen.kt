@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -65,6 +66,10 @@ fun HomeScreen(
     }
     val isBannerVisible = !isScrolled
 
+//    LaunchedEffect(listOfCompanies) {
+//        homeScreenViewModel
+//    }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -85,7 +90,12 @@ fun HomeScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             item {
-                SearchFilters(homeScreenViewModel)
+                SearchFilters(
+                    homeScreenViewModel,
+                    onFilterClick = { listOfFilters ->
+                        homeScreenViewModel.getListOfFilteredCompanies(listOfFilters)
+                    }
+                )
             }
             items(listOfCompanies) {
                 LazyColumnCompanyItem(
@@ -145,7 +155,8 @@ fun LazyColumnCompanyItem(
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     ) {
 
-                        val imageData = remember(company.image) { Base64Decoder.base64ToByteArray(company.image) }
+                        val imageData =
+                            remember(company.image) { Base64Decoder.base64ToByteArray(company.image) }
 
                         AsyncImage(
                             model = ImageRequest.Builder(LocalContext.current)

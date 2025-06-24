@@ -14,6 +14,7 @@ interface CompanyRepository {
     suspend fun getCompanyById(companyId: Int): CompanyApiResponse
     suspend fun getCompanyFilters(): CompanyFilters
     suspend fun postNewCompany(postCompanyApi: PostCompanyApi): CompanyApiResult
+    suspend fun getFilteredCompaniesList(companyFilters: CompanyFilters): CompanyApiResult
 }
 
 @Singleton
@@ -53,10 +54,34 @@ class CompanyRepositoryImpl @Inject constructor(private val apiService: CompanyA
             return CompanyApiResult.UnknownError(e)
         }
     }
+
+    override suspend fun getFilteredCompaniesList(companyFilters: CompanyFilters): CompanyApiResult {
+        return try {
+            val response = apiService.getFilteredCompanies(companyFilters)
+
+            if (response.isSuccessful && response.body() != null) {
+                    Log.i("CompanyRepository", "Get list of filtered companies successful.")
+                    CompanyApiResult.GetFilteredCompaniesSuccess(response.body()!!)
+            } else {
+                Log.e(
+                    "CompanyRepository",
+                    "Failed to get list of filtered companies. Code: ${response.code()}, Message: ${response.message()}"
+                )
+                CompanyApiResult.Error("Failed to retrieve companies. Please try again.")
+            }
+        } catch (e: IOException) {
+            Log.e("CompanyRepository", "Failed to get list of filtered companies. Network error has occurred. $e")
+            return CompanyApiResult.NetworkError
+        } catch (e: Exception) {
+            Log.e("CompanyRepository", "Failed to get list of filtered companies. Unknown error has occurred.")
+            return CompanyApiResult.UnknownError(e)
+        }
+    }
 }
 
 sealed interface CompanyApiResult {
     data object PostCompanySuccess : CompanyApiResult
+    data class GetFilteredCompaniesSuccess(val filteredCompanies: List<CompanyApiResponse>): CompanyApiResult
     data class Error(val message: String) : CompanyApiResult
     data object NetworkError : CompanyApiResult
     data class UnknownError(val exception: Throwable) : CompanyApiResult

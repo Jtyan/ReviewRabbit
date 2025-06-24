@@ -79,6 +79,7 @@ class PostCompanyViewModel @Inject constructor(
                     _postCompanyUiState.value =
                         PostCompanyUiState.Error("Unknown error has occurred. ${response.exception}")
                 }
+                else -> {}
             }
         }
     }

@@ -21,4 +21,7 @@ interface CompanyApiService {
 
     @POST("companies")
     suspend fun postNewCompany(@Body postCompanyApi: PostCompanyApi): Response<Unit>
+
+    @POST("companies/search")
+    suspend fun getFilteredCompanies(@Body companyFilters: CompanyFilters): Response<List<CompanyApiResponse>>
 }

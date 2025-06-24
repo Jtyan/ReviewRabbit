@@ -38,6 +38,7 @@ object NetworkModule {
     fun provideJsonConfiguration(): Json {
         return Json {
             ignoreUnknownKeys = true
+            encodeDefaults = true
             isLenient = true
         }
     }

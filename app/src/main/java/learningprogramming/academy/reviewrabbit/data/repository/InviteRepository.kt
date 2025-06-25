@@ -2,18 +2,18 @@ package learningprogramming.academy.reviewrabbit.data.repository
 
 import android.util.Log
 import androidx.datastore.core.IOException
-import learningprogramming.academy.reviewrabbit.data.model.GetInvitesApiResponse
-import learningprogramming.academy.reviewrabbit.data.model.InviteCheckoutRequestModel
-import learningprogramming.academy.reviewrabbit.data.model.SendInvitesApiModel
-import learningprogramming.academy.reviewrabbit.data.model.SendInvitesApiResponse
+import learningprogramming.academy.reviewrabbit.data.model.InvitesResponse
+import learningprogramming.academy.reviewrabbit.data.model.CreateCheckoutSessionRequest
+import learningprogramming.academy.reviewrabbit.data.model.SendInvitesRequest
+import learningprogramming.academy.reviewrabbit.data.model.SendInvitesResponse
 import learningprogramming.academy.reviewrabbit.data.network.InviteApiService
 import retrofit2.Response
 import javax.inject.Inject
 
 interface InviteRepository {
     suspend fun getInvites(): CompanyInviteResult
-    suspend fun sendInvites(invites: SendInvitesApiModel): CompanyInviteResult
-    suspend fun getInviteCheckoutUrl(inviteCheckoutRequestModel: InviteCheckoutRequestModel): CompanyInviteResult
+    suspend fun sendInvites(sendInvitesRequest: SendInvitesRequest): CompanyInviteResult
+    suspend fun getInviteCheckoutUrl(createCheckoutSessionRequest: CreateCheckoutSessionRequest): CompanyInviteResult
 }
 
 class InviteRepositoryImpl @Inject constructor(
@@ -21,7 +21,7 @@ class InviteRepositoryImpl @Inject constructor(
 ) : InviteRepository {
     override suspend fun getInvites(): CompanyInviteResult {
         return try {
-            val response: Response<List<GetInvitesApiResponse>> = inviteApiService.getInvites()
+            val response: Response<List<InvitesResponse>> = inviteApiService.getInvites()
 
             if (response.isSuccessful) {
                 val getInvitesApiResponse = response.body()
@@ -54,9 +54,9 @@ class InviteRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun sendInvites(invites: SendInvitesApiModel): CompanyInviteResult {
+    override suspend fun sendInvites(sendInvitesRequest: SendInvitesRequest): CompanyInviteResult {
         return try {
-            val response = inviteApiService.sendInvites(invites)
+            val response = inviteApiService.sendInvites(sendInvitesRequest)
             if(response.isSuccessful && response.body() != null) {
                 CompanyInviteResult.SendInviteSuccess(response.body()!!)
             } else {
@@ -81,9 +81,9 @@ class InviteRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getInviteCheckoutUrl(inviteCheckoutRequestModel: InviteCheckoutRequestModel): CompanyInviteResult {
+    override suspend fun getInviteCheckoutUrl(createCheckoutSessionRequest: CreateCheckoutSessionRequest): CompanyInviteResult {
         return try {
-            val response = inviteApiService.getInviteCheckoutUrl(inviteCheckoutRequestModel)
+            val response = inviteApiService.getInviteCheckoutUrl(createCheckoutSessionRequest)
             if (response.isSuccessful && response.body() != null) {
                 CompanyInviteResult.RedirectToStripeSuccess(response.body()!!)
             } else {
@@ -110,8 +110,8 @@ class InviteRepositoryImpl @Inject constructor(
 }
 
 sealed interface CompanyInviteResult {
-    data class GetInviteSuccess(val response: List<GetInvitesApiResponse?>) : CompanyInviteResult
-    data class SendInviteSuccess(val response: SendInvitesApiResponse): CompanyInviteResult
+    data class GetInviteSuccess(val response: List<InvitesResponse?>) : CompanyInviteResult
+    data class SendInviteSuccess(val response: SendInvitesResponse): CompanyInviteResult
     data class RedirectToStripeSuccess(val urlString: String): CompanyInviteResult
     data class Error(val message: String) : CompanyInviteResult
     data object NetworkError : CompanyInviteResult

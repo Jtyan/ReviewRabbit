@@ -15,12 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import learningprogramming.academy.reviewrabbit.data.model.CompanyApiResponse
+import learningprogramming.academy.reviewrabbit.data.model.CompanyResponse
 import learningprogramming.academy.reviewrabbit.ui.theme.ReviewRabbitTheme
 
 @Composable
 fun CompanyLocationAndTags(
-    company: CompanyApiResponse,
+    company: CompanyResponse,
     color: Color = Color.Unspecified
 ) {
     val location = company.location
@@ -69,7 +69,7 @@ fun CompanyLocationAndTags(
 fun CompanyLocationAndTagsPreview() {
     ReviewRabbitTheme(dynamicColor = false) {
         CompanyLocationAndTags(
-            company = CompanyApiResponse(
+            company = CompanyResponse(
                 id = 1,
                 name = "Lazy Programmers",
                 url = "www.google.com",

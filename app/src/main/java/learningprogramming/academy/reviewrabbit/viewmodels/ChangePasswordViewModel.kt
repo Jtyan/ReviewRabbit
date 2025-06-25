@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import learningprogramming.academy.reviewrabbit.data.model.ChangePasswordApi
+import learningprogramming.academy.reviewrabbit.data.model.ChangePasswordRequest
 import learningprogramming.academy.reviewrabbit.data.repository.UserAuthResult
 import learningprogramming.academy.reviewrabbit.data.repository.UserRepository
 import learningprogramming.academy.reviewrabbit.data.session.SessionManager
@@ -34,7 +34,7 @@ class ChangePasswordViewModel @Inject constructor(
                 UserAuthResult.Error("Unable to find user email address")
                 return@launch
             } else {
-                val changePasswordApi = ChangePasswordApi(
+                val changePasswordRequest = ChangePasswordRequest(
                     email = email,
                     oldPassword = oldPassword,
                     newPassword = newPassword
@@ -57,7 +57,7 @@ class ChangePasswordViewModel @Inject constructor(
 
                 _changePasswordUiState.value = ChangePasswordUiState.Loading
 
-                when (val response = userRepository.changePassword(changePasswordApi)) {
+                when (val response = userRepository.changePassword(changePasswordRequest)) {
                     is UserAuthResult.ChangePasswordSuccess -> {
                         Log.i("ChangePasswordViewModel", "Password reset successful!")
                         _changePasswordUiState.value =

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import learningprogramming.academy.reviewrabbit.data.model.CompanyApiResponse
+import learningprogramming.academy.reviewrabbit.data.model.CompanyResponse
 import learningprogramming.academy.reviewrabbit.data.model.CompanyFilters
 import learningprogramming.academy.reviewrabbit.data.repository.CompanyApiResult
 import learningprogramming.academy.reviewrabbit.data.repository.CompanyRepository
@@ -21,8 +21,8 @@ class HomeScreenViewModel @Inject constructor(
 ) : ViewModel() {
     private val _companyFilters = MutableStateFlow(CompanyFilters())
     val companyFilters: StateFlow<CompanyFilters> = _companyFilters.asStateFlow()
-    private val _listOfCompanies = MutableStateFlow<List<CompanyApiResponse>>(emptyList())
-    val listOfCompanies: StateFlow<List<CompanyApiResponse>> = _listOfCompanies.asStateFlow()
+    private val _listOfCompanies = MutableStateFlow<List<CompanyResponse>>(emptyList())
+    val listOfCompanies: StateFlow<List<CompanyResponse>> = _listOfCompanies.asStateFlow()
     private val _listOfFilters = MutableStateFlow(CompanyFilters())
     val listOfFilters: StateFlow<CompanyFilters> = _listOfFilters.asStateFlow()
 

@@ -1,11 +1,12 @@
 package learningprogramming.academy.reviewrabbit.data.repository
 
 import android.util.Log
-import learningprogramming.academy.reviewrabbit.data.model.ChangePasswordApi
-import learningprogramming.academy.reviewrabbit.data.model.PostUserForgetPasswordApi
-import learningprogramming.academy.reviewrabbit.data.model.PostUserApi
-import learningprogramming.academy.reviewrabbit.data.model.ResetPasswordApi
-import learningprogramming.academy.reviewrabbit.data.model.UserLoginApiResponse
+import learningprogramming.academy.reviewrabbit.data.model.ChangePasswordRequest
+import learningprogramming.academy.reviewrabbit.data.model.ForgetPasswordRequest
+import learningprogramming.academy.reviewrabbit.data.model.LoginUserRequest
+import learningprogramming.academy.reviewrabbit.data.model.ResetPasswordRequest
+import learningprogramming.academy.reviewrabbit.data.model.SignupUserRequest
+import learningprogramming.academy.reviewrabbit.data.model.UserLoginResponse
 import learningprogramming.academy.reviewrabbit.data.network.UserApiService
 import learningprogramming.academy.reviewrabbit.data.session.SessionManager
 import retrofit2.Response
@@ -13,21 +14,21 @@ import java.io.IOException
 import javax.inject.Inject
 
 interface UserRepository {
-    suspend fun loginUser(postUserApi: PostUserApi): UserAuthResult
-    suspend fun recoverPassword(postUserForgetPasswordApi: PostUserForgetPasswordApi): UserAuthResult
-    suspend fun resetPassword(resetPasswordApi: ResetPasswordApi): UserAuthResult
-    suspend fun changePassword(changePasswordApi: ChangePasswordApi): UserAuthResult
-    suspend fun signupUser(postUserApi: PostUserApi): UserAuthResult
+    suspend fun loginUser(loginUserRequest: LoginUserRequest): UserAuthResult
+    suspend fun recoverPassword(forgetPasswordRequest: ForgetPasswordRequest): UserAuthResult
+    suspend fun resetPassword(resetPasswordRequest: ResetPasswordRequest): UserAuthResult
+    suspend fun changePassword(changePasswordRequest: ChangePasswordRequest): UserAuthResult
+    suspend fun signupUser(signupUserRequest: SignupUserRequest): UserAuthResult
 }
 
 class UserRepositoryImpl @Inject constructor(
     private val userApiService: UserApiService,
     private val sessionManager: SessionManager
 ) : UserRepository {
-    override suspend fun loginUser(postUserApi: PostUserApi): UserAuthResult {
+    override suspend fun loginUser(loginUserRequest: LoginUserRequest): UserAuthResult {
         return try {
-            val response: Response<UserLoginApiResponse> =
-                userApiService.loginUser(postUserApi)
+            val response: Response<UserLoginResponse> =
+                userApiService.loginUser(loginUserRequest)
             if (response.isSuccessful) {
                 val userLoginApiResponse = response.body()
                 if (userLoginApiResponse != null) {
@@ -56,9 +57,9 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun recoverPassword(postUserForgetPasswordApi: PostUserForgetPasswordApi): UserAuthResult {
+    override suspend fun recoverPassword(forgetPasswordRequest: ForgetPasswordRequest): UserAuthResult {
         return try {
-            val response = userApiService.recoverPassword(postUserForgetPasswordApi)
+            val response = userApiService.recoverPassword(forgetPasswordRequest)
             if (response.isSuccessful) {
                 Log.i("UserRepository", "Email for password recovery successfully sent")
                 UserAuthResult.PasswordRecoverySent
@@ -75,9 +76,9 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun resetPassword(resetPasswordApi: ResetPasswordApi): UserAuthResult {
+    override suspend fun resetPassword(resetPasswordRequest: ResetPasswordRequest): UserAuthResult {
         return try {
-            val response = userApiService.resetPassword(resetPasswordApi)
+            val response = userApiService.resetPassword(resetPasswordRequest)
             if (response.isSuccessful) {
                 Log.i("UserRepository", "Password reset successful")
                 UserAuthResult.ResetPasswordSuccess
@@ -94,9 +95,9 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun changePassword(changePasswordApi: ChangePasswordApi): UserAuthResult {
+    override suspend fun changePassword(changePasswordRequest: ChangePasswordRequest): UserAuthResult {
         return try {
-            val response = userApiService.changePassword(changePasswordApi)
+            val response = userApiService.changePassword(changePasswordRequest)
             if (response.isSuccessful) {
                 Log.i("UserRepository", "Password successfully changed.")
                 UserAuthResult.ChangePasswordSuccess
@@ -113,9 +114,9 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun signupUser(postUserApi: PostUserApi): UserAuthResult {
+    override suspend fun signupUser(signupUserRequest: SignupUserRequest): UserAuthResult {
         return try {
-            val response = userApiService.signupUser(postUserApi)
+            val response = userApiService.signupUser(signupUserRequest)
             if (response.isSuccessful) {
                 Log.i("UserRepository", "User sign up successful")
                 UserAuthResult.SignupUserSuccess
@@ -134,7 +135,7 @@ class UserRepositoryImpl @Inject constructor(
 }
 
 sealed interface UserAuthResult {
-    data class LoginUserSuccess(val userData: UserLoginApiResponse) : UserAuthResult
+    data class LoginUserSuccess(val userData: UserLoginResponse) : UserAuthResult
     data object PasswordRecoverySent : UserAuthResult
     data object ResetPasswordSuccess: UserAuthResult
     data object ChangePasswordSuccess: UserAuthResult

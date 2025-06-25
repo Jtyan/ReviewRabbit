@@ -9,8 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import learningprogramming.academy.reviewrabbit.data.model.ChangePasswordApi
-import learningprogramming.academy.reviewrabbit.data.model.PostUserApi
+import learningprogramming.academy.reviewrabbit.data.model.LoginUserRequest
 import learningprogramming.academy.reviewrabbit.data.repository.UserAuthResult
 import learningprogramming.academy.reviewrabbit.data.repository.UserRepository
 import javax.inject.Inject
@@ -23,7 +22,7 @@ class SignupViewModel @Inject constructor(
     val signupUiState: StateFlow<SignupScreenUiState> = _signupUiState.asStateFlow()
 
 
-    fun onSignupClicked(postUserApi: PostUserApi) {
+    fun onSignupClicked(postUserApi: LoginUserRequest) {
         viewModelScope.launch {
 
             if (!Patterns.EMAIL_ADDRESS.matcher(postUserApi.email).matches()) {

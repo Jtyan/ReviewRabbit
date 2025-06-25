@@ -3,7 +3,7 @@ package learningprogramming.academy.reviewrabbit.data.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CompanyApiResponse(
+data class CompanyResponse(
     val id: Int = 0,
     val name: String,
     val url: String,
@@ -15,7 +15,7 @@ data class CompanyApiResponse(
 )
 
 @Serializable
-data class PostCompanyApi(
+data class CreateCompanyRequest(
     val name: String,
     val url: String,
     val location: String?,

@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import learningprogramming.academy.reviewrabbit.data.model.GetInvitesApiResponse
+import learningprogramming.academy.reviewrabbit.data.model.InvitesResponse
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomButton
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomTextField
 import learningprogramming.academy.reviewrabbit.ui.theme.extendedLight
@@ -43,7 +43,7 @@ fun ProfileSettingsScreen(
     onChangePasswordClick: () -> Unit
 ) {
     val getInviteUiState = inviteViewModel.getInvites.collectAsState().value
-    var listOfCompanies by remember { mutableStateOf<List<GetInvitesApiResponse>>(emptyList()) }
+    var listOfCompanies by remember { mutableStateOf<List<InvitesResponse>>(emptyList()) }
 
     LaunchedEffect(Unit) {
         inviteViewModel.getInvites()
@@ -118,7 +118,7 @@ fun ProfileSettingsScreen(
 @Composable
 fun InvitesSection(
     modifier: Modifier = Modifier,
-    company: GetInvitesApiResponse,
+    company: InvitesResponse,
     inviteViewModel: InviteViewModel
 ) {
     val inviteTextState = rememberTextFieldState()

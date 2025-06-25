@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import learningprogramming.academy.reviewrabbit.data.model.PostUserApi
-import learningprogramming.academy.reviewrabbit.data.model.UserLoginApiResponse
+import learningprogramming.academy.reviewrabbit.data.model.LoginUserRequest
+import learningprogramming.academy.reviewrabbit.data.model.UserLoginResponse
 import learningprogramming.academy.reviewrabbit.data.repository.UserAuthResult
 import learningprogramming.academy.reviewrabbit.data.repository.UserRepository
 import learningprogramming.academy.reviewrabbit.data.session.SessionManager
@@ -31,10 +31,10 @@ class LoginViewModel @Inject constructor(
         initialValue = false
     )
 
-    fun onLoginClicked(postUserApi: PostUserApi) {
+    fun onLoginClicked(loginUserRequest: LoginUserRequest) {
         viewModelScope.launch {
             _loginUiState.value = LoginScreenUiState.Loading
-            when (val response = userRepository.loginUser(postUserApi)) {
+            when (val response = userRepository.loginUser(loginUserRequest)) {
                 is UserAuthResult.LoginUserSuccess -> {
                     Log.i("LoginViewModel", "Login successful")
                     _loginUiState.value = LoginScreenUiState.Success(response.userData)
@@ -74,6 +74,6 @@ class LoginViewModel @Inject constructor(
 sealed interface LoginScreenUiState {
     data object Idle : LoginScreenUiState
     data object Loading : LoginScreenUiState
-    data class Success(val userCred: UserLoginApiResponse) : LoginScreenUiState
+    data class Success(val userCred: UserLoginResponse) : LoginScreenUiState
     data class Error(val message: String) : LoginScreenUiState
 }

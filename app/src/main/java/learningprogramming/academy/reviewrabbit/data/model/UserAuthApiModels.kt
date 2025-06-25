@@ -3,7 +3,7 @@ package learningprogramming.academy.reviewrabbit.data.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UserLoginApiResponse(
+data class UserLoginResponse(
     val id: Long,
     val email: String,
     val token: String,
@@ -11,25 +11,31 @@ data class UserLoginApiResponse(
 )
 
 @Serializable
-data class PostUserApi(
+data class LoginUserRequest(
     val email: String,
     val password: String
 )
 
 @Serializable
-data class PostUserForgetPasswordApi(
+data class SignupUserRequest(
+    val email: String,
+    val password: String
+)
+
+@Serializable
+data class ForgetPasswordRequest(
     val email: String
 )
 
 @Serializable
-data class ResetPasswordApi(
+data class ResetPasswordRequest(
     val email: String,
     val token: String,
     val newPassword: String
 )
 
 @Serializable
-data class ChangePasswordApi(
+data class ChangePasswordRequest(
     val email: String,
     val oldPassword: String,
     val newPassword: String

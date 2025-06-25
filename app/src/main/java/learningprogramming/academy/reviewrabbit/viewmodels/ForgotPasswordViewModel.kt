@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import learningprogramming.academy.reviewrabbit.data.model.PostUserForgetPasswordApi
+import learningprogramming.academy.reviewrabbit.data.model.ForgetPasswordRequest
 import learningprogramming.academy.reviewrabbit.data.repository.UserAuthResult
 import learningprogramming.academy.reviewrabbit.data.repository.UserRepository
 import javax.inject.Inject
@@ -23,8 +23,8 @@ class ForgotPasswordViewModel @Inject constructor(
     val forgotPasswordUiState: StateFlow<ForgotPasswordUiState> =
         _forgotPasswordUiState.asStateFlow()
 
-    fun onRecoverPasswordClicked(postUserForgetPasswordApi: PostUserForgetPasswordApi) {
-        val email = postUserForgetPasswordApi.email
+    fun onRecoverPasswordClicked(forgetPasswordRequest: ForgetPasswordRequest) {
+        val email = forgetPasswordRequest.email
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             _forgotPasswordUiState.value = ForgotPasswordUiState.Error("Email $email is invalid")
@@ -32,7 +32,7 @@ class ForgotPasswordViewModel @Inject constructor(
         }
         viewModelScope.launch {
             _forgotPasswordUiState.value = ForgotPasswordUiState.Loading
-             when (val response = userRepository.recoverPassword(postUserForgetPasswordApi)) {
+             when (val response = userRepository.recoverPassword(forgetPasswordRequest)) {
                 is UserAuthResult.PasswordRecoverySent -> {
                     Log.i("ForgotPasswordViewModel", "Password recovery email sent for $email")
                     _forgotPasswordUiState.value = ForgotPasswordUiState.Success

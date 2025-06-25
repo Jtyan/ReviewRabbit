@@ -2,8 +2,6 @@ package learningprogramming.academy.reviewrabbit.viewmodels
 
 import android.util.Log
 import android.util.Patterns
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,9 +9,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import learningprogramming.academy.reviewrabbit.data.model.GetInvitesApiResponse
-import learningprogramming.academy.reviewrabbit.data.model.InviteCheckoutRequestModel
-import learningprogramming.academy.reviewrabbit.data.model.SendInvitesApiModel
+import learningprogramming.academy.reviewrabbit.data.model.InvitesResponse
+import learningprogramming.academy.reviewrabbit.data.model.CreateCheckoutSessionRequest
+import learningprogramming.academy.reviewrabbit.data.model.SendInvitesRequest
 import learningprogramming.academy.reviewrabbit.data.repository.CompanyInviteResult
 import learningprogramming.academy.reviewrabbit.data.repository.InviteRepository
 import learningprogramming.academy.reviewrabbit.data.session.SessionManager
@@ -95,7 +93,7 @@ class InviteViewModel @Inject constructor(
                 }
             }
 
-            val listOfInvites = SendInvitesApiModel(companyId, emails)
+            val listOfInvites = SendInvitesRequest(companyId, emails)
 
             when (val response = inviteRepository.sendInvites(listOfInvites)) {
                 is CompanyInviteResult.SendInviteSuccess -> {
@@ -137,7 +135,7 @@ class InviteViewModel @Inject constructor(
     fun redirectInviteToStripe(companyId: Long) {
         viewModelScope.launch {
             when (val response =
-                inviteRepository.getInviteCheckoutUrl(InviteCheckoutRequestModel(companyId))) {
+                inviteRepository.getInviteCheckoutUrl(CreateCheckoutSessionRequest(companyId))) {
                 is CompanyInviteResult.RedirectToStripeSuccess -> {
                     Log.i("InviteViewModel", "Request checkout Url success")
                     _redirectInviteState.value = InviteCheckoutUiState(
@@ -190,7 +188,7 @@ class InviteViewModel @Inject constructor(
 sealed interface InviteUiState {
     data object Idle : InviteUiState
     data object Loading : InviteUiState
-    data class GetInvitesSuccess(val companyInvites: List<GetInvitesApiResponse?>) : InviteUiState
+    data class GetInvitesSuccess(val companyInvites: List<InvitesResponse?>) : InviteUiState
     data class SendInvitesSuccess(val message: String) : InviteUiState
     data class Error(val message: String) : InviteUiState
 }

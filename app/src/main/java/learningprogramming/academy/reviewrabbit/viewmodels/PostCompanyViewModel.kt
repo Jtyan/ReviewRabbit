@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import learningprogramming.academy.reviewrabbit.data.model.PostCompanyApi
+import learningprogramming.academy.reviewrabbit.data.model.CreateCompanyRequest
 import learningprogramming.academy.reviewrabbit.data.repository.CompanyApiResult
 import learningprogramming.academy.reviewrabbit.data.repository.CompanyRepository
 import javax.inject.Inject
@@ -50,7 +50,7 @@ class PostCompanyViewModel @Inject constructor(
                 if (!companyTags.isNullOrEmpty()) companyTags.splitToSequence(",").map { it.trim() }
                     .filter { it.isNotEmpty() }.toList() else emptyList()
 
-            val postCompanyApi = PostCompanyApi(
+            val createCompanyRequest = CreateCompanyRequest(
                 name = name,
                 url = companyUrl,
                 location = location,
@@ -59,7 +59,7 @@ class PostCompanyViewModel @Inject constructor(
                 image = image,
                 tags = tags
             )
-            when (val response = companyRepository.postNewCompany(postCompanyApi)) {
+            when (val response = companyRepository.postNewCompany(createCompanyRequest)) {
                 is CompanyApiResult.PostCompanySuccess -> {
                     _postCompanyUiState.value =
                         PostCompanyUiState.Success("Company $name is added successfully.")

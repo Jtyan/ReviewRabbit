@@ -1,4 +1,4 @@
-package learningprogramming.academy.reviewrabbit.data.model
+package learningprogramming.academy.reviewrabbit.data.company.model
 
 import kotlinx.serialization.Serializable
 

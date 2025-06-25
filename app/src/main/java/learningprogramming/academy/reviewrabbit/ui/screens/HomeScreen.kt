@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import learningprogramming.academy.reviewrabbit.R
-import learningprogramming.academy.reviewrabbit.data.model.CompanyResponse
+import learningprogramming.academy.reviewrabbit.data.company.model.CompanyResponse
 import learningprogramming.academy.reviewrabbit.ui.components.common.CompanyLocationAndTags
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomButton
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomCard

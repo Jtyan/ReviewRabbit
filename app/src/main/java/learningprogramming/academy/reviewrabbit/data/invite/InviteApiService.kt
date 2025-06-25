@@ -1,9 +1,9 @@
-package learningprogramming.academy.reviewrabbit.data.network
+package learningprogramming.academy.reviewrabbit.data.invite
 
-import learningprogramming.academy.reviewrabbit.data.model.InvitesResponse
-import learningprogramming.academy.reviewrabbit.data.model.CreateCheckoutSessionRequest
-import learningprogramming.academy.reviewrabbit.data.model.SendInvitesRequest
-import learningprogramming.academy.reviewrabbit.data.model.SendInvitesResponse
+import learningprogramming.academy.reviewrabbit.data.invite.model.CreateCheckoutSessionRequest
+import learningprogramming.academy.reviewrabbit.data.invite.model.InvitesResponse
+import learningprogramming.academy.reviewrabbit.data.invite.model.SendInvitesRequest
+import learningprogramming.academy.reviewrabbit.data.invite.model.SendInvitesResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

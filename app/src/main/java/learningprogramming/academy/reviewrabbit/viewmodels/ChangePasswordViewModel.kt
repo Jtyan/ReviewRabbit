@@ -9,9 +9,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import learningprogramming.academy.reviewrabbit.data.model.ChangePasswordRequest
-import learningprogramming.academy.reviewrabbit.data.repository.UserAuthResult
-import learningprogramming.academy.reviewrabbit.data.repository.UserRepository
+import learningprogramming.academy.reviewrabbit.data.user.model.ChangePasswordRequest
+import learningprogramming.academy.reviewrabbit.data.user.UserAuthResult
+import learningprogramming.academy.reviewrabbit.data.user.UserRepository
 import learningprogramming.academy.reviewrabbit.data.session.SessionManager
 import javax.inject.Inject
 

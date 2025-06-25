@@ -1,8 +1,8 @@
-package learningprogramming.academy.reviewrabbit.data.network
+package learningprogramming.academy.reviewrabbit.data.company
 
-import learningprogramming.academy.reviewrabbit.data.model.CompanyResponse
-import learningprogramming.academy.reviewrabbit.data.model.CompanyFilters
-import learningprogramming.academy.reviewrabbit.data.model.CreateCompanyRequest
+import learningprogramming.academy.reviewrabbit.data.company.model.CompanyFilters
+import learningprogramming.academy.reviewrabbit.data.company.model.CompanyResponse
+import learningprogramming.academy.reviewrabbit.data.company.model.CreateCompanyRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

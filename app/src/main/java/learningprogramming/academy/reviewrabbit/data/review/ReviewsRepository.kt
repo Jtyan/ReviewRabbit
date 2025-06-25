@@ -1,9 +1,8 @@
-package learningprogramming.academy.reviewrabbit.data.repository
+package learningprogramming.academy.reviewrabbit.data.review
 
-import learningprogramming.academy.reviewrabbit.data.model.PostReviewRequest
-import learningprogramming.academy.reviewrabbit.data.model.ReviewResponse
-import learningprogramming.academy.reviewrabbit.data.model.ReviewSummaryResponse
-import learningprogramming.academy.reviewrabbit.data.network.ReviewsApiService
+import learningprogramming.academy.reviewrabbit.data.review.model.CreateReviewRequest
+import learningprogramming.academy.reviewrabbit.data.review.model.ReviewResponse
+import learningprogramming.academy.reviewrabbit.data.review.model.ReviewSummaryResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -11,11 +10,12 @@ interface ReviewsRepository {
     suspend fun getAllReviewsByCompanyId(companyId: Long): List<ReviewResponse>
     suspend fun getReviewSummaryByCompanyId(companyId: Long): ReviewSummaryResponse
     suspend fun generateReviewSummaryByCompanyId(companyId: Long): ReviewSummaryResponse
-    suspend fun postAReview(postReviewRequest: PostReviewRequest): ReviewResponse
+    suspend fun postAReview(createReviewRequest: CreateReviewRequest): ReviewResponse
 }
 
 @Singleton
-class ReviewsRepositoryImpl @Inject constructor(private val reviewsApiService: ReviewsApiService): ReviewsRepository {
+class ReviewsRepositoryImpl @Inject constructor(private val reviewsApiService: ReviewsApiService):
+    ReviewsRepository {
     override suspend fun getAllReviewsByCompanyId(companyId: Long): List<ReviewResponse> {
         return reviewsApiService.getAllReviewsByCompanyId(companyId)
     }
@@ -28,7 +28,7 @@ class ReviewsRepositoryImpl @Inject constructor(private val reviewsApiService: R
         return reviewsApiService.postReviewSummaryByCompanyId(companyId)
     }
 
-    override suspend fun postAReview(postReviewRequest: PostReviewRequest): ReviewResponse {
-        return reviewsApiService.postAReview(postReviewRequest)
+    override suspend fun postAReview(createReviewRequest: CreateReviewRequest): ReviewResponse {
+        return reviewsApiService.postAReview(createReviewRequest)
     }
 }

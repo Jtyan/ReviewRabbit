@@ -1,11 +1,10 @@
-package learningprogramming.academy.reviewrabbit.data.repository
+package learningprogramming.academy.reviewrabbit.data.company
 
 import android.util.Log
 import androidx.datastore.core.IOException
-import learningprogramming.academy.reviewrabbit.data.model.CompanyResponse
-import learningprogramming.academy.reviewrabbit.data.model.CompanyFilters
-import learningprogramming.academy.reviewrabbit.data.model.CreateCompanyRequest
-import learningprogramming.academy.reviewrabbit.data.network.CompanyApiService
+import learningprogramming.academy.reviewrabbit.data.company.model.CompanyFilters
+import learningprogramming.academy.reviewrabbit.data.company.model.CompanyResponse
+import learningprogramming.academy.reviewrabbit.data.company.model.CreateCompanyRequest
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -61,7 +60,7 @@ class CompanyRepositoryImpl @Inject constructor(private val apiService: CompanyA
 
             if (response.isSuccessful && response.body() != null) {
                     Log.i("CompanyRepository", "Get list of filtered companies successful.")
-                    CompanyApiResult.GetFilteredCompaniesSuccess(response.body()!!)
+                CompanyApiResult.GetFilteredCompaniesSuccess(response.body()!!)
             } else {
                 Log.e(
                     "CompanyRepository",
@@ -81,7 +80,8 @@ class CompanyRepositoryImpl @Inject constructor(private val apiService: CompanyA
 
 sealed interface CompanyApiResult {
     data object PostCompanySuccess : CompanyApiResult
-    data class GetFilteredCompaniesSuccess(val filteredCompanies: List<CompanyResponse>): CompanyApiResult
+    data class GetFilteredCompaniesSuccess(val filteredCompanies: List<CompanyResponse>):
+        CompanyApiResult
     data class Error(val message: String) : CompanyApiResult
     data object NetworkError : CompanyApiResult
     data class UnknownError(val exception: Throwable) : CompanyApiResult

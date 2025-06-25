@@ -35,7 +35,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import learningprogramming.academy.reviewrabbit.data.model.LoginUserRequest
+import learningprogramming.academy.reviewrabbit.data.user.model.LoginUserRequest
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomButton
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomTextField
 import learningprogramming.academy.reviewrabbit.ui.theme.extendedLight

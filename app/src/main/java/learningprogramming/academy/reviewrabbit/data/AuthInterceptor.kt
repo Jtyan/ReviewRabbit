@@ -1,4 +1,4 @@
-package learningprogramming.academy.reviewrabbit.data.network
+package learningprogramming.academy.reviewrabbit.data
 
 import kotlinx.coroutines.runBlocking
 import learningprogramming.academy.reviewrabbit.data.session.SessionManager

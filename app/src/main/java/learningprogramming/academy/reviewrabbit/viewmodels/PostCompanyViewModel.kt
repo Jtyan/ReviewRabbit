@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import learningprogramming.academy.reviewrabbit.data.model.CreateCompanyRequest
-import learningprogramming.academy.reviewrabbit.data.repository.CompanyApiResult
-import learningprogramming.academy.reviewrabbit.data.repository.CompanyRepository
+import learningprogramming.academy.reviewrabbit.data.company.model.CreateCompanyRequest
+import learningprogramming.academy.reviewrabbit.data.company.CompanyApiResult
+import learningprogramming.academy.reviewrabbit.data.company.CompanyRepository
 import javax.inject.Inject
 
 @HiltViewModel

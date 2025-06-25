@@ -9,12 +9,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import learningprogramming.academy.reviewrabbit.data.model.CompanyResponse
-import learningprogramming.academy.reviewrabbit.data.model.PostReviewRequest
-import learningprogramming.academy.reviewrabbit.data.model.ReviewResponse
-import learningprogramming.academy.reviewrabbit.data.model.ReviewSummaryResponse
-import learningprogramming.academy.reviewrabbit.data.repository.CompanyRepository
-import learningprogramming.academy.reviewrabbit.data.repository.ReviewsRepository
+import learningprogramming.academy.reviewrabbit.data.company.model.CompanyResponse
+import learningprogramming.academy.reviewrabbit.data.review.model.CreateReviewRequest
+import learningprogramming.academy.reviewrabbit.data.review.model.ReviewResponse
+import learningprogramming.academy.reviewrabbit.data.review.model.ReviewSummaryResponse
+import learningprogramming.academy.reviewrabbit.data.company.CompanyRepository
+import learningprogramming.academy.reviewrabbit.data.review.ReviewsRepository
 import learningprogramming.academy.reviewrabbit.data.session.SessionManager
 import learningprogramming.academy.reviewrabbit.model.ReviewCategories
 import javax.inject.Inject
@@ -29,7 +29,7 @@ class CompanyReviewViewModel @Inject constructor(
     private val initialReviewSummary = ReviewSummaryResponse(
         companyId = 0, contents = "No generated review summary yet.", created = ""
     )
-    private val initialNewReview = PostReviewRequest(
+    private val initialNewReview = CreateReviewRequest(
         companyId = 0,
         management = 0,
         culture = 0,
@@ -46,7 +46,7 @@ class CompanyReviewViewModel @Inject constructor(
     private val _listOfReviews = MutableStateFlow<List<ReviewResponse>>(emptyList())
     val listOfReviews: StateFlow<List<ReviewResponse>> = _listOfReviews.asStateFlow()
     private val _newReview = MutableStateFlow(initialNewReview)
-    val newReview: StateFlow<PostReviewRequest> = _newReview.asStateFlow()
+    val newReview: StateFlow<CreateReviewRequest> = _newReview.asStateFlow()
     private val _reviewUiState = MutableStateFlow<ReviewUiState>(ReviewUiState.Idle)
     val reviewUiState: StateFlow<ReviewUiState> = _reviewUiState.asStateFlow()
     private val _userId = MutableStateFlow<Long?>(null)
@@ -152,7 +152,7 @@ class CompanyReviewViewModel @Inject constructor(
         }
     }
 
-    fun updateNewReview(newReview: PostReviewRequest) {
+    fun updateNewReview(newReview: CreateReviewRequest) {
         _newReview.value = newReview
     }
 

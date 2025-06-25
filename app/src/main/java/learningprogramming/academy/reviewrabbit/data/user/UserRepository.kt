@@ -1,14 +1,13 @@
-package learningprogramming.academy.reviewrabbit.data.repository
+package learningprogramming.academy.reviewrabbit.data.user
 
 import android.util.Log
-import learningprogramming.academy.reviewrabbit.data.model.ChangePasswordRequest
-import learningprogramming.academy.reviewrabbit.data.model.ForgetPasswordRequest
-import learningprogramming.academy.reviewrabbit.data.model.LoginUserRequest
-import learningprogramming.academy.reviewrabbit.data.model.ResetPasswordRequest
-import learningprogramming.academy.reviewrabbit.data.model.SignupUserRequest
-import learningprogramming.academy.reviewrabbit.data.model.UserLoginResponse
-import learningprogramming.academy.reviewrabbit.data.network.UserApiService
 import learningprogramming.academy.reviewrabbit.data.session.SessionManager
+import learningprogramming.academy.reviewrabbit.data.user.model.ChangePasswordRequest
+import learningprogramming.academy.reviewrabbit.data.user.model.ForgetPasswordRequest
+import learningprogramming.academy.reviewrabbit.data.user.model.LoginUserRequest
+import learningprogramming.academy.reviewrabbit.data.user.model.LoginUserResponse
+import learningprogramming.academy.reviewrabbit.data.user.model.ResetPasswordRequest
+import learningprogramming.academy.reviewrabbit.data.user.model.SignupUserRequest
 import retrofit2.Response
 import java.io.IOException
 import javax.inject.Inject
@@ -27,7 +26,7 @@ class UserRepositoryImpl @Inject constructor(
 ) : UserRepository {
     override suspend fun loginUser(loginUserRequest: LoginUserRequest): UserAuthResult {
         return try {
-            val response: Response<UserLoginResponse> =
+            val response: Response<LoginUserResponse> =
                 userApiService.loginUser(loginUserRequest)
             if (response.isSuccessful) {
                 val userLoginApiResponse = response.body()
@@ -135,7 +134,7 @@ class UserRepositoryImpl @Inject constructor(
 }
 
 sealed interface UserAuthResult {
-    data class LoginUserSuccess(val userData: UserLoginResponse) : UserAuthResult
+    data class LoginUserSuccess(val userData: LoginUserResponse) : UserAuthResult
     data object PasswordRecoverySent : UserAuthResult
     data object ResetPasswordSuccess: UserAuthResult
     data object ChangePasswordSuccess: UserAuthResult

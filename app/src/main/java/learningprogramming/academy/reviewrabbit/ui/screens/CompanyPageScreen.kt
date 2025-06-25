@@ -51,9 +51,9 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import learningprogramming.academy.reviewrabbit.R
-import learningprogramming.academy.reviewrabbit.data.model.CompanyResponse
-import learningprogramming.academy.reviewrabbit.data.model.ReviewResponse
-import learningprogramming.academy.reviewrabbit.data.model.ReviewSummaryResponse
+import learningprogramming.academy.reviewrabbit.data.company.model.CompanyResponse
+import learningprogramming.academy.reviewrabbit.data.review.model.ReviewResponse
+import learningprogramming.academy.reviewrabbit.data.review.model.ReviewSummaryResponse
 import learningprogramming.academy.reviewrabbit.model.ReviewCategories
 import learningprogramming.academy.reviewrabbit.model.ReviewCategoriesAndStars
 import learningprogramming.academy.reviewrabbit.ui.components.common.CompanyLocationAndTags

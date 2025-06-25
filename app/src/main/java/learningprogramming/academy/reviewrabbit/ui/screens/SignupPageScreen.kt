@@ -36,7 +36,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
-import learningprogramming.academy.reviewrabbit.data.model.LoginUserRequest
+import learningprogramming.academy.reviewrabbit.data.user.model.LoginUserRequest
+import learningprogramming.academy.reviewrabbit.data.user.model.SignupUserRequest
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomButton
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomTextField
 import learningprogramming.academy.reviewrabbit.ui.theme.extendedLight
@@ -186,7 +187,7 @@ fun SignupPageScreen(
                 text = "Sign up",
                 onClick = {
                     signupViewModel.onSignupClicked(
-                        LoginUserRequest(
+                        SignupUserRequest(
                             email = emailState.text.toString().trim(),
                             password = passwordState.text.toString().trim()
                         )

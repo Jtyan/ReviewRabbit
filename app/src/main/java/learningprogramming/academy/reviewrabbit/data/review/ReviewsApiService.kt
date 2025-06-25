@@ -1,8 +1,8 @@
-package learningprogramming.academy.reviewrabbit.data.network
+package learningprogramming.academy.reviewrabbit.data.review
 
-import learningprogramming.academy.reviewrabbit.data.model.PostReviewRequest
-import learningprogramming.academy.reviewrabbit.data.model.ReviewResponse
-import learningprogramming.academy.reviewrabbit.data.model.ReviewSummaryResponse
+import learningprogramming.academy.reviewrabbit.data.review.model.CreateReviewRequest
+import learningprogramming.academy.reviewrabbit.data.review.model.ReviewResponse
+import learningprogramming.academy.reviewrabbit.data.review.model.ReviewSummaryResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -13,7 +13,7 @@ interface ReviewsApiService {
     suspend fun getAllReviewsByCompanyId(@Path("id") companyId: Long): List<ReviewResponse>
 
     @POST("reviews")
-    suspend fun postAReview(@Body postReviewRequest: PostReviewRequest): ReviewResponse
+    suspend fun postAReview(@Body createReviewRequest: CreateReviewRequest): ReviewResponse
 
     @GET("reviews/company/{id}/summary")
     suspend fun getReviewSummaryByCompanyId(@Path("id") companyId: Long): ReviewSummaryResponse

@@ -1,12 +1,11 @@
-package learningprogramming.academy.reviewrabbit.data.repository
+package learningprogramming.academy.reviewrabbit.data.invite
 
 import android.util.Log
 import androidx.datastore.core.IOException
-import learningprogramming.academy.reviewrabbit.data.model.InvitesResponse
-import learningprogramming.academy.reviewrabbit.data.model.CreateCheckoutSessionRequest
-import learningprogramming.academy.reviewrabbit.data.model.SendInvitesRequest
-import learningprogramming.academy.reviewrabbit.data.model.SendInvitesResponse
-import learningprogramming.academy.reviewrabbit.data.network.InviteApiService
+import learningprogramming.academy.reviewrabbit.data.invite.model.CreateCheckoutSessionRequest
+import learningprogramming.academy.reviewrabbit.data.invite.model.InvitesResponse
+import learningprogramming.academy.reviewrabbit.data.invite.model.SendInvitesRequest
+import learningprogramming.academy.reviewrabbit.data.invite.model.SendInvitesResponse
 import retrofit2.Response
 import javax.inject.Inject
 

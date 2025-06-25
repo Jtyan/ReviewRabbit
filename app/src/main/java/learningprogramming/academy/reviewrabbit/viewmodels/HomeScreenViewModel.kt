@@ -8,10 +8,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import learningprogramming.academy.reviewrabbit.data.model.CompanyResponse
-import learningprogramming.academy.reviewrabbit.data.model.CompanyFilters
-import learningprogramming.academy.reviewrabbit.data.repository.CompanyApiResult
-import learningprogramming.academy.reviewrabbit.data.repository.CompanyRepository
+import learningprogramming.academy.reviewrabbit.data.company.model.CompanyResponse
+import learningprogramming.academy.reviewrabbit.data.company.model.CompanyFilters
+import learningprogramming.academy.reviewrabbit.data.company.CompanyApiResult
+import learningprogramming.academy.reviewrabbit.data.company.CompanyRepository
 import learningprogramming.academy.reviewrabbit.model.FilterTabs
 import javax.inject.Inject
 

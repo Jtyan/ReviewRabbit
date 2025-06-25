@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import learningprogramming.academy.reviewrabbit.data.model.LoginUserRequest
-import learningprogramming.academy.reviewrabbit.data.model.UserLoginResponse
-import learningprogramming.academy.reviewrabbit.data.repository.UserAuthResult
-import learningprogramming.academy.reviewrabbit.data.repository.UserRepository
+import learningprogramming.academy.reviewrabbit.data.user.model.LoginUserRequest
+import learningprogramming.academy.reviewrabbit.data.user.model.LoginUserResponse
+import learningprogramming.academy.reviewrabbit.data.user.UserAuthResult
+import learningprogramming.academy.reviewrabbit.data.user.UserRepository
 import learningprogramming.academy.reviewrabbit.data.session.SessionManager
 import javax.inject.Inject
 
@@ -74,6 +74,6 @@ class LoginViewModel @Inject constructor(
 sealed interface LoginScreenUiState {
     data object Idle : LoginScreenUiState
     data object Loading : LoginScreenUiState
-    data class Success(val userCred: UserLoginResponse) : LoginScreenUiState
+    data class Success(val userCred: LoginUserResponse) : LoginScreenUiState
     data class Error(val message: String) : LoginScreenUiState
 }

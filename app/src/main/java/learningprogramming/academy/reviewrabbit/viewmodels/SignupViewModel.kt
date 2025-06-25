@@ -9,9 +9,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import learningprogramming.academy.reviewrabbit.data.model.LoginUserRequest
-import learningprogramming.academy.reviewrabbit.data.repository.UserAuthResult
-import learningprogramming.academy.reviewrabbit.data.repository.UserRepository
+import learningprogramming.academy.reviewrabbit.data.user.UserAuthResult
+import learningprogramming.academy.reviewrabbit.data.user.UserRepository
+import learningprogramming.academy.reviewrabbit.data.user.model.SignupUserRequest
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,19 +22,19 @@ class SignupViewModel @Inject constructor(
     val signupUiState: StateFlow<SignupScreenUiState> = _signupUiState.asStateFlow()
 
 
-    fun onSignupClicked(postUserApi: LoginUserRequest) {
+    fun onSignupClicked(signupUserRequest: SignupUserRequest) {
         viewModelScope.launch {
 
-            if (!Patterns.EMAIL_ADDRESS.matcher(postUserApi.email).matches()) {
+            if (!Patterns.EMAIL_ADDRESS.matcher(signupUserRequest.email).matches()) {
                 _signupUiState.value =
-                    SignupScreenUiState.Error("Email ${postUserApi.email} is invalid")
+                    SignupScreenUiState.Error("Email ${signupUserRequest.email} is invalid")
                 return@launch
             }
-            if (postUserApi.password.isEmpty()) {
+            if (signupUserRequest.password.isEmpty()) {
                 _signupUiState.value =
                     SignupScreenUiState.Error("Password must not be empty")
                 return@launch
-            } else if (postUserApi.password.length < 8) {
+            } else if (signupUserRequest.password.length < 8) {
                 _signupUiState.value =
                     SignupScreenUiState.Error("Password must be 8 or more characters")
                 return@launch
@@ -42,7 +42,7 @@ class SignupViewModel @Inject constructor(
 
             _signupUiState.value = SignupScreenUiState.Loading
 
-            when (val response = userRepository.signupUser(postUserApi)) {
+            when (val response = userRepository.signupUser(signupUserRequest)) {
                 is UserAuthResult.SignupUserSuccess -> {
                     Log.i("LoginViewModel", "User sign up successful")
                     _signupUiState.value = SignupScreenUiState.Success("User sign up successfully. You will be redirected to Login page...")

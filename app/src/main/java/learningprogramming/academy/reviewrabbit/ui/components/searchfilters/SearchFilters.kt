@@ -34,7 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import learningprogramming.academy.reviewrabbit.data.model.CompanyFilters
+import learningprogramming.academy.reviewrabbit.data.company.model.CompanyFilters
 import learningprogramming.academy.reviewrabbit.model.FilterTabs
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomButton
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomCard

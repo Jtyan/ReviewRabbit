@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import learningprogramming.academy.reviewrabbit.data.model.InvitesResponse
-import learningprogramming.academy.reviewrabbit.data.model.CreateCheckoutSessionRequest
-import learningprogramming.academy.reviewrabbit.data.model.SendInvitesRequest
-import learningprogramming.academy.reviewrabbit.data.repository.CompanyInviteResult
-import learningprogramming.academy.reviewrabbit.data.repository.InviteRepository
+import learningprogramming.academy.reviewrabbit.data.invite.model.InvitesResponse
+import learningprogramming.academy.reviewrabbit.data.invite.model.CreateCheckoutSessionRequest
+import learningprogramming.academy.reviewrabbit.data.invite.model.SendInvitesRequest
+import learningprogramming.academy.reviewrabbit.data.invite.CompanyInviteResult
+import learningprogramming.academy.reviewrabbit.data.invite.InviteRepository
 import learningprogramming.academy.reviewrabbit.data.session.SessionManager
 import javax.inject.Inject
 

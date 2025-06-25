@@ -1,7 +1,6 @@
 package learningprogramming.academy.reviewrabbit.ui.screens
 
 import android.content.Intent
-import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -52,9 +51,9 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import learningprogramming.academy.reviewrabbit.R
-import learningprogramming.academy.reviewrabbit.data.model.CompanyApiResponse
-import learningprogramming.academy.reviewrabbit.data.model.ReviewApiResponse
-import learningprogramming.academy.reviewrabbit.data.model.ReviewSummaryApiResponse
+import learningprogramming.academy.reviewrabbit.data.company.model.CompanyResponse
+import learningprogramming.academy.reviewrabbit.data.review.model.ReviewResponse
+import learningprogramming.academy.reviewrabbit.data.review.model.ReviewSummaryResponse
 import learningprogramming.academy.reviewrabbit.model.ReviewCategories
 import learningprogramming.academy.reviewrabbit.model.ReviewCategoriesAndStars
 import learningprogramming.academy.reviewrabbit.ui.components.common.CompanyLocationAndTags
@@ -73,8 +72,6 @@ import java.time.temporal.ChronoUnit
 import java.util.Date
 import java.util.Locale
 import androidx.core.net.toUri
-import learningprogramming.academy.reviewrabbit.viewmodels.InviteCheckoutUiState
-import learningprogramming.academy.reviewrabbit.viewmodels.InviteUiState
 
 
 @Composable
@@ -166,7 +163,7 @@ fun CompanyPage(
 
 @Composable
 fun CompanyPageHeroBanner(
-    company: CompanyApiResponse,
+    company: CompanyResponse,
     isReviewPosted: Boolean,
     onAddReviewClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -228,7 +225,7 @@ fun CompanyPageHeroBanner(
 
 @Composable
 fun ReviewSummary(
-    reviewSummary: ReviewSummaryApiResponse,
+    reviewSummary: ReviewSummaryResponse,
     onClick: () -> Unit
 ) {
     val isReviewSummaryCreated = reviewSummary.created.isNotEmpty()
@@ -413,7 +410,7 @@ fun AddReviewCategoriesAndStars(
 @Composable
 fun ReviewCard(
     userId: Long?,
-    companyReview: ReviewApiResponse
+    companyReview: ReviewResponse
 ) {
     val reviewCategoriesAndStars = remember(companyReview) {
         listOf(
@@ -537,7 +534,7 @@ fun InvitePeopleCard(
 fun CompanyPageHeroBannerPreview() {
     ReviewRabbitTheme(dynamicColor = false) {
         CompanyPageHeroBanner(
-            company = CompanyApiResponse(
+            company = CompanyResponse(
                 id = 1,
                 name = "Lazy Programmers",
                 url = "www.google.com",
@@ -558,7 +555,7 @@ fun CompanyPageHeroBannerPreview() {
 fun CompanyPageReviewSummaryPreview() {
     ReviewRabbitTheme(dynamicColor = false) {
         ReviewSummary(
-            reviewSummary = ReviewSummaryApiResponse(
+            reviewSummary = ReviewSummaryResponse(
                 companyId = 0,
                 contents = "No generated review summary yet",
                 created = "2025-05-23T14:45:22.003036Z"
@@ -574,7 +571,7 @@ fun CompanyPageReviewItemPreview() {
     ReviewRabbitTheme(dynamicColor = false) {
         ReviewCard(
             userId = 0,
-            companyReview = ReviewApiResponse(
+            companyReview = ReviewResponse(
                 id = 0,
                 companyId = 2L,
                 userId = 3L,

@@ -9,9 +9,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import learningprogramming.academy.reviewrabbit.data.model.ResetPasswordApi
-import learningprogramming.academy.reviewrabbit.data.repository.UserAuthResult
-import learningprogramming.academy.reviewrabbit.data.repository.UserRepository
+import learningprogramming.academy.reviewrabbit.data.user.model.ResetPasswordRequest
+import learningprogramming.academy.reviewrabbit.data.user.UserAuthResult
+import learningprogramming.academy.reviewrabbit.data.user.UserRepository
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,7 +22,7 @@ class ResetPasswordViewModel @Inject constructor(
     val resetPasswordUiState: StateFlow<ResetPasswordUiState> = _resetPasswordUiState.asStateFlow()
 
     fun onResetPasswordClicked(email: String, token: String, password: String) {
-        val resetPasswordApi = ResetPasswordApi(
+        val resetPasswordRequest = ResetPasswordRequest(
             email = email,
             token = token,
             newPassword = password
@@ -41,7 +41,7 @@ class ResetPasswordViewModel @Inject constructor(
         }
         viewModelScope.launch {
             _resetPasswordUiState.value = ResetPasswordUiState.Loading
-            when (val response = userRepository.resetPassword(resetPasswordApi)) {
+            when (val response = userRepository.resetPassword(resetPasswordRequest)) {
                 is UserAuthResult.ResetPasswordSuccess -> {
                     Log.i("ResetPasswordViewModel", "Password reset successful!")
                     _resetPasswordUiState.value = ResetPasswordUiState.Success("Password reset successful! Please log in with your new password")
@@ -64,9 +64,7 @@ class ResetPasswordViewModel @Inject constructor(
                         ResetPasswordUiState.Error("An unexpected error occurred.")
                 }
 
-                is UserAuthResult.Success -> {}
-                is UserAuthResult.PasswordRecoverySent -> {}
-                is UserAuthResult.ChangePasswordSuccess -> {}
+                else -> {}
             }
         }
     }

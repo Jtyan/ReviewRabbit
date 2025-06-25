@@ -5,6 +5,7 @@ object ScreenRoutes {
     const val CREATE_NEW_COMPANY = "new_company_route"
     const val USER_SETTINGS = "settings_route"
     const val COMPANY_PAGE = "company_page/{companyId}"
+    const val SIGNUP_PAGE = "signup_route"
     const val LOGIN_PAGE = "login_route"
     const val LOGIN_PAGE_AFTER_RESET = "login_route/{reset}"
     const val LOGOUT_PAGE = "logged_out_route"

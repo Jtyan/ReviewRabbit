@@ -1,30 +1,29 @@
-package learningprogramming.academy.reviewrabbit.data.repository
+package learningprogramming.academy.reviewrabbit.data.company
 
 import android.util.Log
 import androidx.datastore.core.IOException
-import learningprogramming.academy.reviewrabbit.data.model.CompanyApiResponse
-import learningprogramming.academy.reviewrabbit.data.model.CompanyFilters
-import learningprogramming.academy.reviewrabbit.data.model.PostCompanyApi
-import learningprogramming.academy.reviewrabbit.data.network.CompanyApiService
+import learningprogramming.academy.reviewrabbit.data.company.model.CompanyFilters
+import learningprogramming.academy.reviewrabbit.data.company.model.CompanyResponse
+import learningprogramming.academy.reviewrabbit.data.company.model.CreateCompanyRequest
 import javax.inject.Inject
 import javax.inject.Singleton
 
 interface CompanyRepository {
-    suspend fun getAllCompanies(): List<CompanyApiResponse>
-    suspend fun getCompanyById(companyId: Int): CompanyApiResponse
+    suspend fun getAllCompanies(): List<CompanyResponse>
+    suspend fun getCompanyById(companyId: Int): CompanyResponse
     suspend fun getCompanyFilters(): CompanyFilters
-    suspend fun postNewCompany(postCompanyApi: PostCompanyApi): CompanyApiResult
+    suspend fun postNewCompany(createCompanyRequest: CreateCompanyRequest): CompanyApiResult
     suspend fun getFilteredCompaniesList(companyFilters: CompanyFilters): CompanyApiResult
 }
 
 @Singleton
 class CompanyRepositoryImpl @Inject constructor(private val apiService: CompanyApiService) :
     CompanyRepository {
-    override suspend fun getAllCompanies(): List<CompanyApiResponse> {
+    override suspend fun getAllCompanies(): List<CompanyResponse> {
         return apiService.getAllCompanies()
     }
 
-    override suspend fun getCompanyById(companyId: Int): CompanyApiResponse {
+    override suspend fun getCompanyById(companyId: Int): CompanyResponse {
         return apiService.getCompanyById(companyId)
     }
 
@@ -32,9 +31,9 @@ class CompanyRepositoryImpl @Inject constructor(private val apiService: CompanyA
         return apiService.getCompanyFilters()
     }
 
-    override suspend fun postNewCompany(postCompanyApi: PostCompanyApi): CompanyApiResult {
+    override suspend fun postNewCompany(createCompanyRequest: CreateCompanyRequest): CompanyApiResult {
         return try {
-            val response = apiService.postNewCompany(postCompanyApi)
+            val response = apiService.postNewCompany(createCompanyRequest)
 
             if (response.isSuccessful) {
                 Log.i("CompanyRepository", "Company added successfully.")
@@ -61,7 +60,7 @@ class CompanyRepositoryImpl @Inject constructor(private val apiService: CompanyA
 
             if (response.isSuccessful && response.body() != null) {
                     Log.i("CompanyRepository", "Get list of filtered companies successful.")
-                    CompanyApiResult.GetFilteredCompaniesSuccess(response.body()!!)
+                CompanyApiResult.GetFilteredCompaniesSuccess(response.body()!!)
             } else {
                 Log.e(
                     "CompanyRepository",
@@ -81,7 +80,8 @@ class CompanyRepositoryImpl @Inject constructor(private val apiService: CompanyA
 
 sealed interface CompanyApiResult {
     data object PostCompanySuccess : CompanyApiResult
-    data class GetFilteredCompaniesSuccess(val filteredCompanies: List<CompanyApiResponse>): CompanyApiResult
+    data class GetFilteredCompaniesSuccess(val filteredCompanies: List<CompanyResponse>):
+        CompanyApiResult
     data class Error(val message: String) : CompanyApiResult
     data object NetworkError : CompanyApiResult
     data class UnknownError(val exception: Throwable) : CompanyApiResult

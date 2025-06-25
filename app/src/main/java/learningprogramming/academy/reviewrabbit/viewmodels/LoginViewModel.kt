@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import learningprogramming.academy.reviewrabbit.data.model.PostUserLoginApi
-import learningprogramming.academy.reviewrabbit.data.model.UserLoginApiResponse
-import learningprogramming.academy.reviewrabbit.data.repository.UserAuthResult
-import learningprogramming.academy.reviewrabbit.data.repository.UserRepository
+import learningprogramming.academy.reviewrabbit.data.user.model.LoginUserRequest
+import learningprogramming.academy.reviewrabbit.data.user.model.LoginUserResponse
+import learningprogramming.academy.reviewrabbit.data.user.UserAuthResult
+import learningprogramming.academy.reviewrabbit.data.user.UserRepository
 import learningprogramming.academy.reviewrabbit.data.session.SessionManager
 import javax.inject.Inject
 
@@ -31,11 +31,11 @@ class LoginViewModel @Inject constructor(
         initialValue = false
     )
 
-    fun onLoginClicked(postUserLoginApi: PostUserLoginApi) {
+    fun onLoginClicked(loginUserRequest: LoginUserRequest) {
         viewModelScope.launch {
             _loginUiState.value = LoginScreenUiState.Loading
-            when (val response = userRepository.loginUser(postUserLoginApi)) {
-                is UserAuthResult.Success -> {
+            when (val response = userRepository.loginUser(loginUserRequest)) {
+                is UserAuthResult.LoginUserSuccess -> {
                     Log.i("LoginViewModel", "Login successful")
                     _loginUiState.value = LoginScreenUiState.Success(response.userData)
                 }
@@ -54,9 +54,7 @@ class LoginViewModel @Inject constructor(
                     Log.e("LoginViewModel", "Login unknown error", response.exception)
                     _loginUiState.value = LoginScreenUiState.Error("An unexpected error occurred.")
                 }
-                is UserAuthResult.PasswordRecoverySent -> {}
-                is UserAuthResult.ResetPasswordSuccess -> {}
-                is UserAuthResult.ChangePasswordSuccess -> {}
+                else -> {}
             }
         }
     }
@@ -76,6 +74,6 @@ class LoginViewModel @Inject constructor(
 sealed interface LoginScreenUiState {
     data object Idle : LoginScreenUiState
     data object Loading : LoginScreenUiState
-    data class Success(val userCred: UserLoginApiResponse) : LoginScreenUiState
+    data class Success(val userCred: LoginUserResponse) : LoginScreenUiState
     data class Error(val message: String) : LoginScreenUiState
 }

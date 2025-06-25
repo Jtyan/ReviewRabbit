@@ -22,7 +22,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -40,7 +39,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import learningprogramming.academy.reviewrabbit.R
-import learningprogramming.academy.reviewrabbit.data.model.CompanyApiResponse
+import learningprogramming.academy.reviewrabbit.data.company.model.CompanyResponse
 import learningprogramming.academy.reviewrabbit.ui.components.common.CompanyLocationAndTags
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomButton
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomCard
@@ -140,7 +139,7 @@ fun HomepageHeroBanner(
 
 @Composable
 fun LazyColumnCompanyItem(
-    company: CompanyApiResponse,
+    company: CompanyResponse,
     onClick: (Int) -> Unit
 ) {
     CustomCard(
@@ -212,7 +211,7 @@ fun HomepageHeroBannerPreview() {
 fun LazyColumnCompanyItemPreview() {
     ReviewRabbitTheme(dynamicColor = false) {
         LazyColumnCompanyItem(
-            company = CompanyApiResponse(
+            company = CompanyResponse(
                 id = 1,
                 name = "Lazy Programmers",
                 url = "www.google.com",

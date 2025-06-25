@@ -35,39 +35,48 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
 import learningprogramming.academy.reviewrabbit.data.user.model.LoginUserRequest
+import learningprogramming.academy.reviewrabbit.data.user.model.SignupUserRequest
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomButton
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomTextField
 import learningprogramming.academy.reviewrabbit.ui.theme.extendedLight
+import learningprogramming.academy.reviewrabbit.util.PasswordChecker
 import learningprogramming.academy.reviewrabbit.util.PasswordOutputTransformation
-import learningprogramming.academy.reviewrabbit.viewmodels.LoginScreenUiState
-import learningprogramming.academy.reviewrabbit.viewmodels.LoginViewModel
+import learningprogramming.academy.reviewrabbit.viewmodels.SignupScreenUiState
+import learningprogramming.academy.reviewrabbit.viewmodels.SignupViewModel
 
 @Composable
-fun LoginPageScreen(
+fun SignupPageScreen(
     modifier: Modifier = Modifier,
-    loginViewModel: LoginViewModel,
-    onLoginSuccessNavigation: () -> Unit,
-    onForgotPasswordClick: () -> Unit,
-    notification: String? = null,
+    signupViewModel: SignupViewModel,
+    onSignupSuccessNavigation: () -> Unit,
+    onLoginClick: () -> Unit
 ) {
+    val signupUiState by signupViewModel.signupUiState.collectAsState()
+
     var isPasswordVisible by rememberSaveable { mutableStateOf(false) }
+    var isConfirmPasswordVisible by rememberSaveable { mutableStateOf(false) }
 
     val emailState = rememberTextFieldState()
     val passwordState = rememberTextFieldState()
+    val confirmPasswordState = rememberTextFieldState()
 
-    val loginUiState by loginViewModel.loginUiState.collectAsState()
+    val isPasswordMatching: Boolean = PasswordChecker.checkIfPasswordsMatch(
+        passwordState.text.toString(), confirmPasswordState.text.toString()
+    )
 
     DisposableEffect(Unit) {
         onDispose {
-            loginViewModel.resetLoginStateToIdle()
+            signupViewModel.resetSignupStateToIdle()
         }
     }
 
-    LaunchedEffect(loginUiState) {
-        if (loginUiState is LoginScreenUiState.Success) {
-            onLoginSuccessNavigation()
-            loginViewModel.resetLoginStateToIdle()
+    LaunchedEffect(signupUiState) {
+        if (signupUiState is SignupScreenUiState.Success) {
+            delay(2000L)
+            onSignupSuccessNavigation()
+            signupViewModel.resetSignupStateToIdle()
         }
     }
 
@@ -79,32 +88,31 @@ fun LoginPageScreen(
             .verticalScroll(rememberScrollState())
     ) {
         Text(
-            text = "Log In",
+            text = "Sign up",
             fontSize = 24.sp,
             color = MaterialTheme.colorScheme.secondaryContainer
         )
         Spacer(modifier = Modifier.height(24.dp))
-        if (loginUiState is LoginScreenUiState.Error) {
+        if (signupUiState is SignupScreenUiState.Error) {
             Box(
                 modifier = Modifier
                     .border(width = 1.dp, color = MaterialTheme.colorScheme.error)
                     .padding(12.dp)
             ) {
                 Text(
-                    text = (loginUiState as LoginScreenUiState.Error).message,
+                    text = (signupUiState as SignupScreenUiState.Error).message,
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.error,
                 )
             }
-        }
-        if (!notification.isNullOrBlank()) {
+        } else if (signupUiState is SignupScreenUiState.Success) {
             Box(
                 modifier = Modifier
                     .border(width = 1.dp, color = extendedLight.forgotPassword.color)
                     .padding(12.dp)
             ) {
                 Text(
-                    text = notification,
+                    text = (signupUiState as SignupScreenUiState.Success).message,
                     fontSize = 12.sp,
                     color = extendedLight.forgotPassword.color,
                 )
@@ -120,7 +128,7 @@ fun LoginPageScreen(
         CustomTextField(
             textFieldState = passwordState,
             text = "Password",
-            placeholder = "Your Password",
+            placeholder = "Your password",
             trailingIcon = {
                 val image =
                     if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
@@ -138,33 +146,68 @@ fun LoginPageScreen(
             required = true,
             modifier = Modifier.padding(16.dp)
         )
-        if (loginUiState is LoginScreenUiState.Loading) {
+        CustomTextField(
+            textFieldState = confirmPasswordState,
+            text = "Confirm Password",
+            placeholder = "Confirm Password",
+            trailingIcon = {
+                val image =
+                    if (isConfirmPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                val description = if (isConfirmPasswordVisible) "Hide password" else "Show password"
+                IconButton(
+                    onClick = { isConfirmPasswordVisible = !isConfirmPasswordVisible }
+                ) {
+                    Icon(image, description)
+                }
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password
+            ),
+            outputTransformation = if (isConfirmPasswordVisible) null else PasswordOutputTransformation(),
+            focusedContainerColor = if (isPasswordMatching) {
+                MaterialTheme.colorScheme.surfaceContainerLow
+            } else {
+                MaterialTheme.colorScheme.errorContainer
+            },
+            required = true,
+            modifier = Modifier.padding(16.dp)
+        )
+        if (!isPasswordMatching) {
+            Text(
+                text = "Please make sure your passwords match.",
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.error,
+                modifier = modifier.padding(horizontal = 16.dp).align(Alignment.Start)
+            )
+        }
+        if (signupUiState is SignupScreenUiState.Loading) {
             CircularProgressIndicator()
         } else {
             CustomButton(
-                text = "Log In",
+                text = "Sign up",
                 onClick = {
-                    loginViewModel.onLoginClicked(
-                        LoginUserRequest(
+                    signupViewModel.onSignupClicked(
+                        SignupUserRequest(
                             email = emailState.text.toString().trim(),
                             password = passwordState.text.toString().trim()
                         )
                     )
                 },
+                enabled = isPasswordMatching,
                 modifier = Modifier
                     .align(Alignment.Start)
                     .width(224.dp)
                     .padding(16.dp)
             )
             Text(
-                text = "Forgot Password?",
+                text = "Already have an account?",
                 fontSize = 14.sp,
                 textDecoration = TextDecoration.Underline,
                 color = extendedLight.forgotPassword.colorContainer,
                 modifier = Modifier
                     .align(Alignment.Start)
                     .padding(horizontal = 16.dp)
-                    .clickable { onForgotPasswordClick() }
+                    .clickable { onLoginClick() }
             )
         }
     }

@@ -1,4 +1,4 @@
-package learningprogramming.academy.reviewrabbit.data.network
+package learningprogramming.academy.reviewrabbit.data.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -6,6 +6,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
+import learningprogramming.academy.reviewrabbit.data.company.CompanyApiService
+import learningprogramming.academy.reviewrabbit.data.invite.InviteApiService
+import learningprogramming.academy.reviewrabbit.data.AuthInterceptor
+import learningprogramming.academy.reviewrabbit.data.review.ReviewsApiService
+import learningprogramming.academy.reviewrabbit.data.user.UserApiService
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -54,11 +59,13 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideCompanyApiService(retrofit: Retrofit): CompanyApiService = retrofit.create(CompanyApiService::class.java)
+    fun provideCompanyApiService(retrofit: Retrofit): CompanyApiService = retrofit.create(
+        CompanyApiService::class.java)
 
     @Provides
     @Singleton
-    fun provideReviewsApiService(retrofit: Retrofit): ReviewsApiService = retrofit.create(ReviewsApiService::class.java)
+    fun provideReviewsApiService(retrofit: Retrofit): ReviewsApiService = retrofit.create(
+        ReviewsApiService::class.java)
 
     @Provides
     @Singleton
@@ -66,5 +73,6 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideInviteApiService(retrofit: Retrofit): InviteApiService = retrofit.create(InviteApiService::class.java)
+    fun provideInviteApiService(retrofit: Retrofit): InviteApiService = retrofit.create(
+        InviteApiService::class.java)
 }

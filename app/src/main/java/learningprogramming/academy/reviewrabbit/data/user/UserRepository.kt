@@ -1,37 +1,38 @@
-package learningprogramming.academy.reviewrabbit.data.repository
+package learningprogramming.academy.reviewrabbit.data.user
 
 import android.util.Log
-import learningprogramming.academy.reviewrabbit.data.model.ChangePasswordApi
-import learningprogramming.academy.reviewrabbit.data.model.PostUserForgetPasswordApi
-import learningprogramming.academy.reviewrabbit.data.model.PostUserLoginApi
-import learningprogramming.academy.reviewrabbit.data.model.ResetPasswordApi
-import learningprogramming.academy.reviewrabbit.data.model.UserLoginApiResponse
-import learningprogramming.academy.reviewrabbit.data.network.UserApiService
 import learningprogramming.academy.reviewrabbit.data.session.SessionManager
+import learningprogramming.academy.reviewrabbit.data.user.model.ChangePasswordRequest
+import learningprogramming.academy.reviewrabbit.data.user.model.ForgetPasswordRequest
+import learningprogramming.academy.reviewrabbit.data.user.model.LoginUserRequest
+import learningprogramming.academy.reviewrabbit.data.user.model.LoginUserResponse
+import learningprogramming.academy.reviewrabbit.data.user.model.ResetPasswordRequest
+import learningprogramming.academy.reviewrabbit.data.user.model.SignupUserRequest
 import retrofit2.Response
 import java.io.IOException
 import javax.inject.Inject
 
 interface UserRepository {
-    suspend fun loginUser(postUserLoginApi: PostUserLoginApi): UserAuthResult
-    suspend fun recoverPassword(postUserForgetPasswordApi: PostUserForgetPasswordApi): UserAuthResult
-    suspend fun resetPassword(resetPasswordApi: ResetPasswordApi): UserAuthResult
-    suspend fun changePassword(changePasswordApi: ChangePasswordApi): UserAuthResult
+    suspend fun loginUser(loginUserRequest: LoginUserRequest): UserAuthResult
+    suspend fun recoverPassword(forgetPasswordRequest: ForgetPasswordRequest): UserAuthResult
+    suspend fun resetPassword(resetPasswordRequest: ResetPasswordRequest): UserAuthResult
+    suspend fun changePassword(changePasswordRequest: ChangePasswordRequest): UserAuthResult
+    suspend fun signupUser(signupUserRequest: SignupUserRequest): UserAuthResult
 }
 
 class UserRepositoryImpl @Inject constructor(
     private val userApiService: UserApiService,
     private val sessionManager: SessionManager
 ) : UserRepository {
-    override suspend fun loginUser(postUserLoginApi: PostUserLoginApi): UserAuthResult {
+    override suspend fun loginUser(loginUserRequest: LoginUserRequest): UserAuthResult {
         return try {
-            val response: Response<UserLoginApiResponse> =
-                userApiService.loginUser(postUserLoginApi)
+            val response: Response<LoginUserResponse> =
+                userApiService.loginUser(loginUserRequest)
             if (response.isSuccessful) {
                 val userLoginApiResponse = response.body()
                 if (userLoginApiResponse != null) {
                     sessionManager.saveSession(userLoginApiResponse)
-                    UserAuthResult.Success(userData = userLoginApiResponse)
+                    UserAuthResult.LoginUserSuccess(userData = userLoginApiResponse)
                 } else {
                     Log.e("UserRepository", "Login successful but body was null")
                     UserAuthResult.Error("Login successful but server response was empty.")
@@ -55,9 +56,9 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun recoverPassword(postUserForgetPasswordApi: PostUserForgetPasswordApi): UserAuthResult {
+    override suspend fun recoverPassword(forgetPasswordRequest: ForgetPasswordRequest): UserAuthResult {
         return try {
-            val response = userApiService.recoverPassword(postUserForgetPasswordApi)
+            val response = userApiService.recoverPassword(forgetPasswordRequest)
             if (response.isSuccessful) {
                 Log.i("UserRepository", "Email for password recovery successfully sent")
                 UserAuthResult.PasswordRecoverySent
@@ -74,9 +75,9 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun resetPassword(resetPasswordApi: ResetPasswordApi): UserAuthResult {
+    override suspend fun resetPassword(resetPasswordRequest: ResetPasswordRequest): UserAuthResult {
         return try {
-            val response = userApiService.resetPassword(resetPasswordApi)
+            val response = userApiService.resetPassword(resetPasswordRequest)
             if (response.isSuccessful) {
                 Log.i("UserRepository", "Password reset successful")
                 UserAuthResult.ResetPasswordSuccess
@@ -93,9 +94,9 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun changePassword(changePasswordApi: ChangePasswordApi): UserAuthResult {
+    override suspend fun changePassword(changePasswordRequest: ChangePasswordRequest): UserAuthResult {
         return try {
-            val response = userApiService.changePassword(changePasswordApi)
+            val response = userApiService.changePassword(changePasswordRequest)
             if (response.isSuccessful) {
                 Log.i("UserRepository", "Password successfully changed.")
                 UserAuthResult.ChangePasswordSuccess
@@ -111,14 +112,34 @@ class UserRepositoryImpl @Inject constructor(
             UserAuthResult.UnknownError(e)
         }
     }
+
+    override suspend fun signupUser(signupUserRequest: SignupUserRequest): UserAuthResult {
+        return try {
+            val response = userApiService.signupUser(signupUserRequest)
+            if (response.isSuccessful) {
+                Log.i("UserRepository", "User sign up successful")
+                UserAuthResult.SignupUserSuccess
+            } else {
+                Log.e("UserRepository", "Sign up Error. ${response.code()} ${response.message()}")
+                UserAuthResult.Error("Unable to sign up user. ${response.code()} ${response.message()}")
+            }
+        } catch (e: IOException) {
+            Log.e("UserRepository", "User sign up network error: ${e.message}")
+            UserAuthResult.NetworkError
+        } catch (e: Exception) {
+            Log.e("UserRepository", "User sign up unknown error: ${e.message}")
+            UserAuthResult.UnknownError(e)
+        }
+    }
 }
 
 sealed interface UserAuthResult {
-    data class Success(val userData: UserLoginApiResponse) : UserAuthResult
-    data class Error(val message: String) : UserAuthResult
-    data object NetworkError : UserAuthResult
-    data class UnknownError(val exception: Throwable) : UserAuthResult
+    data class LoginUserSuccess(val userData: LoginUserResponse) : UserAuthResult
     data object PasswordRecoverySent : UserAuthResult
     data object ResetPasswordSuccess: UserAuthResult
     data object ChangePasswordSuccess: UserAuthResult
+    data object SignupUserSuccess: UserAuthResult
+    data class Error(val message: String) : UserAuthResult
+    data object NetworkError : UserAuthResult
+    data class UnknownError(val exception: Throwable) : UserAuthResult
 }

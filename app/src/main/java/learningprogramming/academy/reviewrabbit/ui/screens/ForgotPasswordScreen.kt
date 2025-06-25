@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import learningprogramming.academy.reviewrabbit.data.model.PostUserForgetPasswordApi
+import learningprogramming.academy.reviewrabbit.data.user.model.ForgetPasswordRequest
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomButton
 import learningprogramming.academy.reviewrabbit.ui.components.common.CustomTextField
 import learningprogramming.academy.reviewrabbit.ui.theme.extendedLight
@@ -101,7 +101,7 @@ fun ForgotPasswordScreen(
                 text = "Recover password",
                 onClick = {
                     forgotPasswordViewModel.onRecoverPasswordClicked(
-                        PostUserForgetPasswordApi(
+                        ForgetPasswordRequest(
                             email = emailState.text.toString().trim()
                         )
                     )

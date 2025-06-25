@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
-import learningprogramming.academy.reviewrabbit.data.model.UserLoginApiResponse
+import learningprogramming.academy.reviewrabbit.data.user.model.LoginUserResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -62,7 +62,7 @@ class SessionManager @Inject constructor(
         return isLoggedInFlow.firstOrNull() ?: false
     }
 
-    suspend fun saveSession(loginResponse: UserLoginApiResponse) {
+    suspend fun saveSession(loginResponse: LoginUserResponse) {
         dataStore.edit { preferences ->
             preferences[SessionKeys.USER_TOKEN] = loginResponse.token
             preferences[SessionKeys.TOKEN_EXPIRATION] = loginResponse.expiration

@@ -13,6 +13,7 @@ import learningprogramming.academy.reviewrabbit.data.company.model.CompanyFilter
 import learningprogramming.academy.reviewrabbit.data.company.CompanyApiResult
 import learningprogramming.academy.reviewrabbit.data.company.CompanyRepository
 import learningprogramming.academy.reviewrabbit.model.FilterTabs
+import learningprogramming.academy.reviewrabbit.util.retryIO
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,7 +47,9 @@ class HomeScreenViewModel @Inject constructor(
     private fun getListOfEveryCompanies() {
         viewModelScope.launch {
             try {
-                _listOfCompanies.value = companyRepository.getAllCompanies()
+                retryIO {
+                    _listOfCompanies.value = companyRepository.getAllCompanies()
+                }
             } catch (e: Exception) {
                 Log.e("HomeScreenViewModel", "Error fetching list of all companies. $e")
             }

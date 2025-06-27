@@ -19,62 +19,68 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Popup
 
 @Composable
 fun DropdownMenuOverlay(
     modifier: Modifier = Modifier,
     isExpanded: Boolean,
     isLoggedIn: Boolean,
+    onDismissRequest: () -> Unit,
     onLogoutClick: () -> Unit,
     onLoginClick: () -> Unit,
     onSignupClick:() -> Unit
 ) {
-
-    AnimatedVisibility(
-        visible = isExpanded,
-        enter = slideInVertically() + expandVertically(
-            // Expand from the top.
-            expandFrom = Alignment.Top
-        ) + fadeIn(
-            // Fade in with the initial alpha of 0.3f.
-            initialAlpha = 0.3f
-        ),
-        exit = slideOutVertically() + shrinkVertically() + fadeOut(),
-        modifier = modifier
-    ){
-        Box {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth()
-                    .background(color = MaterialTheme.colorScheme.primary)
-                    .padding(start = 30.dp, end = 30.dp, top = 10.dp )
-            ) {
-                HorizontalDivider(
-                    modifier = Modifier.border(
-                        width = 2.dp,
-                        color = MaterialTheme.colorScheme.secondary)
-                )
-                if (isLoggedIn) {
-                    MenuText(
-                        text = "Logout",
-                        onClick = {
-                            onLogoutClick()
-                        }
-                    )
-                } else {
-                    MenuText(
-                        text = "Login",
-                        onClick = onLoginClick
-                    )
+    Popup(
+        onDismissRequest = onDismissRequest
+    ) {
+        AnimatedVisibility(
+            visible = isExpanded,
+            enter = slideInVertically() + expandVertically(
+                // Expand from the top.
+                expandFrom = Alignment.Top
+            ) + fadeIn(
+                // Fade in with the initial alpha of 0.3f.
+                initialAlpha = 0.3f
+            ),
+            exit = slideOutVertically() + shrinkVertically() + fadeOut(),
+            modifier = modifier
+        ){
+            Box {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(color = MaterialTheme.colorScheme.primary)
+                        .padding(start = 30.dp, end = 30.dp, top = 10.dp)
+                ) {
                     HorizontalDivider(
                         modifier = Modifier.border(
                             width = 2.dp,
                             color = MaterialTheme.colorScheme.secondary)
                     )
-                    MenuText(
-                        text = "Signup",
-                        onClick = onSignupClick
-                    )
+                    if (isLoggedIn) {
+                        MenuText(
+                            text = "Logout",
+                            onClick = {
+                                onLogoutClick()
+                            }
+                        )
+                    } else {
+                        MenuText(
+                            text = "Login",
+                            onClick = onLoginClick
+                        )
+                        HorizontalDivider(
+                            modifier = Modifier.border(
+                                width = 2.dp,
+                                color = MaterialTheme.colorScheme.secondary)
+                        )
+                        MenuText(
+                            text = "Signup",
+                            onClick = onSignupClick
+                        )
+                    }
                 }
             }
         }

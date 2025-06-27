@@ -1,5 +1,6 @@
 package learningprogramming.academy.reviewrabbit.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -31,6 +32,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -57,6 +59,7 @@ fun LoginPageScreen(
     val passwordState = rememberTextFieldState()
 
     val loginUiState by loginViewModel.loginUiState.collectAsState()
+    val context = LocalContext.current
 
     DisposableEffect(Unit) {
         onDispose {
@@ -66,6 +69,7 @@ fun LoginPageScreen(
 
     LaunchedEffect(loginUiState) {
         if (loginUiState is LoginScreenUiState.Success) {
+            Toast.makeText(context, "Login successfully", Toast.LENGTH_SHORT).show()
             onLoginSuccessNavigation()
             loginViewModel.resetLoginStateToIdle()
         }

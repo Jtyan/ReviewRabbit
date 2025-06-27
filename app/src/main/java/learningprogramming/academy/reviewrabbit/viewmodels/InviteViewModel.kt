@@ -150,7 +150,7 @@ class InviteViewModel @Inject constructor(
                         "Unable to get checkout url. companyId = $companyId. response = ${response.message}"
                     )
                     _redirectInviteState.value =
-                        InviteCheckoutUiState(message = response.message)
+                        InviteCheckoutUiState(message = "Please log in first.")
                 }
 
                 is CompanyInviteResult.NetworkError -> {

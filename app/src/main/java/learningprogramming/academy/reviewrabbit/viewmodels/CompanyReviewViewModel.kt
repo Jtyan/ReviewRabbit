@@ -8,6 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import learningprogramming.academy.reviewrabbit.data.company.model.CompanyResponse
 import learningprogramming.academy.reviewrabbit.data.review.model.CreateReviewRequest
@@ -56,7 +58,7 @@ class CompanyReviewViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            _userId.value = sessionManager.getUserId()
+            observeUserSession()
         }
     }
 
@@ -109,11 +111,6 @@ class CompanyReviewViewModel @Inject constructor(
                 )
             }
         }
-    }
-
-    private fun checkIfUserPostedAReview() {
-        _hasUserPostedReview.value =
-            _listOfReviews.value.find { it.userId == _userId.value } != null
     }
 
     fun submitReview() {
@@ -170,6 +167,19 @@ class CompanyReviewViewModel @Inject constructor(
 
     fun resetReviewUiState() {
         _reviewUiState.value = ReviewUiState.Idle
+    }
+
+    private fun checkIfUserPostedAReview() {
+        _hasUserPostedReview.value =
+            _listOfReviews.value.find { it.userId == _userId.value } != null
+    }
+
+    private fun observeUserSession() {
+        sessionManager.userIdFlow.onEach { userId ->
+            _userId.value = userId
+            checkIfUserPostedAReview()
+        }
+            .launchIn(viewModelScope)
     }
 }
 

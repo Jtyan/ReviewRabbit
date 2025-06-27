@@ -77,6 +77,7 @@ class MainActivity : ComponentActivity() {
                         ) {
                             ReviewRabbitApp(
                                 navController = navController,
+                                isLoggedIn = isLoggedIn,
                                 homeScreenViewModel = homeScreenViewModel,
                                 companyReviewViewModel = companyReviewViewModel,
                                 loginViewModel = loginViewModel,

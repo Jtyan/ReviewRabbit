@@ -90,22 +90,23 @@ class MainActivity : ComponentActivity() {
                             )
                             DropdownMenuOverlay(
                                 isExpanded = isExpanded,
+                                onDismissRequest = { isExpanded = false },
                                 isLoggedIn = isLoggedIn,
                                 onLogoutClick = {
                                     loginViewModel.onLogoutClicked()
                                     navController.navigate(route = ScreenRoutes.LOGOUT_PAGE)
-                                    isExpanded = !isExpanded
+                                    isExpanded = false
                                 },
                                 onLoginClick = {
                                     navController.navigate(route = ScreenRoutes.LOGIN_PAGE) {
                                         launchSingleTop = true
                                         restoreState = true
                                     }
-                                    isExpanded = !isExpanded
+                                    isExpanded = false
                                 },
                                 onSignupClick = {
                                     navController.navigate(route = ScreenRoutes.SIGNUP_PAGE)
-                                    isExpanded = !isExpanded
+                                    isExpanded = false
                                 },
                                 modifier = Modifier
                                     .align(Alignment.TopCenter)

@@ -34,6 +34,7 @@ import learningprogramming.academy.reviewrabbit.viewmodels.SignupViewModel
 @Composable
 fun ReviewRabbitApp(
     navController: NavHostController,
+    isLoggedIn: Boolean,
     homeScreenViewModel: HomeScreenViewModel,
     companyReviewViewModel: CompanyReviewViewModel,
     loginViewModel: LoginViewModel,
@@ -84,6 +85,7 @@ fun ReviewRabbitApp(
             val companyId = backStackEntry.arguments?.getInt("companyId")
             if (companyId != null) {
                 CompanyPage(
+                    isLoggedIn = isLoggedIn,
                     invitesViewModel = inviteViewModel,
                     companyReviewViewModel = companyReviewViewModel,
                     companyId = companyId

@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.rememberTextFieldState
@@ -35,6 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -72,15 +74,18 @@ import java.time.temporal.ChronoUnit
 import java.util.Date
 import java.util.Locale
 import androidx.core.net.toUri
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun CompanyPage(
+    isLoggedIn: Boolean,
     companyReviewViewModel: CompanyReviewViewModel,
     invitesViewModel: InviteViewModel,
     companyId: Int
 ) {
     var addReviewField by rememberSaveable { mutableStateOf(false) }
+    val lazyColumnState = rememberLazyListState()
 
 
     val selectedCompanyState by companyReviewViewModel.selectedCompany.collectAsState()
@@ -92,6 +97,7 @@ fun CompanyPage(
     val isReviewPosted = companyReviewViewModel.hasUserPostedReview.collectAsState().value
     val redirectInviteState by invitesViewModel.redirectInviteState.collectAsState()
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(companyId) {
         companyReviewViewModel.getCompanyById(companyId)
@@ -117,6 +123,7 @@ fun CompanyPage(
 
     if (selectedCompany != null) {
         LazyColumn(
+            state = lazyColumnState,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
@@ -124,8 +131,14 @@ fun CompanyPage(
             item {
                 CompanyPageHeroBanner(
                     company = selectedCompany,
+                    isLoggedIn = isLoggedIn,
                     isReviewPosted = isReviewPosted,
-                    onAddReviewClick = { addReviewField = true }
+                    onAddReviewClick = {
+                        addReviewField = true
+                        scope.launch {
+                            lazyColumnState.animateScrollToItem(2)
+                        }
+                    }
                 )
             }
             item {
@@ -164,6 +177,7 @@ fun CompanyPage(
 @Composable
 fun CompanyPageHeroBanner(
     company: CompanyResponse,
+    isLoggedIn: Boolean,
     isReviewPosted: Boolean,
     onAddReviewClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -208,7 +222,7 @@ fun CompanyPageHeroBanner(
                 company = company,
                 color = MaterialTheme.colorScheme.secondary
             )
-            if (!isReviewPosted) {
+            if (!isReviewPosted && isLoggedIn) {
                 CustomButton(
                     text = "Add Review",
                     onClick = onAddReviewClick,
@@ -545,7 +559,8 @@ fun CompanyPageHeroBannerPreview() {
                 tags = listOf("IT", "Tech")
             ),
             onAddReviewClick = {},
-            isReviewPosted = false
+            isReviewPosted = false,
+            isLoggedIn = true
         )
     }
 }

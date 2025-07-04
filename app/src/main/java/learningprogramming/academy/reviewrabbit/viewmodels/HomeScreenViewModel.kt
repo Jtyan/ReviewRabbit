@@ -104,4 +104,9 @@ class HomeScreenViewModel @Inject constructor(
         }
         _listOfFilters.value = newFilters
     }
+
+    fun clearListOfFilters() {
+        _listOfFilters.value = CompanyFilters()
+        getListOfEveryCompanies()
+    }
 }

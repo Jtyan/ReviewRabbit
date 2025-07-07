@@ -65,10 +65,6 @@ fun HomeScreen(
     }
     val isBannerVisible = !isScrolled
 
-//    LaunchedEffect(listOfCompanies) {
-//        homeScreenViewModel
-//    }
-
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally

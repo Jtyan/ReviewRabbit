@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
@@ -23,12 +22,13 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,7 +48,10 @@ fun SearchFilters(
 ) {
     val companyFilters = homeScreenViewModel.companyFilters.collectAsState().value
     val listOfFilters = homeScreenViewModel.listOfFilters.collectAsState().value
-
+    var searchFilterState by remember { mutableStateOf(false) }
+    var expandedFilterState by remember {
+        mutableStateOf(FilterTabs.entries.associateWith { false })
+    }
     LaunchedEffect(listOfFilters) {
         Log.i("SearchFilterUI", listOfFilters.toString())
     }
@@ -60,6 +63,8 @@ fun SearchFilters(
             ) {
                 SearchFilterCategory(
                     title = "Search Filters",
+                    isExpanded = searchFilterState,
+                    onToggleExpanded = { searchFilterState = !searchFilterState },
                     child = {
                         FilterTabs.entries.forEach() { filterTabs ->
                             val itemsToShow = when (filterTabs) {
@@ -81,6 +86,13 @@ fun SearchFilters(
                             }
                             SearchFilterCategory(
                                 title = filterTabs.label,
+                                isExpanded =
+                                    expandedFilterState[filterTabs] ?: false,
+                                onToggleExpanded = {
+                                    val newStates = expandedFilterState.toMutableMap()
+                                    newStates[filterTabs] = !(newStates[filterTabs] ?: false)
+                                    expandedFilterState = newStates
+                                },
                                 child = {
                                     itemsToShow.forEach { item ->
                                         SearchFilterContentWithCheckbox(
@@ -99,13 +111,28 @@ fun SearchFilters(
                         }
                     }
                 )
-                CustomButton(
-                    text = "Filter",
-                    onClick = { onFilterClick(listOfFilters) },
-                    modifier = Modifier
-                        .width(300.dp)
-                        .padding(24.dp)
-                )
+                Row(
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth().padding(16.dp)
+                ) {
+                    CustomButton(
+                        text = "Filter",
+                        onClick = {
+                            searchFilterState = false
+                            onFilterClick(listOfFilters)
+                        }
+                    )
+                    TextButton(
+                        onClick = { homeScreenViewModel.clearListOfFilters() }
+                    ) {
+                        Text(
+                            text = "Clear All",
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.scrim
+                        )
+                    }
+                }
             }
         }
     )
@@ -115,10 +142,10 @@ fun SearchFilters(
 @Composable
 fun SearchFilterCategory(
     title: String,
+    isExpanded: Boolean,
+    onToggleExpanded: () -> Unit,
     child: @Composable () -> Unit
 ) {
-    var isSearchFilterCategoryExpanded by rememberSaveable { mutableStateOf(false) }
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -132,14 +159,12 @@ fun SearchFilterCategory(
             Text(
                 text = title
             )
-            IconButton(onClick = {
-                isSearchFilterCategoryExpanded = !isSearchFilterCategoryExpanded
-            }) {
+            IconButton(onClick = onToggleExpanded) {
                 AnimatedIcon(
-                    targetState = isSearchFilterCategoryExpanded,
+                    targetState = isExpanded,
                     iconIfTrue = Icons.Filled.Remove,
                     iconIfFalse = Icons.Filled.Add,
-                    contentDescription = "${if (isSearchFilterCategoryExpanded) "Collapse" else "Expand"} $title filter"
+                    contentDescription = "${if (isExpanded) "Collapse" else "Expand"} $title filter"
                 )
             }
         }
@@ -148,7 +173,7 @@ fun SearchFilterCategory(
             color = MaterialTheme.colorScheme.outlineVariant
         )
         AnimatedVisibility(
-            visible = isSearchFilterCategoryExpanded,
+            visible = isExpanded,
             enter = slideInVertically()
                     + expandVertically(expandFrom = Alignment.Top)
                     + fadeIn(initialAlpha = 0.3f),
@@ -157,7 +182,7 @@ fun SearchFilterCategory(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                if (isSearchFilterCategoryExpanded) {
+                if (isExpanded) {
                     child()
                 }
             }

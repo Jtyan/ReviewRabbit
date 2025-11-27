@@ -28,8 +28,8 @@ class InviteRepositoryImpl @Inject constructor(
                 if (!getInvitesApiResponse.isNullOrEmpty()) {
                     CompanyInviteResult.GetInviteSuccess(getInvitesApiResponse)
                 } else {
-                    Log.w("InviteRepository", "Login successful but body was null or no invites available")
-                    CompanyInviteResult.Error("Login successful but body was null or no invites available")
+                    Log.w("InviteRepository", "GetInvites successful but body was null or no invites available")
+                    CompanyInviteResult.Error("GetInvites successful but body was null or no invites available")
                 }
             } else {
                 val errorBodyString = response.errorBody()?.string()

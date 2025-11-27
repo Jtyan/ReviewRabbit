@@ -1,7 +1,6 @@
 package learningprogramming.academy.reviewrabbit.viewmodels
 
 import android.util.Log
-import androidx.datastore.core.IOException
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +18,7 @@ import learningprogramming.academy.reviewrabbit.data.company.CompanyRepository
 import learningprogramming.academy.reviewrabbit.data.review.ReviewsRepository
 import learningprogramming.academy.reviewrabbit.data.session.SessionManager
 import learningprogramming.academy.reviewrabbit.model.ReviewCategories
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel

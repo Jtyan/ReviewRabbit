@@ -1,10 +1,10 @@
 package learningprogramming.academy.reviewrabbit.data.company
 
 import android.util.Log
-import androidx.datastore.core.IOException
 import learningprogramming.academy.reviewrabbit.data.company.model.CompanyFilters
 import learningprogramming.academy.reviewrabbit.data.company.model.CompanyResponse
 import learningprogramming.academy.reviewrabbit.data.company.model.CreateCompanyRequest
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 

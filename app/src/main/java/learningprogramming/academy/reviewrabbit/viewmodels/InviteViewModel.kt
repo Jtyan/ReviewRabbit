@@ -39,6 +39,7 @@ class InviteViewModel @Inject constructor(
             if (!sessionManager.isSessionValid()) {
                 Log.e("InviteViewModel", "User ${sessionManager.userIdFlow} is not logged in")
                 _getInvites.value = InviteUiState.Error("Please log in first.")
+                return@launch
             }
 
             when (val response = inviteRepository.getInvites()) {
@@ -66,7 +67,8 @@ class InviteViewModel @Inject constructor(
                     _getInvites.value = InviteUiState.Error("An unexpected error occurred.")
                 }
 
-                else -> {}
+                is CompanyInviteResult.SendInviteSuccess,
+                is CompanyInviteResult.RedirectToStripeSuccess -> { /* Not applicable for getInvites */ }
             }
         }
     }
@@ -127,7 +129,8 @@ class InviteViewModel @Inject constructor(
                     )
                 }
 
-                else -> {}
+                is CompanyInviteResult.GetInviteSuccess,
+                is CompanyInviteResult.RedirectToStripeSuccess -> { /* Not applicable for sendInvites */ }
             }
         }
     }
@@ -171,7 +174,8 @@ class InviteViewModel @Inject constructor(
                         InviteCheckoutUiState(message = "UnknownError : ${response.exception}")
                 }
 
-                else -> {}
+                is CompanyInviteResult.GetInviteSuccess,
+                is CompanyInviteResult.SendInviteSuccess -> { /* Not applicable for redirect */ }
             }
         }
     }

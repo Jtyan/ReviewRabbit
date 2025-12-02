@@ -44,25 +44,29 @@ class SignupViewModel @Inject constructor(
 
             when (val response = userRepository.signupUser(signupUserRequest)) {
                 is UserAuthResult.SignupUserSuccess -> {
-                    Log.i("LoginViewModel", "User sign up successful")
+                    Log.i("SignupViewModel", "User sign up successful")
                     _signupUiState.value = SignupScreenUiState.Success("User sign up successfully. You will be redirected to Login page...")
                 }
 
                 is UserAuthResult.Error -> {
-                    Log.w("LoginViewModel", "Signup error: ${response.message}")
+                    Log.w("SignupViewModel", "Signup error: ${response.message}")
                     _signupUiState.value = SignupScreenUiState.Error(response.message)
                 }
 
                 UserAuthResult.NetworkError -> {
-                    Log.w("LoginViewModel", "Signup network error")
+                    Log.w("SignupViewModel", "Signup network error")
                     _signupUiState.value = SignupScreenUiState.Error("Network error. Please check your connection.")
                 }
 
                 is UserAuthResult.UnknownError -> {
-                    Log.e("LoginViewModel", "Signup unknown error", response.exception)
+                    Log.e("SignupViewModel", "Signup unknown error", response.exception)
                     _signupUiState.value = SignupScreenUiState.Error("An unexpected error occurred.")
                 }
-                else -> {}
+
+                is UserAuthResult.LoginUserSuccess,
+                UserAuthResult.PasswordRecoverySent,
+                UserAuthResult.ResetPasswordSuccess,
+                UserAuthResult.ChangePasswordSuccess -> { /* Not applicable for signup */ }
             }
         }
     }
